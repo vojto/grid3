@@ -1,17 +1,4 @@
 Template['home.index'].events
-  'submit form': (ev) ->
-    ev.preventDefault()
-
-    $form = $(ev.currentTarget)
-    data = $form.serializeObject()
-    $form.find('input').val('')
-
-    # Create the source
-    IronRouterProgress.start()
-    Sources.insert {url: data.url}, (err, res) ->
-      alert 'Failed creating sources' if err
-      IronRouterProgress.done()
-
   'click i.delete': (ev) ->
     console.log 'deleting', @
     Sources.remove {_id: @_id}, (err, res) ->
