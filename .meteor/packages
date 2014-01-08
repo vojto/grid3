@@ -12,3 +12,5 @@ coffeescript
 iron-router
 iron-router-progress
 collection2
+d3
+http
