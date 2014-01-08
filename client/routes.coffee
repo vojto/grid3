@@ -1,5 +1,6 @@
 Router.configure
   layoutTemplate: 'layout'
+  disableProgressSpinner: true
 
 Router.map ->
   @route 'home',
