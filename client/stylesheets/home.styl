@@ -1,4 +1,7 @@
 @import '_colors'
+@import 'nib'
+
+// Command prompt
 
 .home-command
   // padding 50px
@@ -20,3 +23,29 @@
 
       outline none
       padding 10px 15px
+
+// Sources
+
+ul.sources
+  list-style none
+  padding 0
+  clearfix()
+  text-align center
+  margin-top 30px
+
+  li
+    width 80px
+    float left
+    margin-bottom 20px
+
+  i.entypo.link
+    font-size 48px
+
+  small
+    color fg2
+    font-size 12px
+
+    i.entypo
+      cursor pointer
+    i.entypo:hover
+      color fg1
