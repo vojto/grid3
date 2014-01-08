@@ -9,3 +9,4 @@ insecure
 preserve-inputs
 stylus
 coffeescript
+iron-router
