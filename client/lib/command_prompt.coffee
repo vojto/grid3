@@ -14,6 +14,7 @@ class @CommandPrompt
     # commands
     @commands =
       addSource: new AddSourceCommand
+      chartSource: new ChartSourceCommand
 
     prompt = @
 
@@ -28,6 +29,8 @@ class @CommandPrompt
       @nextHandler = null
     else if command.substring(0, 4) == 'http'
       @commands.addSource.run(command)
+    else if command.substring(0, 5) == 'chart'
+      @commands.chartSource.run(command)
     else
       @setMessage('Okay, Dave.')
 
@@ -55,3 +58,19 @@ class AddSourceCommand
     Sources.update @sourceID, {$set: {title: command}}, (err, res) ->
       console.log err, res
     prompt.setMessage("Okay. Created source called #{command}.")
+
+class ChartSourceCommand
+  run: (command) ->
+    parts = command.split(' ')
+    sourceName = parts[1]
+
+    # Find source with that name (TODO: This has to be all very unspecific)
+    regex = new RegExp(sourceName, "i")
+    source = Sources.findOne({title: regex})
+
+    if source
+      prompt.setMessage("OK, charting data from #{source.title}.")
+      Router.go 'source.show', source
+    else
+      prompt.setMessage("Sorry, can't find source #{sourceName}.")
+    

@@ -2,6 +2,22 @@
   <h1>{{title}}</h1>
   <pre>{{url}}</pre>
 
+  <table class="preview">
+    <tr>
+      {{#each dataColumns}}
+        <th>{{this}}</th>
+      {{/each}}
+    </tr>
+
+    {{#each dataPreview}}
+      <tr>
+        {{#each this}}
+          <td>{{this}}</td>
+        {{/each}}
+      </tr>
+    {{/each}}
+  </table>
+
   {{#constant}}
 
   {{/constant}}
