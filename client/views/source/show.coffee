@@ -14,6 +14,7 @@ Template['source.show'].rendered = ->
     width = 800
     height = 300
 
+    $('#chart').empty()
     svg = d3.select('#chart').append('svg')
       .attr('class', 'chart')
       .attr('width', width)
