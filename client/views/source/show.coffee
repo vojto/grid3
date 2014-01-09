@@ -1,13 +1,27 @@
 Template['source.show'].rendered = ->
   console.log 'rendering show'
   console.log 'data', @data
-  url = @data.url
 
-  IronRouterProgress.start()
-  Meteor.call 'sources.load', url, (err, data) ->
-    IronRouterProgress.done()
-    console.log 'finished loading', err, data
+  source = @data
+  data = null
+
+
+  if !source.cachedData
+    url = source.url
+    IronRouterProgress.start()
+    Meteor.call 'sources.load', url, (err, res) ->
+      IronRouterProgress.done()
+      data = res
+      update = {$set: {cachedData: JSON.stringify(data)}}
+      console.log update
+      Sources.update source._id, update, (err, res) ->
+        console.log err, res
+      Session.set 'dataPreview', data.slice(0, 5)
+  else
+    data = JSON.parse(source.cachedData)
     Session.set 'dataPreview', data.slice(0, 5)
+
+  
 
 Template['source.show'].helpers
   dataPreview: ->
