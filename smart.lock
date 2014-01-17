@@ -4,7 +4,11 @@
     "basePackages": {
       "iron-router": {},
       "iron-router-progress": {},
-      "collection2": {}
+      "collection2": {},
+      "belt-jade-handlebars": {
+        "git": "https://github.com/meteorbelt/belt-jade-handlebars",
+        "tag": "v0.1.0"
+      }
     },
     "packages": {
       "iron-router": {
@@ -19,13 +23,18 @@
       },
       "collection2": {
         "git": "https://github.com/aldeed/meteor-collection2.git",
-        "tag": "v0.2.17",
-        "commit": "186cc58040764b816392e19178ba373bda7a91c6"
+        "tag": "v0.3.3",
+        "commit": "d5c99b1c0fe30778e683175ecb0dd36529e6271e"
+      },
+      "belt-jade-handlebars": {
+        "git": "https://github.com/meteorbelt/belt-jade-handlebars",
+        "tag": "v0.1.0",
+        "commit": "d1f6189203401b677e22c7ef7d171b33185b5e2e"
       },
       "simple-schema": {
         "git": "https://github.com/aldeed/meteor-simple-schema.git",
-        "tag": "v0.2.26",
-        "commit": "2984003f0edf686023f5fafdce9abffb3cdc6a21"
+        "tag": "v0.2.29",
+        "commit": "dc40caf4eaaeb456e1a4e7e227ad326bcd5607b5"
       }
     }
   }
