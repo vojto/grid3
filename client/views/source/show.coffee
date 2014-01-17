@@ -39,6 +39,7 @@ Template['source.show'].rendered = ->
     valueScale = d3.scale.linear().domain([valueMin, valueMax]).range([height, 0])
     valueAxis = d3.svg.axis().scale(valueScale).orient('right')
 
+    # Dots
     svg.selectAll('circle')
       .data(data)
       .enter()
@@ -48,6 +49,15 @@ Template['source.show'].rendered = ->
         .attr('class', 'point')
         .attr('transform', (d) -> "translate(#{labelScale(d[label])}, #{valueScale(d[value])})")
 
+    # Line
+    line = d3.svg.line().interpolate('basis')
+      .x((d) -> labelScale(d[label]))
+      .y((d) -> valueScale(d[value]))
+    svg.append('path')
+      .attr('class', 'line')
+      .attr('d', line(data))
+
+    # Axes
     svg.append('g')
       .call(valueAxis)
 
