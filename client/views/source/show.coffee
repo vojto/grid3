@@ -5,7 +5,7 @@ Template['source.show'].rendered = ->
   manager = new SourceManager(source)
   manager.loadData ->
     Session.set 'dataPreview', manager.preview()
-    data = manager.data
+    data = manager.data()
 
     # Display graph from the data...
     # This code is in the "view section" so it by all means
@@ -21,12 +21,15 @@ Template['source.show'].rendered = ->
       .attr('height', height+30)
 
     # Column numbers:
-    label = 2
-    value = 0
+    label = data.config.label
+    value = data.config.value
+
+    data = data.parse()
 
     # Label scale
     labelMin = d3.min data, (d) -> d[label]
     labelMax = d3.max data, (d) -> d[label]
+    console.log labelMin, labelMax
     labelScale = d3.time.scale().domain([labelMin, labelMax]).range([0, width])
     labelAxis = d3.svg.axis().scale(labelScale).orient('bottom')
 

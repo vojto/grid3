@@ -13,8 +13,11 @@ class @SourceManager
     Meteor.call 'sources.load', @source.url, (err, data) =>
       IronRouterProgress.done()
       Sources.update @source._id, {$set: {cachedData: JSON.stringify(data)}}
-      @data = data
+      @_data = data
       callback()
 
   preview: ->
-    @data.slice(0, 5)
+    @_data.slice(0, 5)
+
+  data: ->
+    new Grid.Data(@_data)

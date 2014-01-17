@@ -9,7 +9,8 @@
         "git": "https://github.com/meteorbelt/belt-jade-handlebars",
         "tag": "v0.1.0"
       },
-      "npm": {}
+      "npm": {},
+      "moment": {}
     },
     "packages": {
       "iron-router": {
@@ -36,6 +37,11 @@
         "git": "https://github.com/arunoda/meteor-npm.git",
         "tag": "v0.2.6",
         "commit": "177ab6118de5bf8cffb19481343d5762ff7a2aaf"
+      },
+      "moment": {
+        "git": "https://github.com/acreeger/meteor-moment.git",
+        "tag": "v2.2.1",
+        "commit": "9ee12e714afe56b189f53076447b7b54f3012065"
       },
       "simple-schema": {
         "git": "https://github.com/aldeed/meteor-simple-schema.git",
