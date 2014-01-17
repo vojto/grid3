@@ -45,6 +45,7 @@ class AddSourceCommand
     title = shortenURL(command)
     Sources.insert {url: command, title: title}, (err, res) =>
       alert 'Failed creating source' if err
+      console.log err, res
       IronRouterProgress.done()
 
       prompt.setMessage("What should I call the source at #{command}?")

@@ -3,9 +3,10 @@
     "iron-router": {},
     "iron-router-progress": {},
     "collection2": {},
-     "belt-jade-handlebars": {
+    "belt-jade-handlebars": {
       "git": "https://github.com/meteorbelt/belt-jade-handlebars",
       "tag": "v0.1.0"
-    }
+    },
+    "npm": {}
   }
 }

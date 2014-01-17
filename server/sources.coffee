@@ -1,3 +1,5 @@
+d3 = Meteor.require('d3')
+
 findArray = (obj) ->
   if obj instanceof Array && obj.length > 0
     obj
@@ -16,4 +18,13 @@ Meteor.methods
     # TODO: Logic for determining response format
     # For now we'll just go with JSON
 
-    findArray(JSON.parse(data.content))
+    try
+      # Try JSON
+      parsed = JSON.parse(data.content)
+      console.log 'parsed JSON'
+    catch e
+      parsed = d3.csv.parseRows(data.content)
+      console.log 'parsing CSV'
+
+    console.log parsed
+    findArray(parsed)
