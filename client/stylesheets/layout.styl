@@ -41,3 +41,28 @@ a.logo
 
       outline none
       padding 10px 15px
+
+// Split layout
+
+div.split
+  position absolute
+  top 0
+  right 0
+  bottom 0
+  left 0
+
+  .left, .right
+    position absolute
+    top 0
+    bottom 0
+    padding 15px 20px
+
+  .left
+    left 0
+    right 50%
+    background rgba(150, 150, 255, 0.04)
+    border-right 1px solid fg2
+
+  .right
+    right 0
+    left 50%

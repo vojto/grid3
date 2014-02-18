@@ -4,7 +4,7 @@ Template['home.index'].events
     Sources.remove {_id: @_id}, (err, res) ->
       console.log 'removed', err, res
 
-  'click i.link': (ev) ->
+  'click i.text-doc': (ev) ->
     console.log 'opening', @
     Router.go 'source.show', @
 
