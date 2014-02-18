@@ -103,6 +103,10 @@ Template.source_show.events
     Steps.insert params, (e) ->
       console.log 'Finished inserting', e
 
+  'click div.step.collapsed': (e) ->
+    console.log @
+    @expanded = true
+
   'keydown textarea': (e) ->
     if e.keyCode == 9
       insertAtCaret(e.currentTarget, '  ')

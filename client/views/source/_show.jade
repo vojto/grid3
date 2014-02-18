@@ -24,19 +24,14 @@ template(name='source_show')
 
       div.steps
         {{#each steps}}
-          div.step
-            {{#if expanded}
-              form
-                div.row {{weight}}
-                div.row
-                  input(type='text', name='title', value='{{title}}')
-                div.row
-                  textarea(name='code').large.code
-                    {{code}}
-                div.row
-                  input(type='submit' value='Save')
-                  input.delete.error(type='button', value='Delete')
-            {{else}}
-              div not expanded
-            {{/if}}
+          div.step.expanded
+            form.step
+              div.row
+                input(type='text', name='title', value='{{title}}')
+              div.row
+                textarea(name='code').large.code
+                  {{code}}
+              div.row
+                input(type='submit' value='Save')
+                input.delete.error(type='button', value='Delete')
         {{/each}}
