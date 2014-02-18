@@ -1,0 +1,23 @@
+template(name='source_show')
+  div.split
+    div.left
+      table.preview
+        tr
+          {{#each dataColumns}}
+            th {{this}}
+          {{/each}}
+
+        {{#each dataPreview}}
+          tr
+            {{#each this}}
+              td {{this}}
+            {{/each}}
+        {{/each}}
+
+    div.right
+      h1 GRID3 // {{title}}
+
+      div.actions
+        a + Map
+        a + Reduce
+

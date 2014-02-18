@@ -17,7 +17,7 @@ class @SourceManager
       callback()
 
   preview: ->
-    @_data.slice(0, 5)
+    @_data
 
   data: ->
     new Grid.Data(@_data)
