@@ -1,0 +1,34 @@
+@import '_colors'
+@import 'nib'
+
+form
+  .row
+    margin-bottom 10px
+
+  input, textarea
+    border 1px solid fg2
+    background transparent
+    color fg1
+    width 100%
+    box-sizing border-box
+    padding 5px 10px
+    background rgba(0,0,0,0.2)
+
+    &[type=submit], &[type=button]
+      width auto
+      background fg1
+      color bg1
+      border 1px solid fg1
+      cursor pointer
+
+      &.error
+        background transparent
+        border 1px solid err1
+        color err1
+
+    &.large
+      height 250px
+
+    &.code
+      font-family Menlo
+      font-size 12px

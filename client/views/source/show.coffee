@@ -74,8 +74,49 @@ Template.source_show.helpers
 
   dataColumns: ->
     preview = Session.get('dataPreview')
-    console.log 'getting them columns', preview
     return [] unless preview
     row = preview[0]    
     row.map (col, i) ->
       i + 1
+
+  steps: ->
+    Steps.find({sourceId: @_id}, {sort: {weight: 1}})
+
+Template.source_show.events
+  'click a.add-map': (e) ->
+    e.preventDefault()
+    console.log 'adding map step'
+
+    step = Steps.findOne({sourceId: @_id}, {sort: {weight: -1}})
+    if step
+      weight = step.weight + 1
+    else
+      weight = 0
+    
+
+    params =
+      sourceId: @_id
+      weight: weight
+      title: 'Map'
+      code: '// `data` is your data file. Manipulate it and return.\nfunction(data) {\n\t\n}'
+
+    Steps.insert params, (e) ->
+      console.log 'Finished inserting', e
+
+  'keydown textarea': (e) ->
+    if e.keyCode == 9
+      insertAtCaret(e.currentTarget, '  ')
+      e.preventDefault()
+
+  'submit form': (e) ->
+    e.preventDefault()
+    data = $(e.currentTarget).serializeObject()
+    console.log 'data', data
+    console.log 'object', @
+
+    Steps.update {_id: @_id}, {$set: data}, (err) ->
+      console.log 'err', err
+
+  'click input.delete': (e) ->
+    e.preventDefault()
+    Steps.remove {_id: @_id}

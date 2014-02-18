@@ -24,8 +24,6 @@ class Grid.Data
 
       result.push([label, value])
 
-    console.log 'Result: ', JSON.stringify(result)
-
     result
 
   raw: ->
