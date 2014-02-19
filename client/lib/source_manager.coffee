@@ -1,11 +1,16 @@
 class @SourceManager
   constructor: (source) ->
     @source = source
+    @_data = null
+    @_dataDep = new Deps.Dependency
+    @_isLoaded = false
 
   loadData: (callback) ->
     if @source.cachedData
       @_data = JSON.parse(@source.cachedData)
-      callback()
+      @_isLoaded = true
+      @_dataDep.changed()
+      callback() if callback
       return
 
     url = @source.url
@@ -14,10 +19,39 @@ class @SourceManager
       IronRouterProgress.done()
       Sources.update @source._id, {$set: {cachedData: JSON.stringify(data)}}
       @_data = data
-      callback()
+      @_isLoaded  = true
+      @_dataDep.changed()
+      callback() if callback
+
+  ensureDataLoaded: ->
+    @loadData() unless @_isLoaded
 
   preview: ->
-    @_data
+    @ensureDataLoaded()
+    @_dataDep.depend()
 
-  data: ->
-    new Grid.Data(@_data)
+    # Process data with steps
+    steps = Steps.forSource(@source)
+    data = $.extend(true, [], @_data);
+    success = true
+    steps.forEach (step) ->
+      try
+        code = "(function(data) { return #{step.code} })"
+        compiled = eval(code)
+        console.log compiled
+        data = compiled(data)
+        if data.length > 0
+          console.log data[0].map(->)
+        
+      catch e
+        console.log 'Failed', e.message
+        console.log e
+        console.log step.code
+        success = false
+        data = [[]]
+
+    if success
+      data
+    else
+      [[]]
+    

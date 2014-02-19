@@ -10,3 +10,9 @@
   insert: (userId, doc) -> true
   update: (userId, doc) -> true
   remove: (userId, doc) -> true
+
+@Steps.lastForSource = (source) ->
+  Steps.findOne({sourceId: source._id}, {sort: {weight: -1}})
+
+@Steps.forSource = (source) ->
+  Steps.find({sourceId: source._id}, {sort: {weight: 1}})
