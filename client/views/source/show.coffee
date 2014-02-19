@@ -4,36 +4,47 @@ Template.source_show.created = ->
   source = @data
   manager = new SourceManager(source)
 
+  Deps.autorun ->
+    Session.set 'preview', manager.preview()
+
 
 Template.source_show.helpers
   dataPreview: ->
-    manager.preview()
+    Session.get('preview')
 
   dataPreviewObject: ->
-    preview = manager.preview()
+    preview = Session.get('preview')
     values = []
     for k, v of preview
       values.push({key: k, value: v})
     values
 
   is2D: ->
-    preview = manager.preview()
-    preview instanceof Array && preview[0] && preview[0] instanceof Array
+    preview = Session.get('preview')
+    result = preview instanceof Array && preview.length > 0 && preview[0] instanceof Array
+    console.log 'is2D', result
+    result
 
   is1D: ->
-    preview = manager.preview()
-    preview instanceof Array && preview[0] && !(preview[0] instanceof Array)
+    preview = Session.get('preview')
+    result = preview instanceof Array && preview.length > 0 && !(preview[0] instanceof Array)
+    console.log 'is1D', result
+    result
 
   isObject: ->
-    preview = manager.preview()
-    !(preview instanceof Array) && preview instanceof Object
+    preview = Session.get('preview')
+    result = !(preview instanceof Array) && preview instanceof Object
+    console.log 'isObject', result
+    result
 
   isNumber: ->
-    preview = manager.preview()
-    typeof preview == 'number'
+    preview = Session.get('preview')
+    result = typeof preview == 'number'
+    console.log 'isNumber', result
+    result
 
   isArray: ->
-    preview = manager.preview()
+    preview = Session.get('preview')
     if preview[0] instanceof Array
       true
     else
@@ -41,7 +52,7 @@ Template.source_show.helpers
     
 
   dataColumns: ->
-    preview = manager.preview()
+    preview = Session.get('preview')
     return [] unless preview
     row = preview[0]    
     row.map (col, i) ->
@@ -64,7 +75,7 @@ Template.source_show.events
       sourceId: @_id
       weight: weight
       title: 'Map'
-      code: 'data.map(function(d) {\n  return d;\n});'
+      code: 'return data.map(function(d) {\n  return d;\n});'
 
     Steps.insert params, (e) ->
       console.log 'Finished inserting', e

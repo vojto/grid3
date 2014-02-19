@@ -20,6 +20,7 @@ class @SourceManager
       console.log 'got data', data
       Sources.update @source._id, {$set: {cachedData: JSON.stringify(data)}}
       @_data = data
+      @_processedData = null
       @_isLoaded  = true
       @_dataDep.changed()
       callback() if callback
@@ -48,9 +49,5 @@ class @SourceManager
         console.log step.code
         success = false
         data = [[]]
-
-    if success
-      data
-    else
-      [[]]
     
+    data.slice(0, 100)
