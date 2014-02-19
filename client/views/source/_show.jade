@@ -2,17 +2,19 @@ template(name='source_show')
   div.split
     div.left
       table.preview
-        tr
-          {{#each dataColumns}}
-            th {{this}}
+        {{#if isArray}}
+          {{#each dataPreview}}
+            tr
+              {{#each this}}
+                td {{this}}
+              {{/each}}
           {{/each}}
-
-        {{#each dataPreview}}
-          tr
-            {{#each this}}
+        {{else}}
+          {{#each dataPreview}}
+            tr
               td {{this}}
-            {{/each}}
-        {{/each}}
+          {{/each}}
+        {{/if}}
 
     div.right
       div.actions

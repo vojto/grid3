@@ -9,6 +9,14 @@ Template.source_show.helpers
   dataPreview: ->
     manager.preview()
 
+  isArray: ->
+    preview = manager.preview()
+    if preview[0] instanceof Array
+      true
+    else
+      false
+    
+
   dataColumns: ->
     preview = manager.preview()
     return [] unless preview

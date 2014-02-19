@@ -36,12 +36,10 @@ class @SourceManager
     success = true
     steps.forEach (step) ->
       try
-        code = "(function(data) { return #{step.code} })"
+        code = "(function(data) { #{step.code} })"
         compiled = eval(code)
         console.log compiled
         data = compiled(data)
-        if data.length > 0
-          console.log data[0].map(->)
         
       catch e
         console.log 'Failed', e.message
