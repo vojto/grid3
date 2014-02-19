@@ -98,14 +98,14 @@ Template.source_show.events
       sourceId: @_id
       weight: weight
       title: 'Map'
-      code: '// `data` is your data file. Manipulate it and return.\nfunction(data) {\n\t\n}'
+      code: 'function(data) {\n  \n}'
 
     Steps.insert params, (e) ->
       console.log 'Finished inserting', e
 
   'click div.step.collapsed': (e) ->
-    console.log @
-    @expanded = true
+    Steps.update {_id: @_id}, {$set: {expanded: true}}, (err) ->
+      console.log 'Failed', err if err
 
   'keydown textarea': (e) ->
     if e.keyCode == 9
@@ -115,8 +115,7 @@ Template.source_show.events
   'submit form': (e) ->
     e.preventDefault()
     data = $(e.currentTarget).serializeObject()
-    console.log 'data', data
-    console.log 'object', @
+    data.expanded = false
 
     Steps.update {_id: @_id}, {$set: data}, (err) ->
       console.log 'err', err

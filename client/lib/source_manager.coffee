@@ -3,10 +3,10 @@ class @SourceManager
     @source = source
 
   loadData: (callback) ->
-    # if @source.cachedData
-    #   @data = JSON.parse(@source.cachedData)
-    #   callback()
-    #   return
+    if @source.cachedData
+      @_data = JSON.parse(@source.cachedData)
+      callback()
+      return
 
     url = @source.url
     IronRouterProgress.start()
