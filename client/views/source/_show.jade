@@ -20,7 +20,10 @@ template(name='source_show')
         a.add-reduce(href='#') + Reduce
         a.add-graph(href='#') + Graph
 
-      h1 GRID3 // {{title}}
+      h1
+        a(href='/') GRID3
+        |  //
+        | {{title}}
 
       div.steps
         {{#each steps}}
