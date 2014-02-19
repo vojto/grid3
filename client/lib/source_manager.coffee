@@ -50,4 +50,7 @@ class @SourceManager
         success = false
         data = [[]]
     
-    data.slice(0, 100)
+    if data instanceof Array
+      data.slice(0, 100)
+
+    data
