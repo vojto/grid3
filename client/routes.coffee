@@ -7,6 +7,10 @@ Router.map ->
     path: '/'
     template: 'home.index'
 
+  @route 'source.new',
+    path: '/source/new'
+    template: 'source_new'
+
   @route 'source.show',
     path: '/source/:_id'
     template: 'source_show'

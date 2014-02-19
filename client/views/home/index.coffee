@@ -1,12 +1,14 @@
 Template['home.index'].events
   'click i.delete': (ev) ->
-    console.log 'deleting', @
     Sources.remove {_id: @_id}, (err, res) ->
       console.log 'removed', err, res
 
   'click i.text-doc': (ev) ->
-    console.log 'opening', @
     Router.go 'source.show', @
+
+  'click li.add-document': (ev) ->
+    Router.go 'source.new'
+
 
 Template['home.index'].helpers
   sources: ->
