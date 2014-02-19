@@ -9,6 +9,29 @@ Template.source_show.helpers
   dataPreview: ->
     manager.preview()
 
+  dataPreviewObject: ->
+    preview = manager.preview()
+    values = []
+    for k, v of preview
+      values.push({key: k, value: v})
+    values
+
+  is2D: ->
+    preview = manager.preview()
+    preview instanceof Array && preview[0] && preview[0] instanceof Array
+
+  is1D: ->
+    preview = manager.preview()
+    preview instanceof Array && preview[0] && !(preview[0] instanceof Array)
+
+  isObject: ->
+    preview = manager.preview()
+    preview instanceof Object
+
+  isNumber: ->
+    preview = manager.preview()
+    typeof preview == 'number'
+
   isArray: ->
     preview = manager.preview()
     if preview[0] instanceof Array

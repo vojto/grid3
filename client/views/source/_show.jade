@@ -2,19 +2,30 @@ template(name='source_show')
   div.split
     div.left
       table.preview
-        {{#if isArray}}
+        {{#if is2D}}
           {{#each dataPreview}}
             tr
               {{#each this}}
                 td {{this}}
               {{/each}}
           {{/each}}
-        {{else}}
+        {{/if}}
+
+        {{#if is1D}}
           {{#each dataPreview}}
             tr
               td {{this}}
           {{/each}}
         {{/if}}
+
+        {{#if isObject}}
+          {{#each dataPreviewObject}}
+            tr
+              th {{key}}
+              td {{value}}
+          {{/each}}
+        {{/if}}
+
 
     div.right
       div.actions
