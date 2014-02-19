@@ -26,7 +26,7 @@ Template.source_show.helpers
 
   isObject: ->
     preview = manager.preview()
-    preview instanceof Object
+    !(preview instanceof Array) && preview instanceof Object
 
   isNumber: ->
     preview = manager.preview()

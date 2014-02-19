@@ -21,10 +21,7 @@ Meteor.methods
     try
       # Try JSON
       parsed = JSON.parse(data.content)
-      console.log 'parsed JSON'
     catch e
       parsed = d3.csv.parseRows(data.content)
-      console.log 'parsing CSV'
 
-    console.log parsed
     findArray(parsed)

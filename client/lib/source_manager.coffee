@@ -17,6 +17,7 @@ class @SourceManager
     IronRouterProgress.start()
     Meteor.call 'sources.load', @source.url, (err, data) =>
       IronRouterProgress.done()
+      console.log 'got data', data
       Sources.update @source._id, {$set: {cachedData: JSON.stringify(data)}}
       @_data = data
       @_isLoaded  = true
