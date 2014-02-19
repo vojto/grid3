@@ -26,6 +26,11 @@ template(name='source_show')
           {{/each}}
         {{/if}}
 
+        {{#if isNumber}}
+          tr
+            th {{dataPreview}}
+        {{/if}}
+
 
     div.right
       div.actions
