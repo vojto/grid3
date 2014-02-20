@@ -17,8 +17,8 @@
 @Steps.forSource = (source) ->
   Steps.find({sourceId: source._id}, {sort: {weight: 1}})
 
-@Steps.nextWeight = ->
-  step = Steps.lastForSource(@)
+@Steps.nextWeight = (source) ->
+  step = Steps.lastForSource(source)
   if step
     return step.weight + 1
   else

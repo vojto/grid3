@@ -1,6 +1,10 @@
 template(name='source_show')
   div.split
     div.left
+      {{#constant}}
+        .chart
+      {{/constant}}
+
       table.preview
         {{#if is2D}}
           {{#each dataPreview}}
