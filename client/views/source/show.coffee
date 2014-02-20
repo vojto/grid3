@@ -93,9 +93,7 @@ Template.source_show.events
     e.preventDefault()
     data = $(e.currentTarget).serializeObject()
     data.expanded = false
-
-    Steps.update {_id: @_id}, {$set: data}, (err) ->
-      console.log 'err', err
+    Steps.set(@_id, data, Flash.handle)
 
   'click input.delete-step': (e) ->
     e.preventDefault()
@@ -105,14 +103,17 @@ Template.source_show.events
 
   'click a.add-graph': (e) ->
     e.preventDefault()
-
-    params =
-      sourceId: @_id
-      title: 'Viz'
-      code: '// viz code here'
-
-    Graphs.insert params, (err) ->
-      console.log 'failed', err if err
+    Graphs.insert {sourceId: @_id, title: 'Viz', code: ''}, Flash.handle
 
   'click div.graph.collapsed': (e) ->
-    Graphs.set(@_id, expanded: true)
+    Graphs.set(@_id, {expanded: true}, Flash.handle)
+
+  'submit form.graph': (e) ->
+    e.preventDefault()
+    data = $(e.currentTarget).serializeObject()
+    data.expanded = false
+    Graphs.set(@_id, data, Flash.handle)
+
+  'click input.delete-graph': (e) ->
+    e.preventDefault()
+    Graphs.remove({_id: @_id}, Flash.handle)
