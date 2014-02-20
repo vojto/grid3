@@ -35,7 +35,7 @@ template(name='source_show')
     div.right
       div.actions
         a.add-map(href='#') + Process
-        a.add-graph(href='#') + Graph
+        a.add-graph(href='#') + Viz
 
       h1
         a(href='/') GRID3
@@ -54,10 +54,24 @@ template(name='source_show')
                     {{code}}
                 div.row
                   input(type='submit' value='Save')
-                  input.delete.error(type='button', value='Delete')
+                  input.delete-step.error(type='button', value='Delete')
           {{else}}
             div.step.collapsed
               h2 {{title}}
           {{/if}}
         {{/each}}
 
+      h1 Viz
+
+      div.graphs
+        {{#each graphs}}
+          form.graph
+            div.row
+              input(type='text', name='title', value='{{title}}')
+            div.row
+              textarea(name='code').large.code
+                {{code}}
+            div.row
+              input(type='submit' value='Save')
+              input.delete-graph.error(type='button', value='Delete')
+        {{/each}}

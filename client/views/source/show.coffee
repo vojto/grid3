@@ -61,6 +61,9 @@ Template.source_show.helpers
   steps: ->
     Steps.forSource(@)
 
+  graphs: ->
+    Graphs.forSource(@)
+
 Template.source_show.events
   'click a.add-map': (e) ->
     e.preventDefault()
@@ -89,7 +92,7 @@ Template.source_show.events
       insertAtCaret(e.currentTarget, '  ')
       e.preventDefault()
 
-  'submit form': (e) ->
+  'submit form.step': (e) ->
     e.preventDefault()
     data = $(e.currentTarget).serializeObject()
     data.expanded = false
@@ -97,6 +100,17 @@ Template.source_show.events
     Steps.update {_id: @_id}, {$set: data}, (err) ->
       console.log 'err', err
 
-  'click input.delete': (e) ->
+  'click input.delete-step': (e) ->
     e.preventDefault()
     Steps.remove {_id: @_id}
+
+  'click a.add-graph': (e) ->
+    e.preventDefault()
+
+    params =
+      sourceId: @_id
+      title: 'Viz'
+      code: '// viz code here'
+
+    Graphs.insert params, (err) ->
+      console.log 'failed', err if err
