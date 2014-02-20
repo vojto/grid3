@@ -65,32 +65,29 @@ Template.source_show.helpers
     Graphs.forSource(@)
 
 Template.source_show.events
-  'click a.add-map': (e) ->
-    e.preventDefault()
-
-    step = Steps.lastForSource(@)
-    if step
-      weight = step.weight + 1
-    else
-      weight = 0
-
-    params =
-      sourceId: @_id
-      weight: weight
-      title: 'Map'
-      code: 'return data.map(function(d) {\n  return d;\n});'
-
-    Steps.insert params, (e) ->
-      console.log 'Finished inserting', e
-
-  'click div.step.collapsed': (e) ->
-    Steps.update {_id: @_id}, {$set: {expanded: true}}, (err) ->
-      console.log 'Failed', err if err
+  # General
 
   'keydown textarea': (e) ->
     if e.keyCode == 9
       insertAtCaret(e.currentTarget, '  ')
       e.preventDefault()
+
+  # Steps
+
+  'click a.add-step': (e) ->
+    e.preventDefault()
+
+    params =
+      sourceId: @_id
+      weight: Steps.nextWeight()
+      title: 'Map'
+      code: Steps.DEFAULT_CODE
+
+    Steps.insert params, (e) ->
+      console.log 'Finished inserting', e
+
+  'click div.step.collapsed': (e) ->
+    Steps.set(@_id, expanded: true)
 
   'submit form.step': (e) ->
     e.preventDefault()
@@ -104,6 +101,8 @@ Template.source_show.events
     e.preventDefault()
     Steps.remove {_id: @_id}
 
+  # Graphs
+
   'click a.add-graph': (e) ->
     e.preventDefault()
 
@@ -114,3 +113,6 @@ Template.source_show.events
 
     Graphs.insert params, (err) ->
       console.log 'failed', err if err
+
+  'click div.graph.collapsed': (e) ->
+    Graphs.set(@_id, expanded: true)

@@ -3,6 +3,7 @@
     sourceId: { type: String }
     title: { type: String, label: 'Title', optional: true }
     code: { type: String, label: 'Code' }
+    expanded: { type: Boolean, label: 'expanded', optional: true }
 
 @Graphs.allow
   insert: (userId, doc) -> true

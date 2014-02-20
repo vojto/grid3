@@ -16,3 +16,12 @@
 
 @Steps.forSource = (source) ->
   Steps.find({sourceId: source._id}, {sort: {weight: 1}})
+
+@Steps.nextWeight = ->
+  step = Steps.lastForSource(@)
+  if step
+    return step.weight + 1
+  else
+    return 0
+
+@Steps.DEFAULT_CODE = 'return data.map(function(d) {\n  return d;\n});'

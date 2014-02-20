@@ -34,7 +34,7 @@ template(name='source_show')
 
     div.right
       div.actions
-        a.add-map(href='#') + Process
+        a.add-step(href='#') + Process
         a.add-graph(href='#') + Viz
 
       h1
@@ -57,7 +57,9 @@ template(name='source_show')
                   input.delete-step.error(type='button', value='Delete')
           {{else}}
             div.step.collapsed
-              h2 {{title}}
+              h2
+                i.entypo.cog
+                | {{title}}
           {{/if}}
         {{/each}}
 
@@ -65,13 +67,20 @@ template(name='source_show')
 
       div.graphs
         {{#each graphs}}
-          form.graph
-            div.row
-              input(type='text', name='title', value='{{title}}')
-            div.row
-              textarea(name='code').large.code
-                {{code}}
-            div.row
-              input(type='submit' value='Save')
-              input.delete-graph.error(type='button', value='Delete')
+          {{#if expanded}}
+            form.graph
+              div.row
+                input(type='text', name='title', value='{{title}}')
+              div.row
+                textarea(name='code').large.code
+                  {{code}}
+              div.row
+                input(type='submit' value='Save')
+                input.delete-graph.error(type='button', value='Delete')
+          {{else}}
+            div.graph.collapsed
+              h2
+                i.entypo.line-graph
+                | {{title}} 
+          {{/if}}
         {{/each}}
