@@ -18,7 +18,6 @@ Template.source_show.rendered = ->
         [parseFloat(k), data[k]]
       data = data2
     
-
     width = $chart.width()
     height = $chart.height()
     $chart.empty()
@@ -27,9 +26,6 @@ Template.source_show.rendered = ->
       .attr('width', width)
       .attr('height', height+30)
 
-    console.log data
-    console.log svg
-
     # For now we'll just draw the graph manually.
     # Next step of course is to use the code from
     # graph model.
@@ -37,27 +33,17 @@ Template.source_show.rendered = ->
     value = 1
 
     # Label scale
-    labelMin = d3.min data, (d) -> d[label]
-    labelMax = d3.max data, (d) -> d[label]
-    labelScale = d3.scale.linear().domain([labelMin, labelMax]).range([0, width])
-    labelAxis = d3.svg.axis().scale(labelScale).orient('bottom')
+    x = d3.scale.linear().domain(d3.extent(data, (d) -> d[label])).range([0, width])
+    xAxis = d3.svg.axis().scale(x).orient('bottom')
+    y = d3.scale.linear().domain(d3.extent(data, (d) -> d[value])).range([height, 0])
+    yAxis = d3.svg.axis().scale(y).orient('right')
 
-    # Value scale
-    valueMin = d3.min data, (d) -> d[value]
-    valueMax = d3.max data, (d) -> d[value]
-    valueScale = d3.scale.linear().domain([valueMin, valueMax]).range([height, 0])
-    valueAxis = d3.svg.axis().scale(valueScale).orient('right')
-
-    svg.append('g')
-      .call(valueAxis)
-
-    svg.append('g')
-      .attr('transform', "translate(0, #{height})")
-      .call(labelAxis)
+    svg.append('g').attr('transform', "translate(0, #{height})").call(xAxis)
+    svg.append('g').call(yAxis)
 
     line = d3.svg.line().interpolate('basis')
-      .x((d) -> labelScale(d[label]))
-      .y((d) -> valueScale(d[value]))
+      .x((d) -> x(d[label]))
+      .y((d) -> y(d[value]))
     svg.append('path')
       .attr('class', 'line')
       .attr('d', line(data))
@@ -69,11 +55,11 @@ Template.source_show.rendered = ->
         .attr('r', 3)
         .attr('opacity', 0.8)
         .attr('class', 'point')
-        .attr('transform', (d) -> "translate(#{labelScale(d[label])}, #{valueScale(d[value])})")
+        .attr('transform', (d) -> "translate(#{x(d[label])}, #{y(d[value])})")
 
     line = d3.svg.line().interpolate('basis')
-      .x((d) -> labelScale(d[label]))
-      .y((d) -> valueScale(d[value]))
+      .x((d) -> x(d[label]))
+      .y((d) -> y(d[value]))
     svg.append('path')
       .attr('class', 'line')
       .attr('d', line(data))
