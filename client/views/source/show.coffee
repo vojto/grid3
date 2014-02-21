@@ -11,12 +11,17 @@ Template.source_show.rendered = ->
   console.log 'rendered template'
   $chart = $(@find('.chart'))
 
-  Deps.autorun ->
+  Deps.autorun =>
+    # Prepare data
     data = Session.get('preview')
     if !(data instanceof Array)
       data2 = Object.keys(data).map (k) ->
         [parseFloat(k), data[k]]
       data = data2
+
+    # Prepare the graph model
+    graph = Graphs.findOne(sourceId: @data)
+    return unless graph
     
     width = $chart.width()
     height = $chart.height()
@@ -160,7 +165,7 @@ Template.source_show.events
 
   'click a.add-graph': (e) ->
     e.preventDefault()
-    Graphs.insert {sourceId: @_id, title: 'Viz', code: ''}, Flash.handle
+    Graphs.insert {sourceId: @_id, title: 'Viz', code: '//'}, Flash.handle
 
   'click div.graph.collapsed': (e) ->
     Graphs.set(@_id, {expanded: true}, Flash.handle)
