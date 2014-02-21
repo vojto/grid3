@@ -5,6 +5,7 @@
     title: { type: String, label: 'Title', optional: true }
     code: { type: String, label: 'Code' }
     expanded: { type: Boolean, label: 'expanded', optional: true }
+    # disabled: { type: Boolean,}
 
 @Steps.allow
   insert: (userId, doc) -> true

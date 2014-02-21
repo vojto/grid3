@@ -14,8 +14,6 @@ Template.source_show.rendered = ->
 
   # Render the graph whenever source/graph changes
   Deps.autorun =>
-    console.log 'rendering'
-
     data = Session.get('preview')
     if !(data instanceof Array)
       data2 = Object.keys(data).map (k) ->
