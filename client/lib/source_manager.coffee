@@ -17,7 +17,6 @@ class @SourceManager
     IronRouterProgress.start()
     Meteor.call 'sources.load', @source.url, (err, data) =>
       IronRouterProgress.done()
-      console.log 'got data', data
       Sources.update @source._id, {$set: {cachedData: JSON.stringify(data)}}
       @_data = data
       @_processedData = null
@@ -25,11 +24,7 @@ class @SourceManager
       @_dataDep.changed()
       callback() if callback
 
-  ensureDataLoaded: ->
-    @loadData() unless @_isLoaded
-
   preview: ->
-    @ensureDataLoaded()
     @_dataDep.depend()
 
     # Process data with steps
@@ -40,7 +35,6 @@ class @SourceManager
       try
         code = "(function(data) { #{step.code} })"
         compiled = eval(code)
-        console.log compiled
         data = compiled(data)
         
       catch e

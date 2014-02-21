@@ -15,4 +15,5 @@ Router.map ->
     path: '/source/:_id'
     template: 'source_show'
     data: ->
-      Sources.findOne {_id: @params._id}
+      source = Sources.findOne {_id: @params._id}
+      source

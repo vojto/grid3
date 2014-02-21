@@ -1,26 +1,29 @@
 manager = null
 
-Template.source_show.created = ->
-  source = @data
-  manager = new SourceManager(source)
-
-  Deps.autorun ->
-    Session.set 'preview', manager.preview()
+# Template.source_show.created = ->
 
 Template.source_show.rendered = ->
-  console.log 'rendered template'
-  $chart = $(@find('.chart'))
+  return unless @data._id
 
+  manager = new SourceManager(@data)
+  manager.loadData()
+
+  # Put data into preview whenever source/steps change
   Deps.autorun =>
-    # Prepare data
+    Session.set 'preview', manager.preview()
+
+  # Render the graph whenever source/graph changes
+  Deps.autorun =>
     data = Session.get('preview')
     if !(data instanceof Array)
       data2 = Object.keys(data).map (k) ->
         [parseFloat(k), data[k]]
       data = data2
 
+
+    $chart = $(@find('.chart'))
     # Prepare the graph model
-    graph = Graphs.findOne(sourceId: @data)
+    graph = Graphs.findOne(sourceId: @data._id)
     return unless graph
     
     width = $chart.width()
@@ -84,25 +87,21 @@ Template.source_show.helpers
   is2D: ->
     preview = Session.get('preview')
     result = preview instanceof Array && preview.length > 0 && preview[0] instanceof Array
-    console.log 'is2D', result
     result
 
   is1D: ->
     preview = Session.get('preview')
     result = preview instanceof Array && preview.length > 0 && !(preview[0] instanceof Array)
-    console.log 'is1D', result
     result
 
   isObject: ->
     preview = Session.get('preview')
     result = !(preview instanceof Array) && preview instanceof Object
-    console.log 'isObject', result
     result
 
   isNumber: ->
     preview = Session.get('preview')
     result = typeof preview == 'number'
-    console.log 'isNumber', result
     result
 
   isArray: ->
@@ -145,8 +144,7 @@ Template.source_show.events
       title: 'Map'
       code: Steps.DEFAULT_CODE
 
-    Steps.insert params, (e) ->
-      console.log 'Finished inserting', e
+    Steps.insert params, Flash.handle
 
   'click div.step.collapsed': (e) ->
     Steps.set(@_id, expanded: true)
