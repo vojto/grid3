@@ -14,6 +14,8 @@ Template.source_show.rendered = ->
 
   # Render the graph whenever source/graph changes
   Deps.autorun =>
+    console.log 'rendering'
+
     data = Session.get('preview')
     if !(data instanceof Array)
       data2 = Object.keys(data).map (k) ->
@@ -22,13 +24,13 @@ Template.source_show.rendered = ->
 
 
     $chart = $(@find('.chart'))
+    $chart.empty()
     # Prepare the graph model
     graph = Graphs.findOne(sourceId: @data._id)
     return unless graph
     
     width = $chart.width()
     height = $chart.height()
-    $chart.empty()
     svg = d3.select($chart.get(0)).append('svg')
       .attr('class', 'chart')
       .attr('width', width)
@@ -49,28 +51,24 @@ Template.source_show.rendered = ->
     svg.append('g').attr('transform', "translate(0, #{height})").call(xAxis)
     svg.append('g').call(yAxis)
 
-    line = d3.svg.line().interpolate('basis')
-      .x((d) -> x(d[label]))
-      .y((d) -> y(d[value]))
-    svg.append('path')
-      .attr('class', 'line')
-      .attr('d', line(data))
+    code = "(function(data, svg, x, y) { #{graph.code} })"
+    compiled = eval(code)
+    compiled(data, svg, x, y)
 
-    svg.selectAll('circle')
-      .data(data)
-      .enter()
-      .append('circle')
-        .attr('r', 3)
-        .attr('opacity', 0.8)
-        .attr('class', 'point')
-        .attr('transform', (d) -> "translate(#{x(d[label])}, #{y(d[value])})")
+    # line = d3.svg.line().interpolate('basis')
+    #   .x((d) -> x(d[label]))
+    #   .y((d) -> y(d[value]))
+    # svg.append('path')
+    #   .attr('class', 'line')
+    #   .attr('d', line(data))
 
-    line = d3.svg.line().interpolate('basis')
-      .x((d) -> x(d[label]))
-      .y((d) -> y(d[value]))
-    svg.append('path')
-      .attr('class', 'line')
-      .attr('d', line(data))
+
+    # line = d3.svg.line().interpolate('basis')
+    #   .x((d) -> x(d[label]))
+    #   .y((d) -> y(d[value]))
+    # svg.append('path')
+    #   .attr('class', 'line')
+    #   .attr('d', line(data))
 
 
 Template.source_show.helpers
