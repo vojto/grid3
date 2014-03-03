@@ -12,7 +12,7 @@ Template.source_graph.rendered = ->
 
   # Render the graph whenever source/graph changes
   Deps.autorun =>
-    data = Session.get('preview')
+    data = manager.data()
     if !(data instanceof Array)
       data2 = Object.keys(data).map (k) ->
         [parseFloat(k), data[k]]

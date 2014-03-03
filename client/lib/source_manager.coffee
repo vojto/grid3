@@ -25,6 +25,13 @@ class @SourceManager
       callback() if callback
 
   preview: ->
+    data = @data()
+    if data instanceof Array
+      data.slice(0, 10)
+    else
+      data
+
+  data: ->
     @_dataDep.depend()
 
     # Process data with steps
@@ -35,7 +42,7 @@ class @SourceManager
 
     # Don't do any processing if no step is selected
     if !currentStep
-      return data
+      return data.slice(0, 10)
     
 
     steps.every (step) ->
@@ -55,8 +62,5 @@ class @SourceManager
         return false
       
       return true
-    
-    if data instanceof Array
-      data.slice(0, 100)
 
     data
