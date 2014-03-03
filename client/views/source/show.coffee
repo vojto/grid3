@@ -113,7 +113,10 @@ Template.source_show.events
     Steps.insert params, Flash.handle
 
   'click div.step.collapsed': (e) ->
-    Session.set('editedObject', @)
+    if @title && @url # type is source
+      Session.set('editedObject', null)
+    else
+      Session.set('editedObject', @)
 
   'submit form.step': (e) ->
     e.preventDefault()

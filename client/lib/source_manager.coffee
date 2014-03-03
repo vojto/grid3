@@ -32,6 +32,12 @@ class @SourceManager
     currentStep = Session.get('editedObject')
     data = $.extend(true, [], @_data)
     success = true
+
+    # Don't do any processing if no step is selected
+    if !currentStep
+      return data
+    
+
     steps.every (step) ->
       try
         code = "(function(data) { #{step.code} })"
