@@ -1,7 +1,4 @@
 manager = null
-
-# Template.source_show.created = ->
-
     
 Template.source_show.helpers
   dataColumns: ->

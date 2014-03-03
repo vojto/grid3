@@ -8,7 +8,7 @@ template(name='source_show')
           i.entypo.numbered-list
           span {{title}}
         {{#each steps}}
-          div.step.collapsed(class='{{currentClass}}')
+          div.draggable.step.collapsed(class='{{currentClass}}', data-id='{{_id}}')
             i.entypo.cog
             span {{title}}
         {{/each}}
