@@ -8,8 +8,6 @@ template(name='source_code')
           i.entypo.check.submit.primary
           i.entypo.cross.delete
         div.row
-          {{#constant}}
-            div.code
-          {{/constant}}
+          {{> source_code_editor}}
         
   {{/with}}
