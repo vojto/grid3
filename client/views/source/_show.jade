@@ -1,42 +1,6 @@
 template(name='source_show')
   div.split
-    div.left
-      {{#constant}}
-        .chart
-      {{/constant}}
-
-      table.preview
-        {{#if is2D}}
-          {{#each dataPreview}}
-            tr
-              {{#each this}}
-                td {{this}}
-              {{/each}}
-          {{/each}}
-        {{/if}}
-
-        {{#if is1D}}
-          {{#each dataPreview}}
-            tr
-              td {{this}}
-          {{/each}}
-        {{/if}}
-
-        {{#if isObject}}
-          {{#each dataPreviewObject}}
-            tr
-              th {{key}}
-              td {{value}}
-          {{/each}}
-        {{/if}}
-
-        {{#if isNumber}}
-          tr
-            th {{dataPreview}}
-        {{/if}}
-
-
-    div.right
+    div.sidebar
       div.actions
         a.add-step(href='#') + Process
         a.add-graph(href='#') + Viz
@@ -88,3 +52,11 @@ template(name='source_show')
                 | {{title}} 
           {{/if}}
         {{/each}}
+
+    div.left
+      | code here
+
+
+    div.right
+      {{> source_table}}
+
