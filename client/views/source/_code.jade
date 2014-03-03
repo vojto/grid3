@@ -1,0 +1,12 @@
+template(name='source_code')
+  {{#with object}}
+    form.step
+      div.row
+        input(type='text', name='title', value='{{title}}')
+      div.row
+        textarea(name='code').large.code
+          {{code}}
+      div.row
+        input(type='submit' value='Save')
+        input.delete-step.error(type='button', value='Delete')
+  {{/with}}

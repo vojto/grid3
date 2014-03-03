@@ -8,22 +8,15 @@ template(name='source_show')
           i.entypo.numbered-list
           span {{title}}
         {{#each steps}}
-          {{#if expanded}}
-            div.step.expanded
-              form.step
-                div.row
-                  input(type='text', name='title', value='{{title}}')
-                div.row
-                  textarea(name='code').large.code
-                    {{code}}
-                div.row
-                  input(type='submit' value='Save')
-                  input.delete-step.error(type='button', value='Delete')
-          {{else}}
-            div.step.collapsed
-              i.entypo.cog
-              span {{title}}
-          {{/if}}
+          div.step.collapsed(class='{{currentClass}}')
+            i.entypo.cog
+            span {{title}}
+        {{/each}}
+
+        {{#each graphs}}
+          div.step.graph.collapsed(class='{{currentClass}}')
+            i.entypo.line-graph
+            span {{title}}
         {{/each}}
 
         div.step.action.add-step
@@ -33,29 +26,9 @@ template(name='source_show')
           i.entypo.plus
           span Graph
 
-      div.graphs
-        {{#each graphs}}
-          {{#if expanded}}
-            form.graph
-              div.row
-                input(type='text', name='title', value='{{title}}')
-              div.row
-                textarea(name='code').large.code
-                  {{code}}
-              div.row
-                input(type='submit' value='Save')
-                input.delete-graph.error(type='button', value='Delete')
-          {{else}}
-            div.graph.collapsed
-              h2
-                i.entypo.line-graph
-                | {{title}} 
-          {{/if}}
-        {{/each}}
-
 
     div.left
-      | code here
+      {{> source_code}}
 
 
     div.right

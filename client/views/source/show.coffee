@@ -83,6 +83,14 @@ Template.source_show.helpers
   graphs: ->
     Graphs.forSource(@)
 
+  currentClass: ->
+    edited = Session.get('editedObject')
+    if edited && edited._id == @_id
+      'edited'
+    else
+      ''
+    
+
 Template.source_show.events
   # General
 
@@ -105,7 +113,7 @@ Template.source_show.events
     Steps.insert params, Flash.handle
 
   'click div.step.collapsed': (e) ->
-    Steps.set(@_id, expanded: true)
+    Session.set('editedObject', @)
 
   'submit form.step': (e) ->
     e.preventDefault()
