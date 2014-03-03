@@ -8,7 +8,8 @@ template(name='source_code')
           i.entypo.check.submit.primary
           i.entypo.cross.delete
         div.row
-          textarea(name='code').large.code
-            {{code}}
+          {{#constant}}
+            div.code
+          {{/constant}}
         
   {{/with}}

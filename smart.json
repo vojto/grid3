@@ -14,6 +14,8 @@
     "npm": {},
     "moment": {},
     "autoform": {},
-    "reactive-ace": {}
+    "reactive-ace": {
+      "git": "https://github.com/mad-eye/meteor-reactive-ace.git"
+    }
   }
 }
