@@ -15,7 +15,8 @@
       },
       "npm": {},
       "moment": {},
-      "autoform": {}
+      "autoform": {},
+      "reactive-ace": {}
     },
     "packages": {
       "iron-router": {
@@ -52,6 +53,11 @@
         "git": "https://github.com/aldeed/meteor-autoform.git",
         "tag": "v0.4.18",
         "commit": "991efc809b959e77d94796f47ca6c5b1e5c2c6e2"
+      },
+      "reactive-ace": {
+        "git": "https://github.com/mad-eye/meteor-reactive-ace.git",
+        "tag": "v0.0.4",
+        "commit": "9db4f200d7c27c61b242b7cc6a64bad7d2b3794c"
       },
       "simple-schema": {
         "git": "https://github.com/aldeed/meteor-simple-schema.git",

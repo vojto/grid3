@@ -13,6 +13,7 @@
     },
     "npm": {},
     "moment": {},
-    "autoform": {}
+    "autoform": {},
+    "reactive-ace": {}
   }
 }
