@@ -28,10 +28,11 @@ class @SourceManager
     @_dataDep.depend()
 
     # Process data with steps
-    steps = Steps.forSource(@source)
-    data = $.extend(true, [], @_data);
+    steps = Steps.forSource(@source).fetch()
+    currentStep = Session.get('editedObject')
+    data = $.extend(true, [], @_data)
     success = true
-    steps.forEach (step) ->
+    steps.every (step) ->
       try
         code = "(function(data) { #{step.code} })"
         compiled = eval(code)
@@ -43,6 +44,11 @@ class @SourceManager
         console.log step.code
         success = false
         data = [[]]
+
+      if currentStep && currentStep._id == step._id
+        return false
+      
+      return true
     
     if data instanceof Array
       data.slice(0, 100)
