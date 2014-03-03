@@ -1,21 +1,44 @@
 @import '_colors'
+@import 'nib'
 
-.actions
-  float right
-  padding-top 25px
-  padding-right 15px
+div.steps
+  margin-top 20px
 
-  a
-    text-decoration underline
-    margin-right 10px
-    color fg1
-
-div.collapsed
-  background fg1
-  color bg1
-  padding 1px 15px
-  margin-bottom 10px
+div.step
+  margin-bottom 20px
   cursor pointer
+
+  i.entypo
+    font-size 40px
+    background #394958
+    // background red
+    padding 5px
+    border-radius 50%
+    width 18px
+    height 18px
+    display inline-block
+    text-align center
+    line-height 45%
+
+  span
+    display inline-block
+    position relative
+    top -5px
+    margin-left 5px
+    font-weight 500
+
+  &.action
+    margin-bottom 10px
+    color #90a4b7
+
+    i.entypo
+      background #5a6b7b
+      width 15px
+      height 15px
+      line-height 40%
+    span
+      top -4px
+      font-weight 400
 
 div.chart
   height 250px

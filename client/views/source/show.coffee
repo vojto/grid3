@@ -68,7 +68,7 @@ Template.source_show.rendered = ->
     #   .attr('class', 'line')
     #   .attr('d', line(data))
     
-
+Template.source_show.helpers
   dataColumns: ->
     preview = Session.get('preview')
     return [] unless preview
@@ -77,6 +77,7 @@ Template.source_show.rendered = ->
       i + 1
 
   steps: ->
+    console.log 'getting steps for source', @
     Steps.forSource(@)
 
   graphs: ->
@@ -92,7 +93,7 @@ Template.source_show.events
 
   # Steps
 
-  'click a.add-step': (e) ->
+  'click .action.add-step': (e) ->
     e.preventDefault()
 
     params =
@@ -118,7 +119,7 @@ Template.source_show.events
 
   # Graphs
 
-  'click a.add-graph': (e) ->
+  'click .action.add-graph': (e) ->
     e.preventDefault()
     Graphs.insert {sourceId: @_id, title: 'Viz', code: '//'}, Flash.handle
 

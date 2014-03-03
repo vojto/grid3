@@ -1,16 +1,12 @@
 template(name='source_show')
   div.split
     div.sidebar
-      div.actions
-        a.add-step(href='#') + Process
-        a.add-graph(href='#') + Viz
-
-      h1
-        a(href='/') GRID3
-        |  //
-        | {{title}}
+      a(href='/') Back
 
       div.steps
+        div.step.collapsed
+          i.entypo.numbered-list
+          span {{title}}
         {{#each steps}}
           {{#if expanded}}
             div.step.expanded
@@ -25,13 +21,17 @@ template(name='source_show')
                   input.delete-step.error(type='button', value='Delete')
           {{else}}
             div.step.collapsed
-              h2
-                i.entypo.cog
-                | {{title}}
+              i.entypo.cog
+              span {{title}}
           {{/if}}
         {{/each}}
 
-      h1 Viz
+        div.step.action.add-step
+          i.entypo.plus
+          span Processing
+        div.step.action.add-graph
+          i.entypo.plus
+          span Graph
 
       div.graphs
         {{#each graphs}}
@@ -52,6 +52,7 @@ template(name='source_show')
                 | {{title}} 
           {{/if}}
         {{/each}}
+
 
     div.left
       | code here
