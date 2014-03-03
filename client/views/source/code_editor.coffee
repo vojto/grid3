@@ -16,3 +16,5 @@ Template.source_code_editor.rendered = ->
   @editor.theme = "tomorrow_night"
   @editor.syntaxMode = "javascript"
   @editor.fontSize = 14
+
+  @editor._editor.setValue(@data.code, 1)
