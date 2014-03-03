@@ -28,7 +28,7 @@ Template.source_graph.rendered = ->
       return
     
     width = $chart.width()
-    height = $chart.height()
+    height = 400
     svg = d3.select($chart.get(0)).append('svg')
       .attr('class', 'chart')
       .attr('width', width)
