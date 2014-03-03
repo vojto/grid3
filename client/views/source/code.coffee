@@ -7,7 +7,11 @@ Template.source_code.events
     data.code = ace.edit($editor).getValue()
     console.log 'data', data
     data.expanded = false
+
+    # This is a terrible hack, but one of this will succeed, and the
+    # other one will fail.
     Steps.set(@_id, data, Flash.handle)
+    Graphs.set(@_id, data, Flash.handle)
 
   'click .delete': (e) ->
     e.preventDefault()

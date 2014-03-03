@@ -1,4 +1,14 @@
 Template.source_table.helpers
+  wantsTable: ->
+    editedObject = Session.get('editedObject')
+
+    if !editedObject
+      true
+    else if editedObject.isGraph
+      false
+    else
+      true
+
   dataPreview: ->
     Session.get('preview')
 
