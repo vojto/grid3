@@ -13,14 +13,8 @@ Template.source_graph.rendered = ->
   # Render the graph whenever source/graph changes
   Deps.autorun =>
     data = manager.data()
-    if !(data instanceof Array)
-      data2 = Object.keys(data).map (k) ->
-        [parseFloat(k), data[k]]
-      data = data2
-
 
     $chart = $(@find('.graph'))
-    # console.log 'heres the $chart', $chart
     $chart.empty()
 
     graph = Session.get('editedObject')
@@ -56,18 +50,3 @@ Template.source_graph.rendered = ->
     code = "(function(data, svg, x, y) { #{graph.code} })"
     compiled = eval(code)
     compiled(data, svg, x, y)
-
-    # line = d3.svg.line().interpolate('basis')
-    #   .x((d) -> x(d[label]))
-    #   .y((d) -> y(d[value]))
-    # svg.append('path')
-    #   .attr('class', 'line')
-    #   .attr('d', line(data))
-
-
-    # line = d3.svg.line().interpolate('basis')
-    #   .x((d) -> x(d[label]))
-    #   .y((d) -> y(d[value]))
-    # svg.append('path')
-    #   .attr('class', 'line')
-    #   .attr('d', line(data))

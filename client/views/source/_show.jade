@@ -2,6 +2,8 @@ template(name='source_show')
   div.split
     div.sidebar
       a(href='/') Back
+      |  | 
+      a(href="{{pathFor 'dashboard.show'}}") Dashboard
 
       div.steps
         div.step.collapsed

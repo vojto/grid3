@@ -38,12 +38,7 @@ class @SourceManager
     steps = Steps.forSource(@source).fetch()
     currentStep = Session.get('editedObject')
     data = $.extend(true, [], @_data)
-    success = true
-
-    # Don't do any processing if no step is selected
-    if !currentStep
-      return data.slice(0, 10)
-    
+    success = true    
 
     steps.every (step) ->
       try
@@ -65,5 +60,10 @@ class @SourceManager
       return true
 
     Session.set('sourceError', null) if success
+
+    if !(data instanceof Array)
+      data2 = Object.keys(data).map (k) ->
+        [parseFloat(k), data[k]]
+      data = data2
 
     data

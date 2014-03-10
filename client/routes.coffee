@@ -18,5 +18,5 @@ Router.map ->
 
   @route 'dashboard.show',
     path: '/dashboard/:_id'
-    template: 'dashbaord_show'
+    template: 'dashboard_show'
     data: -> Sources.findOne {_id: @params._id}
