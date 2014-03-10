@@ -14,6 +14,9 @@ Router.map ->
   @route 'source.show',
     path: '/source/:_id'
     template: 'source_show'
-    data: ->
-      source = Sources.findOne {_id: @params._id}
-      source
+    data: -> Sources.findOne {_id: @params._id}
+
+  @route 'dashboard.show',
+    path: '/dashboard/:_id'
+    template: 'dashbaord_show'
+    data: -> Sources.findOne {_id: @params._id}
