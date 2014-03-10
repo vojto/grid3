@@ -17,3 +17,5 @@ Template.source_code.events
     e.preventDefault()
     if confirm("Are you sure you want to remove step #{@title}?")    
       Steps.remove {_id: @_id}
+      Graphs.remove {_id: @_id}
+      Session.set('editedObject', null)
