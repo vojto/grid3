@@ -55,6 +55,7 @@ class @SourceManager
         console.log 'Failed', e.message
         console.log e
         console.log step.code
+        Session.set('sourceError', e.message)
         success = false
         data = [[]]
 
@@ -62,5 +63,7 @@ class @SourceManager
         return false
       
       return true
+
+    Session.set('sourceError', null) if success
 
     data

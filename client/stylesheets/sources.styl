@@ -87,6 +87,15 @@ form.step
       &.primary
         background #4892d9
         color #1c4b77
+        transition background 0.15s, color 0.15s, -webkit-transform 0.15s
+
+        &.pulse
+          background #5ad13a
+          color #134007
+          transform scale(1.2)
+
+        &.pulseback
+          transition background 1s, color 1s, -webkit-transform 1s
 
 
   input, textarea
@@ -114,3 +123,11 @@ form.step
   .ace_marker-layer
     .ace_active-line
       background bg1 !important
+
+
+// Error
+
+.error
+  background #d72727
+  padding 10px 15px
+  border-radius 3px

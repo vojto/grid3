@@ -1,17 +1,34 @@
+saveEditedObject = (template) ->
+  object = Session.get('editedObject')
+  return unless object
+
+  $form = $(template.find('form'))
+  $editor = template.find('div.code')
+  data = $form.serializeObject()
+  data.code = ace.edit($editor).getValue()
+  data.expanded = false
+
+  Steps.set(object._id, data, Flash.handle)
+  Graphs.set(object._id, data, Flash.handle)
+
+  # Animate the button
+  $button = $(template.find('.primary'))
+  $button.removeClass('pulseback').addClass('pulse')
+  setTimeout ->
+    $button.addClass('pulseback').removeClass('pulse')
+  , 150
+
+Template.source_code.rendered = ->
+  shortcuts = ['ctrl+s', 'command+s']
+  Mousetrap.bind shortcuts, (e) =>
+    e.preventDefault()
+    saveEditedObject(@)
+
 Template.source_code.events
   'click .submit': (e, template) ->
     e.preventDefault()
-    $form = $(template.find('form'))
-    $editor = template.find('div.code')
-    data = $form.serializeObject()
-    data.code = ace.edit($editor).getValue()
-    console.log 'data', data
-    data.expanded = false
-
-    # This is a terrible hack, but one of this will succeed, and the
-    # other one will fail.
-    Steps.set(@_id, data, Flash.handle)
-    Graphs.set(@_id, data, Flash.handle)
+    saveEditedObject(template)
+    
 
   'click .delete': (e) ->
     e.preventDefault()
