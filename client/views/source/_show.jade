@@ -19,12 +19,9 @@ template(name='source_show')
             span {{title}}
         {{/each}}
 
-        div.step.action.add-step
-          i.entypo.plus
-          span Processing
-        div.step.action.add-graph
-          i.entypo.plus
-          span Graph
+        {{{plusButton 'add-step' 'plus' 'Process'}}}  
+        {{{plusButton 'add-line-chart' 'plus' 'Line chart'}}}
+        {{{plusButton 'add-bar-chart' 'plus' 'Bar chart'}}}
 
 
     div.left

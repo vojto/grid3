@@ -1,4 +1,30 @@
 manager = null
+
+LINE_CHART_CODE = """
+var line = d3.svg.line()
+    .interpolate('basis')  
+    .x(function(d) { return x(d[0]) })
+    .y(function(d) { return y(d[1]) });
+
+svg.append('path')
+    .attr('class', 'line')  
+    .attr('d', line(data));
+"""
+
+BAR_CHART_CODE = """
+var width = svg.attr('width') / data.length;
+var barWidth = width;
+var height = svg.attr('height');
+
+svg.selectAll('rect')
+  .data(data)
+  .enter()
+  .append('rect')
+  .attr('width', barWidth)
+  .attr('height', function(d) { return height-y(d[1])-30 })
+  .attr('x', function(d) { return x(d[0]) })
+  .attr('y', function(d) { return y(d[1]) });
+"""
     
 Template.source_show.helpers
   dataColumns: ->
@@ -21,6 +47,9 @@ Template.source_show.helpers
       'edited'
     else
       ''
+  
+  plusButton: (klass, icon, label) ->
+    "<div class='step action #{klass}'><i class='entypo #{icon}'></i><span>#{label}</span></div>"
     
 
 Template.source_show.events
@@ -52,9 +81,13 @@ Template.source_show.events
 
   # Graphs
 
-  'click .action.add-graph': (e) ->
+  'click .action.add-line-chart': (e) ->
     e.preventDefault()
-    Graphs.insert {sourceId: @_id, title: 'Viz', code: '//\n'}, Flash.handle
+    Graphs.insert {sourceId: @_id, title: 'Viz', code: LINE_CHART_CODE}, Flash.handle
+
+  'click .action.add-bar-chart': (e) ->
+    e.preventDefault()
+    Graphs.insert {sourceId: @_id, title: 'Viz', code: BAR_CHART_CODE}, Flash.handle
 
   'click div.graph.collapsed': (e) ->
     Graphs.set(@_id, {expanded: true}, Flash.handle)
