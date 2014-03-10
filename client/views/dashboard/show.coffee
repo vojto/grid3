@@ -17,3 +17,7 @@ Template.dashboard_show.rendered = ->
     grapher = new Grapher(graph: graph, el: $chart, data: data)
 
     
+Template.dashboard_show.events
+  'click button.editor': (e, template) ->
+    console.log @
+    Router.go 'source.show', @

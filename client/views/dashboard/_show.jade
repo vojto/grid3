@@ -1,5 +1,12 @@
 template(name='dashboard_show')
-  {{#constant}}
-    .graph
-      | graph here brother
-  {{/constant}}
+  header
+    .buttons
+      button.editor
+        i.entypo.line-graph
+        | Editor
+    a.logo
+  main
+    {{#constant}}
+      .graph
+        | graph here brother
+    {{/constant}}

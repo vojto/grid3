@@ -1,17 +1,23 @@
 <template name="home.index">
-  <ul class="sources">
-    {{#each sources}}
-      <li>
-        <div><i class="entypo text-doc"></i></div>
-        <small>
-          {{title}}
-          <i class="delete entypo circled-cross"></i>
-        </small>
+  <header>
+    <a class="logo"></a>
+  </header>
+
+  <main>
+    <ul class="sources">
+      {{#each sources}}
+        <li>
+          <div><i class="entypo text-doc"></i></div>
+          <small>
+            {{title}}
+            <i class="delete entypo circled-cross"></i>
+          </small>
+        </li>
+      {{/each}}
+      <li class='add-document'>
+        <div><i class="entypo circled-plus"></i></div>
+        <small>Add document</small>
       </li>
-    {{/each}}
-    <li class='add-document'>
-      <div><i class="entypo circled-plus"></i></div>
-      <small>Add document</small>
-    </li>
-  </ul>
+    </ul>
+  </main>
 </template>
