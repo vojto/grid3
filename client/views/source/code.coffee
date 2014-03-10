@@ -16,7 +16,7 @@ saveEditedObject = (template) ->
   $button.removeClass('pulseback').addClass('pulse')
   setTimeout ->
     $button.addClass('pulseback').removeClass('pulse')
-  , 150
+  , 200
 
 Template.source_code.rendered = ->
   shortcuts = ['ctrl+s', 'command+s']
