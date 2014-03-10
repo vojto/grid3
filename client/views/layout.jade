@@ -2,4 +2,11 @@ head
   title GRID
 
 template(name="layout")
-  {{yield}}
+  header
+    .buttons
+      button
+        i.entypo.line-graph
+        | Dashboard
+    a.logo
+  main
+    {{yield}}
