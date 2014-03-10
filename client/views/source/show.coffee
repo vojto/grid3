@@ -1,5 +1,7 @@
 manager = null
 
+# TODO: This code belongs to the model
+
 LINE_CHART_CODE = """
 var line = d3.svg.line()
     .interpolate('basis')  
