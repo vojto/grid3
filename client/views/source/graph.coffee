@@ -26,6 +26,10 @@ Template.source_graph.rendered = ->
     graph = Session.get('editedObject')
     if !graph || !graph.isGraph
       return
+
+    # Reload the graph from database, to make sure we get 
+    # an auto-updating version with deps.
+    graph = Graphs.findOne({_id: graph._id})
     
     width = $chart.width()
     height = 400
