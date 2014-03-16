@@ -20,3 +20,8 @@ Router.map ->
     path: '/dashboard/:_id'
     template: 'dashboard_show'
     data: -> Sources.findOne {_id: @params._id}
+
+  @route 'flow.edit',
+    path: '/flow/:_id'
+    template: 'flow_edit'
+    data: -> Sources.findOne {_id: @params._id}

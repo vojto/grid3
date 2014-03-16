@@ -19,5 +19,4 @@ Template.dashboard_show.rendered = ->
     
 Template.dashboard_show.events
   'click button.editor': (e, template) ->
-    console.log @
     Router.go 'source.show', @
