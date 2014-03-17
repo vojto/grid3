@@ -1,11 +1,11 @@
 template(name='source_code')
-  +object
+  with object
     .step-form-wrapper
       form.step
         div.row
-          input(type='text', name='title', value='{{title}}')
+          input(type='text', name='title', value=title)
         div.actions
           i.entypo.check.submit.primary
           i.entypo.cross.delete
         div.row
-          {{> source_code_editor}}
+          +source_code_editor

@@ -24,6 +24,10 @@ Template.source_code.rendered = ->
     e.preventDefault()
     saveEditedObject(@)
 
+Template.source_code.helpers
+  'object': ->
+    @
+
 Template.source_code.events
   'click .submit': (e, template) ->
     e.preventDefault()
