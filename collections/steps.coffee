@@ -5,6 +5,8 @@
     title: { type: String, label: 'Title', optional: true }
     code: { type: String, label: 'Code' }
     expanded: { type: Boolean, label: 'expanded', optional: true }
+    x: { type: Number, label: 'X', optional: true }
+    y: { type: Number, label: 'Y', optional: true }
     # disabled: { type: Boolean,}
 
 @Steps.allow

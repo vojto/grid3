@@ -10,7 +10,7 @@ template(name='flow_edit')
       .main
         #flow
           each steps
-            div.step.collapsed
+            div.step.collapsed(data-id=_id, style=stepStyle)
               i.entypo.cog
               span= title
           = updateStep
