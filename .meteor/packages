@@ -9,13 +9,11 @@ insecure
 preserve-inputs
 stylus
 coffeescript
-iron-router
 iron-router-progress
-collection2
 d3
 http
-belt-jade-handlebars
 npm
 moment
-autoform
 reactive-ace
+collection2
+iron-router

@@ -1,21 +1,24 @@
 {
   "meteor": {
     "git": "https://github.com/meteor/meteor.git",
-    "branch": "devel"
+    "tag": "release/blaze-rc1"
   },
   "packages": {
-    "iron-router": {},
-    "iron-router-progress": {},
-    "collection2": {},
-    "belt-jade-handlebars": {
-      "git": "https://github.com/meteorbelt/belt-jade-handlebars",
-      "tag": "v0.1.0"
-    },
     "npm": {},
     "moment": {},
-    "autoform": {},
     "reactive-ace": {
       "git": "https://github.com/mad-eye/meteor-reactive-ace.git"
+    },
+    "jade": {},
+    "blaze-layout": {},
+    "collection2": {},
+    "autoform": {
+      "git": "https://github.com/aldeed/meteor-autoform.git",
+      "branch": "ui"
+    },
+    "iron-router": {
+      "git": "https://github.com/EventedMind/iron-router.git",
+      "branch": "blaze-integration"
     }
   }
 }
