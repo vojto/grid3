@@ -7,7 +7,7 @@
     expanded: { type: Boolean, label: 'expanded', optional: true }
     x: { type: Number, label: 'X', optional: true }
     y: { type: Number, label: 'Y', optional: true }
-    # disabled: { type: Boolean,}
+    inputStepId: { type: String, optional: true }
 
 @Steps.allow
   insert: (userId, doc) -> true
@@ -26,5 +26,12 @@
     return step.weight + 1
   else
     return 0
+
+@Steps.lastIdForSource = (source) ->
+  step = @lastForSource(source)
+  if step
+    step._id
+  else
+    null
 
 @Steps.DEFAULT_CODE = 'return data.map(function(d) {\n  return d;\n});'

@@ -67,14 +67,20 @@ Template.source_show.events
 
   # Steps
 
-  'click .action.add-step': (e) ->
+  'click .action.add-step': (e, template) ->
     e.preventDefault()
 
+    source = template.data
+
     params =
-      sourceId: @_id
-      weight: Steps.nextWeight(@)
+      sourceId: source._id
+      weight: Steps.nextWeight(source)
       title: 'Map'
       code: Steps.DEFAULT_CODE
+      inputStepId: Steps.lastIdForSource(source)
+
+    alert "inserting with inputStepId: #{params.inputStepId}"
+    console.log params
 
     Steps.insert params, Flash.handle
 

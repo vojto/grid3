@@ -3,13 +3,14 @@ Template.source_graph.rendered = ->
 
   # Put data into preview whenever source/steps change
   Deps.autorun =>
-    return unless @data._id
+    return unless @data && @data._id
     manager = new SourceManager(@data)
     manager.loadData()
     Session.set 'preview', manager.preview()
 
   # Render the graph whenever source/graph changes
   Deps.autorun =>
+    return unless manager
     data = manager.data()
 
     $chart = $(@find('.graph'))
