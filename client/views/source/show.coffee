@@ -37,7 +37,6 @@ Template.source_show.helpers
       i + 1
 
   steps: ->
-    console.log 'getting steps for source', @
     Steps.forSource(@)
 
   graphs: ->
@@ -61,6 +60,10 @@ Template.source_show.events
     if e.keyCode == 9
       insertAtCaret(e.currentTarget, '  ')
       e.preventDefault()
+
+  'click a.flow': (e) ->
+    e.preventDefault()
+    Router.go('flow.edit', @)
 
   # Steps
 

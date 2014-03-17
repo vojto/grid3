@@ -3,9 +3,9 @@ template(name='source_show')
     div.sidebar
       a(href='/') Back
       |  | 
-      a(href="{{pathFor 'dashboard.show'}}") Dashboard
+      a(href="#") Dashboard
       |  | 
-      a(href="{{pathFor 'flow.edit'}}") Flow
+      a.flow(href='#') Flow
 
       div.steps
         div.step.collapsed
