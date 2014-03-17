@@ -61,7 +61,7 @@ Template.source_show.events
       insertAtCaret(e.currentTarget, '  ')
       e.preventDefault()
 
-  'click a.flow': (e) ->
+  'click button.flow': (e) ->
     e.preventDefault()
     Router.go('flow.edit', @)
 

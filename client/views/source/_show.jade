@@ -1,11 +1,16 @@
 template(name='source_show')
+  header
+    .buttons
+      button.editor.flow
+        i.entypo.flow-tree
+        | Flow
+    a.logo
+
   div.split
     div.sidebar
       a(href='/') Back
       |  | 
       a(href="#") Dashboard
-      |  | 
-      a.flow(href='#') Flow
 
       div.steps
         div.step.collapsed
