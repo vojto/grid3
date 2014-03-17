@@ -1,13 +1,11 @@
 Template.source_graph.rendered = ->
-  # Cancel if data (source) didn't come through from router yet
-  return unless @data._id
-
-  # Prepare the source manager
-  manager = new SourceManager(@data)
-  manager.loadData()
+  manager = null
 
   # Put data into preview whenever source/steps change
   Deps.autorun =>
+    return unless @data._id
+    manager = new SourceManager(@data)
+    manager.loadData()
     Session.set 'preview', manager.preview()
 
   # Render the graph whenever source/graph changes
