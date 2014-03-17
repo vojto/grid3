@@ -22,6 +22,7 @@
     "blaze-layout": {
       "git": "https://github.com/EventedMind/blaze-layout.git",
       "branch": "devel"
-    }
+    },
+    "iron-router-progress": {}
   }
 }

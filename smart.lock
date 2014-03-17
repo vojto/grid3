@@ -25,7 +25,8 @@
       "blaze-layout": {
         "git": "https://github.com/EventedMind/blaze-layout.git",
         "branch": "devel"
-      }
+      },
+      "iron-router-progress": {}
     },
     "packages": {
       "npm": {
@@ -67,6 +68,11 @@
         "git": "https://github.com/EventedMind/blaze-layout.git",
         "branch": "devel",
         "commit": "f52f416d6277f27b11832355298553e46b8cc6fd"
+      },
+      "iron-router-progress": {
+        "git": "https://github.com/Multiply/iron-router-progress.git",
+        "tag": "v0.2.0",
+        "commit": "ce730d1d26feadb7c75ea25f22c5bfdb0c549a8b"
       },
       "simple-schema": {
         "git": "https://github.com/aldeed/meteor-simple-schema.git",

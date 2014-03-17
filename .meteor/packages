@@ -4,12 +4,10 @@
 # but you can also edit it by hand.
 
 standard-app-packages
-autopublish
 insecure
 preserve-inputs
 stylus
 coffeescript
-iron-router-progress
 d3
 http
 npm
@@ -19,3 +17,4 @@ collection2
 iron-router
 blaze-layout
 jade
+iron-router-progress

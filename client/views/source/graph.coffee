@@ -3,8 +3,11 @@ Template.source_graph.rendered = ->
 
   # Put data into preview whenever source/steps change
   Deps.autorun =>
-    return unless @data && @data._id
-    manager = new SourceManager(@data)
+    # return unless @data && @data._id
+    # data = @getData()
+    data = Router.getData()
+    return unless data
+    manager = new SourceManager(data)
     manager.loadData()
     Session.set 'preview', manager.preview()
 
