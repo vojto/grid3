@@ -12,12 +12,12 @@ template(name='source_show')
           i.entypo.numbered-list
           span= title
         each steps
-          div.draggable.step.collapsed(class='{{currentClass}}', data-id='{{_id}}')
+          div.draggable.step.collapsed(class=currentClass, data-id=_id)
             i.entypo.cog
             span= title
 
         each graphs
-          div.step.graph.collapsed(class='{{currentClass}}')
+          div.step.graph.collapsed(class=currentClass)
             i.entypo.line-graph
             span= title
 
