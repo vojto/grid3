@@ -10,7 +10,6 @@
       "git": "https://github.com/mad-eye/meteor-reactive-ace.git"
     },
     "jade": {},
-    "blaze-layout": {},
     "collection2": {},
     "autoform": {
       "git": "https://github.com/aldeed/meteor-autoform.git",
@@ -19,6 +18,10 @@
     "iron-router": {
       "git": "https://github.com/EventedMind/iron-router.git",
       "branch": "blaze-integration"
+    },
+    "blaze-layout": {
+      "git": "https://github.com/EventedMind/blaze-layout.git",
+      "branch": "devel"
     }
   }
 }

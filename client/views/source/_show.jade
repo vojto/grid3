@@ -10,18 +10,16 @@ template(name='source_show')
       div.steps
         div.step.collapsed
           i.entypo.numbered-list
-          span {{title}}
-        {{#each steps}}
+          span= title
+        each steps
           div.draggable.step.collapsed(class='{{currentClass}}', data-id='{{_id}}')
             i.entypo.cog
-            span {{title}}
-        {{/each}}
+            span= title
 
-        {{#each graphs}}
+        each graphs
           div.step.graph.collapsed(class='{{currentClass}}')
             i.entypo.line-graph
-            span {{title}}
-        {{/each}}
+            span= title
 
         {{{plusButton 'add-step' 'plus' 'Process'}}}  
         {{{plusButton 'add-line-chart' 'plus' 'Line chart'}}}

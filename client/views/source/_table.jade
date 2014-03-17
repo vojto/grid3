@@ -1,32 +1,23 @@
 template(name='source_table')
-  {{#if wantsTable}}
+  if wantsTable
     table.preview
-      {{#if is2D}}
-        {{#each dataPreview}}
+      if is2D
+        each dataPreview
           tr
-            {{#each this}}
-              td {{this}}
-            {{/each}}
-        {{/each}}
-      {{/if}}
+            each this
+              td= this
 
-      {{#if is1D}}
-        {{#each dataPreview}}
+      if is1D
+        each dataPreview
           tr
-            td {{this}}
-        {{/each}}
-      {{/if}}
+            td= this
 
-      {{#if isObject}}
-        {{#each dataPreviewObject}}
+      if isObject
+        each dataPreviewObject
           tr
-            th {{key}}
-            td {{value}}
-        {{/each}}
-      {{/if}}
+            th= key
+            td= value
 
-      {{#if isNumber}}
+      if isNumber
         tr
-          th {{dataPreview}}
-      {{/if}}
-  {{/if}}
+          th= dataPreview

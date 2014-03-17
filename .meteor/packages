@@ -17,3 +17,5 @@ moment
 reactive-ace
 collection2
 iron-router
+blaze-layout
+jade

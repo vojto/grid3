@@ -1,5 +1,5 @@
 template(name='source_code')
-  {{#with object}}
+  +object
     .step-form-wrapper
       form.step
         div.row
@@ -9,5 +9,3 @@ template(name='source_code')
           i.entypo.cross.delete
         div.row
           {{> source_code_editor}}
-        
-  {{/with}}
