@@ -8,4 +8,9 @@ template(name='flow_edit')
   div.main
     .split
       .main
-        .flow
+        #flow
+          each steps
+            div.step.collapsed
+              i.entypo.cog
+              span= title
+          = updateStep
