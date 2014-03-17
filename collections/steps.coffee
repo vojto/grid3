@@ -27,6 +27,22 @@
   else
     return 0
 
+@Steps.nextY = (source) ->
+  step = Steps.lastForSource(source)
+  if step
+    return step.y + 40
+  else
+    return 40
+
+@Steps.lastX = (source) ->
+  step = Steps.lastForSource(source)
+  if step
+    return step.x
+  else
+    return 40
+  
+  
+
 @Steps.lastIdForSource = (source) ->
   step = @lastForSource(source)
   if step

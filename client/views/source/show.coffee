@@ -78,9 +78,8 @@ Template.source_show.events
       title: 'Map'
       code: Steps.DEFAULT_CODE
       inputStepId: Steps.lastIdForSource(source)
-
-    alert "inserting with inputStepId: #{params.inputStepId}"
-    console.log params
+      y: Steps.nextY(source)
+      x: Steps.lastX(source)
 
     Steps.insert params, Flash.handle
 
