@@ -88,7 +88,7 @@ Template.source_show.events
 
   # Graphs
 
-  'click .action.add-line-chart': (e) ->
+  'click .action.add-line-chart': (e, template) ->
     e.preventDefault()
     source = template.data
     Graphs.insert {

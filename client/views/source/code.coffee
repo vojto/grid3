@@ -32,7 +32,10 @@ Template.source_code.events
   'click .submit': (e, template) ->
     e.preventDefault()
     saveEditedObject(template)
-    
+  
+  'submit form': (e, template) ->
+    e.preventDefault()
+    saveEditedObject(template)
 
   'click .delete': (e) ->
     e.preventDefault()
