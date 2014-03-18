@@ -1,3 +1,7 @@
+$arrow = null
+isArrowing = false
+$source = null
+
 Template.flow_edit.events
   'click button.editor': (e, template) ->
     Router.go 'source.show', @
@@ -8,6 +12,40 @@ Template.flow_edit.events
 
   'click line': (e) ->
     Session.set('selectedLineId', @id)
+
+  'mousedown div.step': (e) ->
+    return true unless e.ctrlKey
+
+    $(e.currentTarget).addClass('edited')
+    isArrowing = true
+    $source = e.currentTarget
+
+  'mouseup #flow': (e) ->
+    $(e.currentTarget).find('div.step').removeClass('edited')
+    isArrowing = false
+
+  'contextmenu div.step': (e) ->
+    e.preventDefault()
+    false
+
+  'mousemove div.step': (e) ->
+    e.preventDefault()
+
+  'mouseover div.step': (e) ->
+    e.preventDefault()
+    $(e.currentTarget).addClass('edited') if isArrowing
+
+  'mouseout div.step': (e) ->
+    e.preventDefault()
+    if isArrowing && e.currentTarget != $source
+      $(e.currentTarget).removeClass('edited') 
+
+  'mouseup div.step': (e) ->
+    console.log 'mouseup on step'
+    e.preventDefault()
+
+  'dragstart div.step': (e) ->
+    e.preventDefault() if e.ctrlKey
 
 $flow = null
 
