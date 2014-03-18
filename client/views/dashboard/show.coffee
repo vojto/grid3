@@ -9,7 +9,7 @@ Template.dashboard_show.rendered = ->
   Deps.autorun =>
     $chart = $(@find('.graph')).empty()
 
-    graph = Graphs.findOne({sourceId: @data._id})
+    graph = Graphs.findOne({inputSourceId: @data._id})
     return unless graph
 
     data = manager.data()
