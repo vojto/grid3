@@ -17,8 +17,24 @@ didStopDragging = (ev, ui) ->
   Steps.update({_id: id}, {$set: {x: x, y: y}})
   Graphs.update({_id: id}, {$set: {x: x, y: y}})
 
+deleteSelectedLine = ->
+  selectedLineId = Session.get('selectedLineId')
+  item = Steps.findOne({_id: selectedLineId})
+  item or= Graphs.findOne({_id: selectedLineId})
+
+  console.log 'deleting line from', item
+  sel = {_id: selectedLineId}
+  set = {$set: {inputStepId: null}}
+  Steps.update(sel, set, Flash.handle)
+  Graphs.update(sel, set, Flash.handle)
+
 Template.flow_edit.rendered = ->
   $flow = $(@find('#flow'))
+
+  shortcuts = ['backspace', 'del']
+  Mousetrap.bind shortcuts, (e) =>
+    e.preventDefault()
+    deleteSelectedLine()
 
 Template.flow_edit.helpers
   lines: ->
