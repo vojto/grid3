@@ -61,9 +61,14 @@ class @SourceManager
 
     Session.set('sourceError', null) if success
 
-    if !(data instanceof Array)
-      data2 = Object.keys(data).map (k) ->
-        [parseFloat(k), data[k]]
-      data = data2
+    # Tento zazrak nam vyraba floaty pre graph.
+    # Toto tu urcite nebudeme riesit, ale presunieme
+    # to do kodu, ktory sa stara o pripravu dat pre
+    # graf, ktory este vlastne nemame.
+    
+    # if !(data instanceof Array)
+    #   data2 = Object.keys(data).map (k) ->
+    #     [parseFloat(k), data[k]]
+    #   data = data2
 
     data

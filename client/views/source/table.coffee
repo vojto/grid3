@@ -10,7 +10,9 @@ Template.source_table.helpers
       true
 
   dataPreview: ->
-    Session.get('preview')
+    preview = Session.get('preview')
+    console.log preview
+    preview
 
   dataPreviewObject: ->
     preview = Session.get('preview')

@@ -3,8 +3,6 @@ Template.source_graph.rendered = ->
 
   # Put data into preview whenever source/steps change
   Deps.autorun =>
-    # return unless @data && @data._id
-    # data = @getData()
     data = Router.getData()
     return unless data
     manager = new SourceManager(data)
@@ -13,13 +11,16 @@ Template.source_graph.rendered = ->
 
   # Render the graph whenever source/graph changes
   Deps.autorun =>
+    graph = Session.get('editedObject')
+
+    console.log 'checking for manager', manager
     return unless manager
+    console.log 'manager present!'
     data = manager.data()
 
     $chart = $(@find('.graph'))
     $chart.empty()
 
-    graph = Session.get('editedObject')
     if !graph || !graph.isGraph
       return
 
@@ -41,7 +42,8 @@ Template.source_graph.rendered = ->
     value = 1
 
     # Label scale
-    x = d3.scale.linear().domain(d3.extent(data, (d) -> d[label])).range([0, width])
+    console.log 'extent', d3.extent(data, (d) -> d[label])
+    x = d3.time.scale().domain(d3.extent(data, (d) -> d[label])).range([0, width])
     xAxis = d3.svg.axis().scale(x).orient('bottom')
     y = d3.scale.linear().domain(d3.extent(data, (d) -> d[value])).range([height, 0])
     yAxis = d3.svg.axis().scale(y).orient('right')
