@@ -2,6 +2,10 @@ Template.flow_edit.events
   'click button.editor': (e, template) ->
     Router.go 'source.show', @
 
+  'click svg': (e) ->
+    if e.target.nodeName != 'line'
+      Session.set('selectedLineId', null)
+
   'click line': (e) ->
     Session.set('selectedLineId', @id)
 
@@ -19,14 +23,7 @@ didStopDragging = (ev, ui) ->
 
 deleteSelectedLine = ->
   selectedLineId = Session.get('selectedLineId')
-  item = Steps.findOne({_id: selectedLineId})
-  item or= Graphs.findOne({_id: selectedLineId})
-
-  console.log 'deleting line from', item
-  sel = {_id: selectedLineId}
-  set = {$set: {inputStepId: null}}
-  Steps.update(sel, set, Flash.handle)
-  Graphs.update(sel, set, Flash.handle)
+  Steps.updateStepOrGraph(selectedLineId, {inputStepId: null})
 
 Template.flow_edit.rendered = ->
   $flow = $(@find('#flow'))
@@ -64,7 +61,6 @@ Template.flow_edit.helpers
     Steps.forSource(@).forEach(collect)
     Graphs.forSource(@).forEach(collect)
 
-    console.log 'lines', lines
     lines
 
   steps: ->
@@ -81,17 +77,3 @@ Template.flow_edit.helpers
 
   itemStyle: (step) ->
     "left: #{@x || 10}px; top: #{@y || 10}px; "
-
-  # x1: ->
-  #   @x + 10
-
-  # y1: ->
-  #   @y
-
-  # x2: ->
-  #   input = Steps.findOne({_id: @inputStepId})
-  #   input.x + 15 if input
-
-  # y2: ->
-  #   input = Steps.findOne({_id: @inputStepId})
-  #   input.y + 25 if input

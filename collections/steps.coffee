@@ -40,8 +40,6 @@
     return step.x
   else
     return 40
-  
-  
 
 @Steps.lastIdForSource = (source) ->
   step = @lastForSource(source)
@@ -49,5 +47,16 @@
     step._id
   else
     null
+
+@Steps.updateStepOrGraph = (id, attrs) ->
+  sel = {_id: id}
+  set = {$set: attrs}
+  Steps.update(sel, set, Flash.handle)
+  Graphs.update(sel, set, Flash.handle)
+
+@Steps.findStepOrGraph = (id) ->
+  item = Steps.findOne({_id: id})
+  item or= Graphs.findOne({_id: id})
+  item
 
 @Steps.DEFAULT_CODE = 'return data.map(function(d) {\n  return d;\n});'
