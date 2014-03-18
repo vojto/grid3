@@ -14,10 +14,12 @@ template(name='flow_edit')
             defs
               marker#head(orient='auto', viewBox="0 0 10 10" markerWidth='6', markerHeight='6', refX='2', refY='5')
                 path(d="M 0 5 L 10 0 L 10 10 z", fill='#fff')
+              marker#head-selected(orient='auto', viewBox="0 0 10 10" markerWidth='6', markerHeight='6', refX='2', refY='5')
+                path(d="M 0 5 L 10 0 L 10 10 z", fill='#4aa8ff')
 
             each lines
-              line(x1=x1 y1=y1 x2=x2 y2=y2 stroke='#4d5d6c' stroke-width='12')
-              line(x1=x1 y1=y1 x2=x2 y2=y2 stroke='#fff' stroke-width='2' marker-start='url(#head)')
+              line.handle(x1=x1 y1=y1 x2=x2 y2=y2 stroke='#5b6d7e' stroke-width='20' stroke-opacity='0.0')
+              line(x1=x1 y1=y1 x2=x2 y2=y2 stroke=color stroke-width='2' marker-start=marker)
 
           each steps
             div.step.collapsed(data-id=_id, style=itemStyle)

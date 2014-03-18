@@ -3,7 +3,7 @@ Template.flow_edit.events
     Router.go 'source.show', @
 
   'click line': (e) ->
-    alert 'sup'
+    Session.set('selectedLineId', @id)
 
 $flow = null
 
@@ -26,11 +26,23 @@ Template.flow_edit.helpers
     collect = (object) ->
       input = Steps.findOne({_id: object.inputStepId})
       return unless input
+
+      selectedLineId = Session.get('selectedLineId')
+      if selectedLineId && object._id == selectedLineId
+        color = '#4aa8ff'
+        marker = 'url(#head-selected)'
+      else
+        color = '#fff'
+        marker = 'url(#head)'
+      
       lines.push({
+        id: object._id
         x1: object.x + 10
         y1: object.y
         x2: input.x + 15
         y2: input.y + 25
+        color: color
+        marker: marker
       })
 
     Steps.forSource(@).forEach(collect)
