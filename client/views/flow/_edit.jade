@@ -15,12 +15,17 @@ template(name='flow_edit')
               marker#head(orient='auto', viewBox="0 0 10 10" markerWidth='6', markerHeight='6', refX='2', refY='5')
                 path(d="M 0 5 L 10 0 L 10 10 z", fill='#fff')
 
-            each steps
-              if inputStepId
-                line(x1=x1 y1=y1 x2=x2 y2=y2 stroke='#fff' stroke-width='2' marker-start='url(#head)')
+            each lines
+              line(x1=x1 y1=y1 x2=x2 y2=y2 stroke='#fff' stroke-width='2' marker-start='url(#head)')
 
           each steps
-            div.step.collapsed(data-id=_id, style=stepStyle)
+            div.step.collapsed(data-id=_id, style=itemStyle)
               i.entypo.cog
               span= title
+
+          each graphs
+            div.step.graph.collapsed(data-id=_id, style=itemStyle)
+              i.entypo.line-graph
+              span= title
+
           = updateStep

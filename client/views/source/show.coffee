@@ -92,9 +92,13 @@ Template.source_show.events
     e.preventDefault()
     Graphs.insert {inputSourceId: @_id, title: 'Viz', code: LINE_CHART_CODE}, Flash.handle
 
-  'click .action.add-bar-chart': (e) ->
+  'click .action.add-bar-chart': (e, template) ->
     e.preventDefault()
-    Graphs.insert {inputSourceId: @_id, title: 'Viz', code: BAR_CHART_CODE}, Flash.handle
+    object = template.data
+    console.log 'object', object
+    data = {inputSourceId: @_id, title: 'Viz', code: BAR_CHART_CODE}
+    console.log 'adding bar chart', data
+    Graphs.insert data, Flash.handle
 
   'click div.graph.collapsed': (e) ->
     Graphs.set(@_id, {expanded: true}, Flash.handle)
