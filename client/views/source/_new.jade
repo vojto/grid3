@@ -1,16 +1,19 @@
 template(name='source_new')
-  h1 
-    a(href='/') GRID3
-    |  //
-    | Add document
+  header
+    .buttons
+      button.editor.back
+        | Back
+    a.logo(href='/')
 
-  +source
-    form.medium
-      .row
-        label Title
-        input(type='text', name='title', value='{{title}}')
-      .row
-        label URL
-        input(type='text', name='url', value='{{url}}')
-      .row
-        input(type='submit', value='Save')
+  div.split
+    div.main
+      with source
+        form.medium
+          .row
+            label Title
+            input(type='text', name='title', value=title)
+          .row
+            label URL
+            input(type='text', name='url', value=url)
+          .row
+            input(type='submit', value='Save')
