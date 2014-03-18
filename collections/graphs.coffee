@@ -7,6 +7,7 @@
     isGraph: { type: Boolean, label: 'graph', autoValue: -> true }
     x: { type: Number, label: 'X', optional: true }
     y: { type: Number, label: 'Y', optional: true }
+    inputStepId: { type: String, optional: true }
 
 @Graphs.allow
   insert: (userId, doc) -> true
