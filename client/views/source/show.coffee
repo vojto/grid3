@@ -90,11 +90,27 @@ Template.source_show.events
 
   'click .action.add-line-chart': (e) ->
     e.preventDefault()
-    Graphs.insert {sourceId: @_id, title: 'Viz', code: LINE_CHART_CODE}, Flash.handle
+    source = template.data
+    Graphs.insert {
+      sourceId: source._id,
+      title: 'Viz',
+      code: LINE_CHART_CODE,
+      inputStepId: Steps.lastIdForSource(source)
+      y: Steps.nextY(source)
+      x: Steps.lastX(source)
+    }, Flash.handle
 
   'click .action.add-bar-chart': (e, template) ->
     e.preventDefault()
-    Graphs.insert {sourceId: @_id, title: 'Viz', code: BAR_CHART_CODE}, Flash.handle
+    source = template.data
+    Graphs.insert {
+      sourceId: source._id,
+      title: 'Viz',
+      code: BAR_CHART_CODE,
+      inputStepId: Steps.lastIdForSource(source)
+      y: Steps.nextY(source)
+      x: Steps.lastX(source)
+    }, Flash.handle
 
   'click div.graph.collapsed': (e) ->
     Graphs.set(@_id, {expanded: true}, Flash.handle)

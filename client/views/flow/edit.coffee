@@ -12,6 +12,7 @@ didStopDragging = (ev, ui) ->
   y = pos.top
 
   Steps.update({_id: id}, {$set: {x: x, y: y}})
+  Graphs.update({_id: id}, {$set: {x: x, y: y}})
 
 Template.flow_edit.rendered = ->
   $flow = $(@find('#flow'))
