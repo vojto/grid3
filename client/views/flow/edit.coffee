@@ -2,6 +2,43 @@ $arrow = null
 isArrowing = false
 $source = null
 
+startArrowing = (source) ->
+  $(source).addClass('edited')
+  isArrowing = true
+  $source = source
+
+  $arrow = document.createElementNS('http://www.w3.org/2000/svg','line')
+  $("svg").append($arrow)
+
+  $($arrow).attr('stroke', '#4aa8ff')
+    .attr('stroke-width', '2')
+    .attr('marker-start', 'url(#head-selected)')
+
+finishArrowing = ->
+  $('#flow div.step').removeClass('edited')
+  isArrowing = false
+  $($arrow).remove()
+
+updateArrowing = (e) ->
+  return unless isArrowing
+
+  sourcePosition = $($source).position()
+  sourceX = sourcePosition.left + 15
+  sourceY = sourcePosition.top + 25
+  svgPosition = $('svg').offset()
+  svgX = svgPosition.left
+  svgY = svgPosition.top
+  mouseX = e.clientX - svgX
+  mouseY = e.clientY - svgY
+
+  $($arrow).attr({
+    x1: mouseX,
+    y1: mouseY,
+    x2: sourceX,
+    y2: sourceY
+  })
+
+
 Template.flow_edit.events
   'click button.editor': (e, template) ->
     Router.go 'source.show', @
@@ -16,20 +53,18 @@ Template.flow_edit.events
   'mousedown div.step': (e) ->
     return true unless e.ctrlKey
 
-    $(e.currentTarget).addClass('edited')
-    isArrowing = true
-    $source = e.currentTarget
+    startArrowing(e.currentTarget)
 
   'mouseup #flow': (e) ->
-    $(e.currentTarget).find('div.step').removeClass('edited')
-    isArrowing = false
+    finishArrowing()
 
   'contextmenu div.step': (e) ->
     e.preventDefault()
     false
 
-  'mousemove div.step': (e) ->
+  'mousemove #flow': (e) ->
     e.preventDefault()
+    updateArrowing(e)
 
   'mouseover div.step': (e) ->
     e.preventDefault()
