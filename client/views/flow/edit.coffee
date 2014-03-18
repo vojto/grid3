@@ -29,3 +29,17 @@ Template.flow_edit.helpers
   stepStyle: (step) ->
     console.log 'coming up with style for', @
     "left: #{@x}px; top: #{@y}px; "
+
+  x1: ->
+    @x + 10
+
+  y1: ->
+    @y
+
+  x2: ->
+    input = Steps.findOne({_id: @inputStepId})
+    input.x + 15 if input
+
+  y2: ->
+    input = Steps.findOne({_id: @inputStepId})
+    input.y + 25 if input
