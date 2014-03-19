@@ -1,11 +1,13 @@
 $arrow = null
 isArrowing = false
 $source = null
+sourceStep = null
 
-startArrowing = (source) ->
-  $(source).addClass('edited')
+startArrowing = (e, step) ->
+  $(e.currentTarget).addClass('edited')
   isArrowing = true
-  $source = source
+  $source = e.currentTarget
+  sourceStep = step
 
   $arrow = document.createElementNS('http://www.w3.org/2000/svg','line')
   $("svg").append($arrow)
@@ -17,6 +19,8 @@ startArrowing = (source) ->
 finishArrowing = ->
   $('#flow div.step').removeClass('edited')
   isArrowing = false
+  sourceStep = null
+  targetStep = null
   $($arrow).remove()
 
 updateArrowing = (e) ->
@@ -38,7 +42,6 @@ updateArrowing = (e) ->
     y2: sourceY
   })
 
-
 Template.flow_edit.events
   'click button.editor': (e, template) ->
     Router.go 'source.show', @
@@ -53,7 +56,7 @@ Template.flow_edit.events
   'mousedown div.step': (e) ->
     return true unless e.ctrlKey
 
-    startArrowing(e.currentTarget)
+    startArrowing(e, @)
 
   'mouseup #flow': (e) ->
     finishArrowing()
@@ -76,8 +79,11 @@ Template.flow_edit.events
       $(e.currentTarget).removeClass('edited') 
 
   'mouseup div.step': (e) ->
-    console.log 'mouseup on step'
     e.preventDefault()
+
+    if sourceStep
+      Steps.updateStepOrGraph(@_id, {inputStepId: sourceStep._id})
+    
 
   'dragstart div.step': (e) ->
     e.preventDefault() if e.ctrlKey
