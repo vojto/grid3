@@ -22,13 +22,17 @@ template(name='flow_edit')
               line(x1=x1 y1=y1 x2=x2 y2=y2 stroke=color stroke-width='2' marker-start=marker)
 
           each steps
-            div.step.collapsed(data-id=_id, style=itemStyle)
-              i.entypo.cog
-              span= title
+            +flow_edit_step
 
           each graphs
-            div.step.graph.collapsed(data-id=_id, style=itemStyle)
-              i.entypo.line-graph
-              span= title
+            +flow_edit_graph
 
-          = updateStep
+template(name='flow_edit_step')
+  div.step.collapsed(data-id=_id, style=itemStyle)
+    i.entypo.cog
+    span= title
+
+template(name='flow_edit_graph')
+  div.step.graph.collapsed(data-id=_id, style=itemStyle)
+    i.entypo.line-graph
+    span= title

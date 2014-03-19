@@ -40,7 +40,6 @@ Template.source_graph.rendered = ->
     value = 1
 
     # Label scale
-    console.log 'extent', d3.extent(data, (d) -> d[label])
     x = d3.time.scale().domain(d3.extent(data, (d) -> d[label])).range([0, width])
     xAxis = d3.svg.axis().scale(x).orient('bottom')
     y = d3.scale.linear().domain(d3.extent(data, (d) -> d[value])).range([height, 0])
