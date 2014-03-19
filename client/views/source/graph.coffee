@@ -13,9 +13,7 @@ Template.source_graph.rendered = ->
   Deps.autorun =>
     graph = Session.get('editedObject')
 
-    console.log 'checking for manager', manager
     return unless manager
-    console.log 'manager present!'
     data = manager.data()
 
     $chart = $(@find('.graph'))
