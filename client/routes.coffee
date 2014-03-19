@@ -14,13 +14,8 @@ Router.map ->
   @route 'source.show',
     path: '/source/:_id'
     template: 'source_show'
-    data: ->
-      source = Sources.findOne {_id: @params._id}
-      console.log 'source', source
-      source
-    waitOn: ->
-      console.log 'subscribing'
-      @subscribe('source')
+    data: -> Sources.findOne {_id: @params._id}
+    waitOn: -> @subscribe('source')
     loadingTemplate: 'loading'
 
 

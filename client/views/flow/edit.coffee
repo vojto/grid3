@@ -1,3 +1,63 @@
+Template.flow_edit.events
+  'click button.editor': (e, template) ->
+    Router.go 'source.show', @
+
+  'click svg': (e) ->
+    if e.target.nodeName != 'line'
+      Session.set('selectedLineId', null)
+
+  'click line': (e) ->
+    Session.set('selectedLineId', @id)
+
+  'mousedown div.step': (e) ->
+    return true unless e.ctrlKey
+    startArrowing(e, @)
+
+  'click div.step span': (e, template) ->
+    e.preventDefault()
+    Router.go 'source.show', template.data
+    Session.set('editedObject', @)
+
+  'mouseup #flow': (e, template) ->
+    # Wants to create a new step
+    if isArrowing && e.target.nodeName == 'line'
+      source = template.data
+      mouse = mousePositionInSvg(e)
+      Steps.insertEmptyWithInputStep(source, sourceStep, {
+        x: mouse.x
+        y: mouse.y
+      })
+
+    finishArrowing()
+
+  'contextmenu div.step': (e) ->
+    e.preventDefault()
+    false
+
+  'mousemove #flow': (e) ->
+    e.preventDefault()
+    updateArrowing(e)
+
+  'mouseover div.step': (e) ->
+    e.preventDefault()
+    $(e.currentTarget).addClass('edited') if isArrowing
+
+  'mouseout div.step': (e) ->
+    e.preventDefault()
+    if isArrowing && e.currentTarget != $source
+      $(e.currentTarget).removeClass('edited') 
+
+  'mouseup div.step': (e) ->
+    e.preventDefault()
+
+    if sourceStep
+      Steps.updateStepOrGraph(@_id, {inputStepId: sourceStep._id})
+    
+
+  'dragstart div.step': (e) ->
+    e.preventDefault() if e.ctrlKey
+
+$flow = null
 $arrow = null
 isArrowing = false
 $source = null
@@ -45,63 +105,6 @@ updateArrowing = (e) ->
     x2: sourceX,
     y2: sourceY
   })
-
-Template.flow_edit.events
-  'click button.editor': (e, template) ->
-    Router.go 'source.show', @
-
-  'click svg': (e) ->
-    if e.target.nodeName != 'line'
-      Session.set('selectedLineId', null)
-
-  'click line': (e) ->
-    Session.set('selectedLineId', @id)
-
-  'mousedown div.step': (e) ->
-    return true unless e.ctrlKey
-
-    startArrowing(e, @)
-
-  'mouseup #flow': (e, template) ->
-    # Wants to create a new step
-    if isArrowing && e.target.nodeName == 'line'
-      source = template.data
-      mouse = mousePositionInSvg(e)
-      Steps.insertEmptyWithInputStep(source, sourceStep, {
-        x: mouse.x
-        y: mouse.y
-      })
-
-    finishArrowing()
-
-  'contextmenu div.step': (e) ->
-    e.preventDefault()
-    false
-
-  'mousemove #flow': (e) ->
-    e.preventDefault()
-    updateArrowing(e)
-
-  'mouseover div.step': (e) ->
-    e.preventDefault()
-    $(e.currentTarget).addClass('edited') if isArrowing
-
-  'mouseout div.step': (e) ->
-    e.preventDefault()
-    if isArrowing && e.currentTarget != $source
-      $(e.currentTarget).removeClass('edited') 
-
-  'mouseup div.step': (e) ->
-    e.preventDefault()
-
-    if sourceStep
-      Steps.updateStepOrGraph(@_id, {inputStepId: sourceStep._id})
-    
-
-  'dragstart div.step': (e) ->
-    e.preventDefault() if e.ctrlKey
-
-$flow = null
 
 didStopDragging = (ev, ui) ->
   $el = $(ev.target)
@@ -161,7 +164,8 @@ Template.flow_edit.helpers
   graphs: ->
     Graphs.forSource(@)
 
-  updateStep: (template) ->
+  setupDragging: (template) ->
+    console.log 'updating step'
     setTimeout ->
       $flow.find('div.step').draggable({stop: didStopDragging})
     , 0
