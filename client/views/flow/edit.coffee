@@ -23,21 +23,25 @@ finishArrowing = ->
   targetStep = null
   $($arrow).remove()
 
+mousePositionInSvg = (e) ->
+  svgPosition = $('svg').offset()
+  svgX = svgPosition.left
+  svgY = svgPosition.top
+  mouseX = e.clientX - svgX
+  mouseY = e.clientY - svgY
+  {x: mouseX, y: mouseY}
+
 updateArrowing = (e) ->
   return unless isArrowing
 
   sourcePosition = $($source).position()
   sourceX = sourcePosition.left + 15
   sourceY = sourcePosition.top + 25
-  svgPosition = $('svg').offset()
-  svgX = svgPosition.left
-  svgY = svgPosition.top
-  mouseX = e.clientX - svgX
-  mouseY = e.clientY - svgY
+  mouse = mousePositionInSvg(e)
 
   $($arrow).attr({
-    x1: mouseX,
-    y1: mouseY,
+    x1: mouse.x,
+    y1: mouse.y,
     x2: sourceX,
     y2: sourceY
   })
@@ -58,7 +62,16 @@ Template.flow_edit.events
 
     startArrowing(e, @)
 
-  'mouseup #flow': (e) ->
+  'mouseup #flow': (e, template) ->
+    # Wants to create a new step
+    if isArrowing && e.target.nodeName == 'line'
+      source = template.data
+      mouse = mousePositionInSvg(e)
+      Steps.insertEmptyWithInputStep(source, sourceStep, {
+        x: mouse.x
+        y: mouse.y
+      })
+
     finishArrowing()
 
   'contextmenu div.step': (e) ->

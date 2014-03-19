@@ -48,6 +48,20 @@
   else
     null
 
+@Steps.insertEmptyWithInputStep = (source, inputStep, extraParams={}) ->
+  params =
+    sourceId: source._id
+    weight: Steps.nextWeight(source)
+    title: 'Map'
+    code: Steps.DEFAULT_CODE
+    inputStepId: inputStep._id
+    y: Steps.nextY(source)
+    x: Steps.lastX(source)
+  _.extend(params, extraParams)
+
+  Steps.insert params, Flash.handle
+
+
 @Steps.updateStepOrGraph = (id, attrs) ->
   sel = {_id: id}
   set = {$set: attrs}
