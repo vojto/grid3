@@ -37,10 +37,24 @@ Template.source_show.helpers
       i + 1
 
   steps: ->
-    Steps.forSource(@)
+    # This is based on the editedObject now.
+    edited = Session.get('editedObject')
+    return [] unless edited
 
-  graphs: ->
-    Graphs.forSource(@)
+    steps = [edited]
+
+    # Find all previous steps
+    previous = edited
+    while previous = Steps.findOne({_id: previous.inputStepId})
+      steps.unshift(previous)
+
+    # Find all following steps
+    next = edited
+    while next = Steps.findStepOrGraphBy({inputStepId: next._id})
+      steps.push(next)
+
+    # Return result
+    steps
 
   currentClass: ->
     edited = Session.get('editedObject')
@@ -48,6 +62,12 @@ Template.source_show.helpers
       'edited'
     else
       ''
+
+  iconForStep: ->
+    if @isGraph
+      'line-graph'
+    else
+      'cog'
   
   plusButton: (klass, icon, label) ->
     "<div class='step action #{klass}'><i class='entypo #{icon}'></i><span>#{label}</span></div>"

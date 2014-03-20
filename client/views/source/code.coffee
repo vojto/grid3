@@ -72,6 +72,6 @@ Template.source_code_editor.rendered = ->
 
     @editor._editor.commands.addCommand
       name: 'saveCode'
-      bindKey: {mac: 'Command-S'}
+      bindKey: {mac: 'Command-S', win: 'Ctrl-S'}
       exec: (editor) ->
         saveEditedObject()

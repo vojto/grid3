@@ -68,9 +68,12 @@
   Steps.update(sel, set, Flash.handle)
   Graphs.update(sel, set, Flash.handle)
 
-@Steps.findStepOrGraph = (id) ->
-  item = Steps.findOne({_id: id})
-  item or= Graphs.findOne({_id: id})
+@Steps.findStepOrGraphBy = (query) ->
+  item = Steps.findOne(query)
+  item or= Graphs.findOne(query)
   item
+
+@Steps.findStepOrGraph = (id) ->
+  Steps.findStepOrGraphBy({_id: id})
 
 @Steps.DEFAULT_CODE = 'return data.map(function(d) {\n  return d;\n});'

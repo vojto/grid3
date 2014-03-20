@@ -1,8 +1,6 @@
 Template.dashboard_show.rendered = ->
   return unless @data._id
 
-  console.log 'Source: ', @data
-
   manager = new Grid.SourceManager(@data)
   manager.loadData()
 
@@ -13,7 +11,6 @@ Template.dashboard_show.rendered = ->
     return unless graph
 
     data = manager.data()
-    console.log 'data', data
     grapher = new Grapher(graph: graph, el: $chart, data: data)
 
     
