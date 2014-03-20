@@ -20,6 +20,7 @@ Template.flow_edit.events
     e.preventDefault()
     Router.go 'source.show', template.data
     Session.set('editedObject', @)
+    Session.set('selectedStep', @)
 
   'mouseup #flow': (e, template) ->
     # Wants to create a new step

@@ -38,18 +38,18 @@ Template.source_show.helpers
 
   steps: ->
     # This is based on the editedObject now.
-    edited = Session.get('editedObject')
-    return [] unless edited
+    selected = Session.get('selectedStep')
+    return [] unless selected
 
-    steps = [edited]
+    steps = [selected]
 
     # Find all previous steps
-    previous = edited
+    previous = selected
     while previous = Steps.findOne({_id: previous.inputStepId})
       steps.unshift(previous)
 
     # Find all following steps
-    next = edited
+    next = selected
     while next = Steps.findStepOrGraphBy({inputStepId: next._id})
       steps.push(next)
 
