@@ -1,4 +1,6 @@
-class @SourceManager
+@Grid or= {}
+
+class Grid.SourceManager
   constructor: (source) ->
     @source = source
     @_data = null
@@ -37,8 +39,11 @@ class @SourceManager
     # Process data with steps
     steps = Steps.forSource(@source).fetch()
     currentStep = Session.get('editedObject')
-    data = $.extend(true, [], @_data)
-    success = true    
+
+    # Create Grid.Data object by sending it reference
+    # to our current data array.
+    data = new Grid.Data(@_data)
+    success = true
 
     steps.every (step) ->
       try
@@ -71,4 +76,4 @@ class @SourceManager
     #     [parseFloat(k), data[k]]
     #   data = data2
 
-    data
+    data.data()

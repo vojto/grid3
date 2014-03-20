@@ -2,36 +2,27 @@
 
 class Grid.Data
   constructor: (data) ->
-    @_data = data
-    @config = new Grid.DataConfig(label: 0, value: 1)
-    @labelParsers =
-      'date.formatted': (v) -> moment(v).unix()
-      'date.unix': (v) -> v
+    @_data = $.extend(true, [], data)
 
-    @parse()
+  filter: (fn) ->
+    @_data = @_data.filter(fn)
+    @
 
-  parse: ->
-    # Parses data using current config and returns the result
-    # For now, we don't evaluate, just display the result and see what's next.
+  group: (fields, fn) ->
+    grouped = @_data.reduce (sum, d) ->
+      key = fields.map((field) -> d[field]).join()  
+      if !sum[key]
+        sum[key] = d
+      
+      fn(sum, d)
+    , {}
 
-    result = []
-    for d in @_data
-      label = d[@config.label]
-      value = d[@config.value]
+    @_data = _.values(grouped)
+    @
 
-      if @config.labelType
-        label = @labelParsers[@config.labelType](label)
+  map: (fn) ->
+    @_data = @_data.map(fn)
+    @
 
-      result.push([label, value])
-
-    result
-
-  raw: ->
+  data: ->
     @_data
-
-class Grid.DataConfig
-  # Configuration of data to be used for guessing structure
-  constructor: (options) ->
-    @label = options.label || 0
-    @labelType = 'date.formatted' # or 'date.unix'
-    @value = options.value || 1

@@ -3,7 +3,7 @@ Template.dashboard_show.rendered = ->
 
   console.log 'Source: ', @data
 
-  manager = new SourceManager(@data)
+  manager = new Grid.SourceManager(@data)
   manager.loadData()
 
   Deps.autorun =>

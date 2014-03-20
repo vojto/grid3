@@ -5,7 +5,7 @@ Template.source_graph.rendered = ->
   Deps.autorun =>
     data = Router.getData()
     return unless data
-    manager = new SourceManager(data)
+    manager = new Grid.SourceManager(data)
     manager.loadData()
     Session.set 'preview', manager.preview()
 
