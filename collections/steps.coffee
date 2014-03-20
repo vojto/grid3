@@ -79,7 +79,9 @@
 @Steps.stepsUpUntil = (selected) ->
   steps = [selected]
   previous = selected
-  while previous = Steps.findOne({_id: previous.inputStepId})
+  while true
+    break unless previous
+    previous = Steps.findOne({_id: previous.inputStepId})
     steps.unshift(previous)
   steps
 

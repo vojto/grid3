@@ -50,5 +50,7 @@ Template.source_graph.rendered = ->
     svg.append('g').call(yAxis)
 
     code = "(function(data, svg, x, y) { #{graph.code} })"
+    console.log 'code', code
     compiled = eval(code)
+    console.log 'compiled', compiled
     compiled(data, svg, x, y)
