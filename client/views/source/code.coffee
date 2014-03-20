@@ -1,4 +1,7 @@
-saveEditedObject = (template) ->
+codeTemplate = null
+
+saveEditedObject = ->
+  template = codeTemplate
   object = Session.get('editedObject')
   return unless object
 
@@ -19,10 +22,11 @@ saveEditedObject = (template) ->
   , 200
 
 Template.source_code.rendered = ->
-  shortcuts = ['ctrl+s', 'command+s']
+  codeTemplate = @
+  shortcuts = ['ctrl+s', 'command+s', 'command+return', 'ctrl+return', 'ctrl+enter']
   Mousetrap.bind shortcuts, (e) =>
     e.preventDefault()
-    saveEditedObject(@)
+    saveEditedObject()
 
 Template.source_code.helpers
   'object': ->
@@ -43,3 +47,31 @@ Template.source_code.events
       Steps.remove {_id: @_id}
       Graphs.remove {_id: @_id}
       Session.set('editedObject', null)
+
+Template.source_code.helpers
+  object: ->
+    Session.get('editedObject')
+
+Template.source_code_editor.rendered = ->
+  Deps.autorun =>
+    object = Session.get('editedObject')
+    $code = @find('.code')
+    return unless $code
+
+    if @editor
+      # Editor already exists
+    else
+      @editor = new ReactiveAce()
+
+    @editor.attach($code)
+    @editor.theme = "tomorrow_night"
+    @editor.syntaxMode = "javascript"
+    @editor.fontSize = 14
+
+    @editor._editor.setValue(object.code, 1)
+
+    @editor._editor.commands.addCommand
+      name: 'saveCode'
+      bindKey: {mac: 'Command-S'}
+      exec: (editor) ->
+        saveEditedObject()

@@ -11,7 +11,6 @@ Template.source_table.helpers
 
   dataPreview: ->
     preview = Session.get('preview')
-    console.log preview
     preview
 
   dataPreviewObject: ->
