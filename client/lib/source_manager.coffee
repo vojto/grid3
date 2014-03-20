@@ -26,19 +26,18 @@ class Grid.SourceManager
       @_dataDep.changed()
       callback() if callback
 
-  preview: ->
-    data = @data()
+  preview: (upUntil) ->
+    data = @data(upUntil)
     if data instanceof Array
       data.slice(0, 10)
     else
       data
 
-  data: ->
+  data: (upUntil) ->
     @_dataDep.depend()
 
     # Process data with steps
-    steps = Steps.forSource(@source).fetch()
-    currentStep = Session.get('editedObject')
+    steps = Steps.stepsUpUntil(upUntil)
 
     # Create Grid.Data object by sending it reference
     # to our current data array.
@@ -58,9 +57,6 @@ class Grid.SourceManager
         Session.set('sourceError', e.message)
         success = false
         data = [[]]
-
-      if currentStep && currentStep._id == step._id
-        return false
       
       return true
 

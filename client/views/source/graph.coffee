@@ -7,14 +7,15 @@ Template.source_graph.rendered = ->
     return unless data
     manager = new Grid.SourceManager(data)
     manager.loadData()
-    Session.set 'preview', manager.preview()
+    edited = Session.get('editedObject')
+    Session.set 'preview', manager.preview(edited)
 
   # Render the graph whenever source/graph changes
   Deps.autorun =>
     graph = Session.get('editedObject')
 
     return unless manager
-    data = manager.data()
+    data = manager.data(graph)
 
     $chart = $(@find('.graph'))
     $chart.empty()

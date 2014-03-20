@@ -41,12 +41,7 @@ Template.source_show.helpers
     selected = Session.get('selectedStep')
     return [] unless selected
 
-    steps = [selected]
-
-    # Find all previous steps
-    previous = selected
-    while previous = Steps.findOne({_id: previous.inputStepId})
-      steps.unshift(previous)
+    steps = Steps.stepsUpUntil(selected)
 
     # Find all following steps
     next = selected

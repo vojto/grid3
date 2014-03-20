@@ -76,4 +76,11 @@
 @Steps.findStepOrGraph = (id) ->
   Steps.findStepOrGraphBy({_id: id})
 
+@Steps.stepsUpUntil = (selected) ->
+  steps = [selected]
+  previous = selected
+  while previous = Steps.findOne({_id: previous.inputStepId})
+    steps.unshift(previous)
+  steps
+
 @Steps.DEFAULT_CODE = 'return data.map(function(d) {\n  return d;\n});'
