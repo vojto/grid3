@@ -45,6 +45,8 @@ class Grid.SourceManager
     success = true
 
     steps.every (step) ->
+      return true if step.isGraph
+
       try
         code = "(function(data) { #{step.code} })"
         compiled = eval(code)

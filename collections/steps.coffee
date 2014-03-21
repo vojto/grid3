@@ -77,6 +77,7 @@
   Steps.findStepOrGraphBy({_id: id})
 
 @Steps.stepsUpUntil = (selected) ->
+  return [] unless selected
   steps = [selected]
   previous = selected
   while previous

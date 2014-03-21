@@ -15,7 +15,9 @@ Template.source_graph.rendered = ->
     graph = Session.get('editedObject')
 
     return unless manager
+    console.log 'trying to get data for graph', graph
     data = manager.data(graph)
+    console.log 'gotten data from manager', data
 
     $chart = $(@find('.graph'))
     $chart.empty()
