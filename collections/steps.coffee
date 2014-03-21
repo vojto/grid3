@@ -79,10 +79,9 @@
 @Steps.stepsUpUntil = (selected) ->
   steps = [selected]
   previous = selected
-  while true
-    break unless previous
+  while previous
     previous = Steps.findOne({_id: previous.inputStepId})
-    steps.unshift(previous)
+    steps.unshift(previous) if previous
   steps
 
 @Steps.DEFAULT_CODE = 'return data.map(function(d) {\n  return d;\n});'
