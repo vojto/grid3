@@ -28,3 +28,7 @@ class Grid.Data
 
   data: ->
     @_data
+
+  splice: (index, count) ->
+    @_data.splice(index, count)
+    @
