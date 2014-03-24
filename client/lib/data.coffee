@@ -14,7 +14,9 @@ class Grid.Data
       if !sum[key]
         sum[key] = d
       
-      fn(sum, d)
+      fn(sum[key], d)
+
+      sum
     , {}
 
     @_data = _.values(grouped)
