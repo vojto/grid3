@@ -78,11 +78,21 @@
 
 @Steps.stepsUpUntil = (selected) ->
   return [] unless selected
-  steps = [selected]
+  selectedId = selected._id
+  stepIds = []
+  previousId = selectedId
   previous = selected
-  while previous
-    previous = Steps.findOne({_id: previous.inputStepId})
-    steps.unshift(previous) if previous
+  while previousId
+    previous or= Steps.findOne({_id: previousId})
+    previous = Steps.findOne({_id: previous.inputStepId}) if previous
+    if previous
+      previousId = previous._id
+      stepIds.unshift(previousId)
+    else
+      previousId = null
+  
+  steps = Steps.find({_id: {$in: stepIds}}).fetch()
+  steps.push(selected)
   steps
 
 @Steps.DEFAULT_CODE = 'return data.map(function(d) {\n  return d;\n});'

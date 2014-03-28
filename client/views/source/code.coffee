@@ -13,6 +13,7 @@ saveEditedObject = ->
   object.title = data.title
   data.expanded = false
 
+  console.log "updating object by id", object._id, 'with data', data
 
   Steps.set(object._id, data, Flash.handle)
   Graphs.set(object._id, data, Flash.handle)

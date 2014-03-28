@@ -3,10 +3,10 @@ Template.source_graph.rendered = ->
 
   # Put data into preview whenever source/steps change
   Deps.autorun =>
-    step = Router.getData()
+    source = Router.getData()
     edited = Session.get('editedObject')
-    return unless step
-    manager = new Grid.SourceManager(step)
+    return unless source
+    manager = new Grid.SourceManager(source)
     manager.loadData()
     Session.set 'preview', manager.preview(edited)
 
@@ -15,7 +15,10 @@ Template.source_graph.rendered = ->
     graph = Session.get('editedObject')
 
     return unless manager
-    data = manager.data(graph)
+    return unless graph
+    step = Steps.findOne({_id: graph.inputStepId})
+    # console.log 'getting graph data for step', step
+    data = manager.data(step)
 
     $chart = $(@find('.graph'))
     $chart.empty()
@@ -50,7 +53,5 @@ Template.source_graph.rendered = ->
     svg.append('g').call(yAxis)
 
     code = "(function(data, svg, x, y) { #{graph.code} })"
-    console.log 'code', code
     compiled = eval(code)
-    console.log 'compiled', compiled
     compiled(data, svg, x, y)
