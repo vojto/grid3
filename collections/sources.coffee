@@ -8,3 +8,6 @@
   insert: (userId, doc) -> true
   update: (userId, doc) -> true
   remove: (userId, doc) -> true
+
+@Sources.isA = (obj) ->
+  return obj.cachedData

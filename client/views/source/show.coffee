@@ -99,6 +99,7 @@ Template.source_show.events
     Steps.insert params, Flash.handle
 
   'click div.step.collapsed': (e) ->
+    return if Sources.isA(@)
     Session.set('editedObject', @)
 
   # Graphs

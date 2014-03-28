@@ -15,8 +15,8 @@
         "branch": "ui"
       },
       "iron-router": {},
-      "iron-router-progress": {},
-      "blaze-layout": {}
+      "blaze-layout": {},
+      "iron-router-progress": {}
     },
     "packages": {
       "npm": {
@@ -54,15 +54,15 @@
         "tag": "v0.7.0",
         "commit": "05f34bc48c4cad9fdaa366c1ddcabe6980232ece"
       },
-      "iron-router-progress": {
-        "git": "https://github.com/Multiply/iron-router-progress.git",
-        "tag": "v0.2.0",
-        "commit": "ce730d1d26feadb7c75ea25f22c5bfdb0c549a8b"
-      },
       "blaze-layout": {
         "git": "https://github.com/EventedMind/blaze-layout.git",
         "tag": "v0.2.2",
         "commit": "8bc53798fe5965669ae67c72f91829fcfdceabfd"
+      },
+      "iron-router-progress": {
+        "git": "https://github.com/Multiply/iron-router-progress.git",
+        "tag": "v0.2.0",
+        "commit": "ce730d1d26feadb7c75ea25f22c5bfdb0c549a8b"
       },
       "simple-schema": {
         "git": "https://github.com/aldeed/meteor-simple-schema.git",

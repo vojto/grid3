@@ -1,6 +1,5 @@
 {
-  "meteor": {
-  },
+  "meteor": {},
   "packages": {
     "npm": {},
     "moment": {},
@@ -14,7 +13,7 @@
       "branch": "ui"
     },
     "iron-router": {},
-    "iron-router-progress": {},
-    "blaze-layout": {}
+    "blaze-layout": {},
+    "iron-router-progress": {}
   }
 }
