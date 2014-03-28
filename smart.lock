@@ -1,9 +1,5 @@
 {
-  "meteor": {
-    "git": "https://github.com/meteor/meteor.git",
-    "tag": "release/blaze-rc1",
-    "commit": "1d3a840372a1d1db6e212d38621288b6cc42a1c7"
-  },
+  "meteor": {},
   "dependencies": {
     "basePackages": {
       "npm": {},
@@ -18,15 +14,9 @@
         "git": "https://github.com/aldeed/meteor-autoform.git",
         "branch": "ui"
       },
-      "iron-router": {
-        "git": "https://github.com/EventedMind/iron-router.git",
-        "branch": "blaze-integration"
-      },
-      "blaze-layout": {
-        "git": "https://github.com/EventedMind/blaze-layout.git",
-        "branch": "devel"
-      },
-      "iron-router-progress": {}
+      "iron-router": {},
+      "iron-router-progress": {},
+      "blaze-layout": {}
     },
     "packages": {
       "npm": {
@@ -46,38 +36,38 @@
       },
       "jade": {
         "git": "https://github.com/mquandalle/meteor-jade.git",
-        "tag": "v0.1.4",
-        "commit": "3d80e6119087ee338dd88249cceedbff7996dda9"
+        "tag": "v0.1.5",
+        "commit": "bbb23ff955d94066b74c4aa9ea760418483b3ddf"
       },
       "collection2": {
         "git": "https://github.com/aldeed/meteor-collection2.git",
-        "tag": "v0.3.9",
-        "commit": "fdda9b5c87e9dcb5cb67087ecb6c9f21352d0cc2"
+        "tag": "v0.3.11",
+        "commit": "7e970671305657678e8508d8107d5e6c5e158559"
       },
       "autoform": {
         "git": "https://github.com/aldeed/meteor-autoform.git",
         "branch": "ui",
-        "commit": "76be30f8848ce19e08923207f47f650e6166925b"
+        "commit": "3db93da60fa73a2c0a20de6d186d47aba7afb6d1"
       },
       "iron-router": {
         "git": "https://github.com/EventedMind/iron-router.git",
-        "branch": "blaze-integration",
-        "commit": "35ea9b93fff61af9f3a4c01d1c48ede00f176391"
-      },
-      "blaze-layout": {
-        "git": "https://github.com/EventedMind/blaze-layout.git",
-        "branch": "devel",
-        "commit": "f52f416d6277f27b11832355298553e46b8cc6fd"
+        "tag": "v0.7.0",
+        "commit": "05f34bc48c4cad9fdaa366c1ddcabe6980232ece"
       },
       "iron-router-progress": {
         "git": "https://github.com/Multiply/iron-router-progress.git",
         "tag": "v0.2.0",
         "commit": "ce730d1d26feadb7c75ea25f22c5bfdb0c549a8b"
       },
+      "blaze-layout": {
+        "git": "https://github.com/EventedMind/blaze-layout.git",
+        "tag": "v0.2.2",
+        "commit": "8bc53798fe5965669ae67c72f91829fcfdceabfd"
+      },
       "simple-schema": {
         "git": "https://github.com/aldeed/meteor-simple-schema.git",
-        "tag": "v0.2.41",
-        "commit": "c269b4e9ddb642cdc733c1f4190bcb7b28099e01"
+        "tag": "v0.2.45",
+        "commit": "27a5a943a70a7376c90f18d2e2a4a122c6fc73fb"
       }
     }
   }

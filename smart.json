@@ -1,7 +1,5 @@
 {
   "meteor": {
-    "git": "https://github.com/meteor/meteor.git",
-    "tag": "release/blaze-rc1"
   },
   "packages": {
     "npm": {},
@@ -15,14 +13,8 @@
       "git": "https://github.com/aldeed/meteor-autoform.git",
       "branch": "ui"
     },
-    "iron-router": {
-      "git": "https://github.com/EventedMind/iron-router.git",
-      "branch": "blaze-integration"
-    },
-    "blaze-layout": {
-      "git": "https://github.com/EventedMind/blaze-layout.git",
-      "branch": "devel"
-    },
-    "iron-router-progress": {}
+    "iron-router": {},
+    "iron-router-progress": {},
+    "blaze-layout": {}
   }
 }

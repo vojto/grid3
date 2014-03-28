@@ -8,13 +8,9 @@ template(name='source_show')
 
   div.split
     div.sidebar
-      a(href='/') Back
-      |  | 
-      a(href="#") Dashboard
-
       div.steps
         div.step.collapsed
-          i.entypo.numbered-list
+          i.entypo.cloud
           span= title
         each steps
           div.draggable.step.collapsed(class=currentClass, data-id=_id)
