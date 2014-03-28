@@ -92,11 +92,16 @@ Template.source_show.events
       weight: Steps.nextWeight(source)
       title: 'Map'
       code: Steps.DEFAULT_CODE
+      # TODO: This should be either current branch (by selectedStep) or start at the beginning
       inputStepId: Steps.lastIdForSource(source)
       y: Steps.nextY(source)
       x: Steps.lastX(source)
 
-    Steps.insert params, Flash.handle
+    step = Steps.insert params, (err, stepId) ->
+      step = Steps.findOne({_id: stepId})
+      Session.set('editedObject', step)
+      Session.set('selectedStep', step)
+
 
   'click div.step.collapsed': (e) ->
     return if Sources.isA(@)
