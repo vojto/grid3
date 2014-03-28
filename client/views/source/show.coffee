@@ -28,6 +28,18 @@ svg.selectAll('rect')
   .attr('y', function(d) { return y(d[1]) });
 """
     
+# This snippet selects "any" step in case that no step is selected
+# and we're not on any branch.
+Template.source_show.rendered = ->
+  Deps.autorun ->
+    source = Router.getData()
+    return unless source
+
+    selectedStep = Session.get('selectedStep')
+    if !selectedStep
+      step = Steps.lastForSource(source)
+      Session.set('selectedStep', step)
+
 Template.source_show.helpers
   dataColumns: ->
     preview = Session.get('preview')
