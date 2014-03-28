@@ -9,10 +9,14 @@ saveEditedObject = ->
   $editor = template.find('div.code')
   data = $form.serializeObject()
   data.code = ace.edit($editor).getValue()
+  object.code = data.code # to update live
   data.expanded = false
+
 
   Steps.set(object._id, data, Flash.handle)
   Graphs.set(object._id, data, Flash.handle)
+
+  Session.set('editedObject', object)
 
   # Animate the button
   $button = $(template.find('.primary'))
