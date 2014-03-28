@@ -10,6 +10,7 @@ saveEditedObject = ->
   data = $form.serializeObject()
   data.code = ace.edit($editor).getValue()
   object.code = data.code # to update live
+  object.title = data.title
   data.expanded = false
 
 
