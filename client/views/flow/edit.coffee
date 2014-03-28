@@ -106,8 +106,13 @@ Template.flow_edit.helpers
   graphs: ->
     Graphs.forSource(@)
 
-  itemStyle: (step) ->
-    "left: #{@x || 10}px; top: #{@y || 10}px; "
+itemStyle = (step) -> "left: #{@x || 10}px; top: #{@y || 10}px; "
+
+Template.flow_edit_step.helpers
+  itemStyle: itemStyle
+
+Template.flow_edit_graph.helpers
+  itemStyle: itemStyle
 
 # Actions
 # -----------------------------------------------------------------------------
