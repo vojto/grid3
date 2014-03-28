@@ -47,6 +47,7 @@ Template.source_code.events
       Steps.remove {_id: @_id}
       Graphs.remove {_id: @_id}
       Session.set('editedObject', null)
+      Session.set('selectedStep', null)
 
 Template.source_code.helpers
   object: ->
@@ -55,6 +56,7 @@ Template.source_code.helpers
 Template.source_code_editor.rendered = ->
   Deps.autorun =>
     object = Session.get('editedObject')
+    return unless object
     $code = @find('.code')
     return unless $code
 
