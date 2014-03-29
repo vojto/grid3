@@ -18,14 +18,14 @@ class Grid.Grapher
     # Label scale
     # x = d3.scale.linear().domain(d3.extent(data, (d) -> d[label])).range([0, width])
     domain = d3.extent(data, (d) -> d[label])
-    x = d3.time.scale().domain(domain).range([0, width])
+    x = d3.time.scale().domain(domain).range([40, width])
     xAxis = d3.svg.axis().scale(x).orient('bottom')
     domain = @addMarginToDomain(d3.extent(data, (d) -> d[value]))
     y = d3.scale.linear().domain(domain).range([height, 0])
-    yAxis = d3.svg.axis().scale(y).orient('right')
+    yAxis = d3.svg.axis().scale(y).orient('left')
 
     svg.append('g').attr('transform', "translate(0, #{height})").call(xAxis)
-    svg.append('g').call(yAxis)
+    svg.append('g').attr('transform', "translate(40, 0)").call(yAxis)
 
     code = "(function(data, svg, x, y) { #{@graph.code} })"
     compiled = eval(code)
