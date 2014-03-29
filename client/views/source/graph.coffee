@@ -29,7 +29,10 @@ Template.source_graph.rendered = ->
     # Reload the graph from database, to make sure we get 
     # an auto-updating version with deps.
     graph = Graphs.findOne({_id: graph._id})
+
+    grapher = new Grid.Grapher(graph: graph, el: $chart, data: data)
     
+    ###
     width = $chart.width()
     height = 400
     svg = d3.select($chart.get(0)).append('svg')
@@ -55,3 +58,4 @@ Template.source_graph.rendered = ->
     code = "(function(data, svg, x, y) { #{graph.code} })"
     compiled = eval(code)
     compiled(data, svg, x, y)
+    ###

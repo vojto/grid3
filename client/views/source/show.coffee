@@ -101,6 +101,10 @@ Template.source_show.events
     e.preventDefault()
     Router.go('flow.edit', @)
 
+  'click button.dashboard': (e) ->
+    e.preventDefault()
+    Router.go('dashboard.show', @)
+
   # Steps
 
   # This event simply edits step that user just clicked on.

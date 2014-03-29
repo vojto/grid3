@@ -1,4 +1,4 @@
-class @Grapher
+class Grid.Grapher
   constructor: (options) ->
     @graph = options.graph
     @$el = options.el
@@ -16,7 +16,8 @@ class @Grapher
     value = 1
 
     # Label scale
-    x = d3.scale.linear().domain(d3.extent(data, (d) -> d[label])).range([0, width])
+    # x = d3.scale.linear().domain(d3.extent(data, (d) -> d[label])).range([0, width])
+    x = d3.time.scale().domain(d3.extent(data, (d) -> d[label])).range([0, width])
     xAxis = d3.svg.axis().scale(x).orient('bottom')
     y = d3.scale.linear().domain(d3.extent(data, (d) -> d[value])).range([height, 0])
     yAxis = d3.svg.axis().scale(y).orient('right')

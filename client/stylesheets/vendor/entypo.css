@@ -26,6 +26,7 @@
   font-weight: normal;
   line-height: 0;
   font-style: normal;
+  -webkit-font-smoothing: antialiased;
 }
 
 .entypo-social {

@@ -1,17 +1,18 @@
 Template.dashboard_show.rendered = ->
-  return unless @data._id
-
-  manager = new Grid.SourceManager(@data)
-  manager.loadData()
-
   Deps.autorun =>
+    data = Router.getData()
+    return unless data
+
+    manager = new Grid.SourceManager(data)
+    manager.loadData()
+
     $chart = $(@find('.graph')).empty()
 
-    graph = Graphs.findOne({sourceId: @data._id})
+    graph = Graphs.findOne({sourceId: data._id})
     return unless graph
 
-    data = manager.data()
-    grapher = new Grapher(graph: graph, el: $chart, data: data)
+    data = manager.data(graph)
+    grapher = new Grid.Grapher(graph: graph, el: $chart, data: data)
 
     
 Template.dashboard_show.events
