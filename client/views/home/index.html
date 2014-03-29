@@ -4,10 +4,15 @@
   </header>
 
   <div class="main">
-    <ul class="sources">
+    <h2>Projects</h2>
+    {{> home_index_projects}}
+
+    <h2>Sources</h2>
+
+    <ul class="list-grid">
       {{#each sources}}
         <li>
-          <div><i class="entypo text-doc"></i></div>
+          <div><i class="entypo text-doc large"></i></div>
           <small>
             {{title}}
             <i class="delete entypo circled-cross"></i>
@@ -15,7 +20,7 @@
         </li>
       {{/each}}
       <li class='add-document'>
-        <div><i class="entypo circled-plus"></i></div>
+        <div><i class="entypo circled-plus large"></i></div>
         <small>Add document</small>
       </li>
     </ul>

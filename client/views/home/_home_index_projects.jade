@@ -1,0 +1,14 @@
+template(name='home_index_projects')
+  ul.list-grid
+    each projects
+      li
+        div
+          i.entypo.folder.large
+        small
+          = title
+          i.delete.entypo.circled-cross
+
+    li.add-project
+      div
+        i.entypo.circled-plus.large
+        small Add project
