@@ -17,9 +17,11 @@ class Grid.Grapher
 
     # Label scale
     # x = d3.scale.linear().domain(d3.extent(data, (d) -> d[label])).range([0, width])
-    x = d3.time.scale().domain(d3.extent(data, (d) -> d[label])).range([0, width])
+    domain = d3.extent(data, (d) -> d[label])
+    x = d3.time.scale().domain(domain).range([0, width])
     xAxis = d3.svg.axis().scale(x).orient('bottom')
-    y = d3.scale.linear().domain(d3.extent(data, (d) -> d[value])).range([height, 0])
+    domain = @addMarginToDomain(d3.extent(data, (d) -> d[value]))
+    y = d3.scale.linear().domain(domain).range([height, 0])
     yAxis = d3.svg.axis().scale(y).orient('right')
 
     svg.append('g').attr('transform', "translate(0, #{height})").call(xAxis)
@@ -28,3 +30,8 @@ class Grid.Grapher
     code = "(function(data, svg, x, y) { #{@graph.code} })"
     compiled = eval(code)
     compiled(data, svg, x, y)
+  
+  addMarginToDomain: (domain) ->
+    size = Math.abs(domain[1] - domain[0])
+    margin = size * 0.1
+    return [domain[0] - margin, domain[1] + margin]
