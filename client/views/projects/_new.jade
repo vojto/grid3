@@ -1,0 +1,16 @@
+template(name='project_new')
+  header
+    a.logo(href='/')
+
+  div.split
+    div.main
+      with project
+        form.medium
+          .row
+            label Title
+            input(type='text', name='title', value=title)
+          .row
+            label Description
+            textarea.large(name='description')= description
+          .row
+            input(type='submit', value='Save')
