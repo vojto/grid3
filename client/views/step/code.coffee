@@ -54,7 +54,9 @@ saveEditedObject = ->
   Steps.set(object._id, data, Flash.handle)
   Graphs.set(object._id, data, Flash.handle)
 
-  # TODO: Do something here to force re-rendering
+  # Doing something to force re-rendering (hack)
+  Router.go 'step.edit', {branchId: null, _id: null}
+  Router.go 'step.edit', {branchId: object._id, _id: object._id}
 
   # Animate the button
   $button = $(template.find('.primary'))
