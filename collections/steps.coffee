@@ -107,7 +107,11 @@
     else
       previousId = null
   
+  # Do this for reactivity to work
   steps = Steps.find({_id: {$in: stepIds}}).fetch()
+  # Do this to keep them in order
+  steps = stepIds.map (id) -> Steps.findOne(id)
+  # Add the final step
   steps.push(selected)
   steps
 

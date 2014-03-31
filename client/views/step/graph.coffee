@@ -1,9 +1,9 @@
 Template.source_graph.rendered = ->
-  manager = null
+  manager = new Grid.SourceManager()
 
   # Render the graph whenever source/graph changes
   Deps.autorun =>
-    graph = Session.get('editedObject')
+    graph = Router.getData().step
 
     return unless manager
     return unless graph

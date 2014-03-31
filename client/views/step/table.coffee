@@ -1,6 +1,6 @@
 Template.source_table.helpers
   wantsTable: ->
-    editedObject = Session.get('editedObject')
+    editedObject = Router.getData().step
 
     if !editedObject
       true
