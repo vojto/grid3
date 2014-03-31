@@ -8,6 +8,7 @@
     x: { type: Number, label: 'X', optional: true }
     y: { type: Number, label: 'Y', optional: true }
     inputStepId: { type: String, optional: true }
+    inputSourceIds: { type: [String], optional: true }
 
 @Steps.allow
   insert: (userId, doc) -> true
