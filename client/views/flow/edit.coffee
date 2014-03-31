@@ -25,9 +25,9 @@ Template.flow_edit.events
   'mouseup #flow': (e, template) ->
     # Wants to create a new step
     if isArrowing && e.target.nodeName == 'line'
-      source = template.data
+      project = template.data
       mouse = mousePositionInSvg(e)
-      Steps.insertEmptyWithInputStep(source, sourceStep, {
+      Steps.insertEmptyWithInputStep(project, sourceStep, {
         x: mouse.x
         y: mouse.y
       })
@@ -95,16 +95,16 @@ Template.flow_edit.helpers
         marker: marker
       })
 
-    Steps.forSource(@).forEach(collect)
-    Graphs.forSource(@).forEach(collect)
+    Steps.forProject(@).forEach(collect)
+    Graphs.forProject(@).forEach(collect)
 
     lines
 
   steps: ->
-    Steps.forSource(@)
+    Steps.forProject(@)
 
   graphs: ->
-    Graphs.forSource(@)
+    Graphs.forProject(@)
 
 itemStyle = (step) -> "left: #{@x || 10}px; top: #{@y || 10}px; "
 

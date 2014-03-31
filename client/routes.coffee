@@ -17,20 +17,20 @@ Router.map ->
     path: '/source/new'
     template: 'source_new'
 
-  @route 'source.show',
-    path: '/source/:_id'
-    template: 'source_show'
-    data: -> Sources.findOne {_id: @params._id}
-    waitOn: -> @subscribe('source')
+  @route 'project.show',
+    path: '/project/:_id'
+    template: 'project_show'
+    data: -> Projects.findOne {_id: @params._id}
+    waitOn: -> @subscribe('project')
     loadingTemplate: 'loading'
 
 
   @route 'dashboard.show',
     path: '/dashboard/:_id'
     template: 'dashboard_show'
-    data: -> Sources.findOne {_id: @params._id}
+    data: -> Projects.findOne {_id: @params._id}
 
   @route 'flow.edit',
     path: '/flow/:_id'
     template: 'flow_edit'
-    data: -> Sources.findOne {_id: @params._id}
+    data: -> Projects.findOne {_id: @params._id}

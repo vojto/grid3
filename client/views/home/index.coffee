@@ -21,6 +21,10 @@ Template['home.index'].helpers
     part1 = url.split('://')[1]
     part1.split('/')[0] if part1
 
+Template.home_index_projects.events
+  'click li': (ev) ->
+    Router.go 'flow.edit', @
+
 Template.home_index_projects.helpers
   projects: ->
     Projects.find({})

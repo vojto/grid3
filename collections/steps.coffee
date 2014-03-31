@@ -1,6 +1,6 @@
 @Steps = new Meteor.Collection2 "steps",
   schema:
-    sourceId: { type: String }
+    projectId: { type: String }
     weight: { type: Number, label: 'Weight' }
     title: { type: String, label: 'Title', optional: true }
     code: { type: String, label: 'Code' }
@@ -14,49 +14,49 @@
   update: (userId, doc) -> true
   remove: (userId, doc) -> true
 
-@Steps.lastForSource = (source) ->
-  Steps.findOne({sourceId: source._id}, {sort: {weight: -1}})
+@Steps.lastForProject = (project) ->
+  Steps.findOne({projectId: project._id}, {sort: {weight: -1}})
 
-@Steps.forSource = (source) ->
-  Steps.find({sourceId: source._id}, {sort: {weight: 1}})
+@Steps.forProject = (project) ->
+  Steps.find({projectId: project._id}, {sort: {weight: 1}})
 
-@Steps.nextWeight = (source) ->
-  step = Steps.lastForSource(source)
+@Steps.nextWeight = (project) ->
+  step = Steps.lastForProject(project)
   if step
     return step.weight + 1
   else
     return 0
 
-@Steps.nextY = (source) ->
-  step = Steps.lastForSource(source)
+@Steps.nextY = (project) ->
+  step = Steps.lastForProject(project)
   if step
     return step.y + 40
   else
     return 40
 
-@Steps.lastX = (source) ->
-  step = Steps.lastForSource(source)
+@Steps.lastX = (project) ->
+  step = Steps.lastForProject(project)
   if step
     return step.x
   else
     return 40
 
-@Steps.lastIdForSource = (source) ->
-  step = @lastForSource(source)
+@Steps.lastIdForProject = (project) ->
+  step = @lastForProject(project)
   if step
     step._id
   else
     null
 
-@Steps.insertEmptyWithInputStep = (source, inputStep, extraParams={}) ->
+@Steps.insertEmptyWithInputStep = (project, inputStep, extraParams={}) ->
   params =
-    sourceId: source._id
-    weight: Steps.nextWeight(source)
+    projectId: project._id
+    weight: Steps.nextWeight(project)
     title: 'Map'
     code: Steps.DEFAULT_CODE
     inputStepId: inputStep._id
-    y: Steps.nextY(source)
-    x: Steps.lastX(source)
+    y: Steps.nextY(project)
+    x: Steps.lastX(project)
   _.extend(params, extraParams)
 
   Steps.insert params, Flash.handle
