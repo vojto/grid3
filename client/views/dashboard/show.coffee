@@ -3,8 +3,7 @@ Template.dashboard_show.rendered = ->
     data = Router.getData()
     return unless data
 
-    manager = new Grid.SourceManager(data)
-    manager.loadData()
+    manager = new Grid.SourceManager()
 
     $chart = $(@find('.graph')).empty()
 

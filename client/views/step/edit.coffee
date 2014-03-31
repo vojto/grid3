@@ -84,7 +84,7 @@ Template.step_edit.events
 
   'click button.dashboard': (e) ->
     e.preventDefault()
-    Router.go('dashboard.show', @)
+    Router.go('dashboard.show', {_id: @step.projectId})
 
   # Steps
 
