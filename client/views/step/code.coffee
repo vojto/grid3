@@ -1,67 +1,18 @@
 codeTemplate = null
 
-saveEditedObject = ->
-  template = codeTemplate
-  object = Session.get('editedObject')
-  return unless object
+# Lifecycle
+# -----------------------------------------------------------------------------
 
-  $form = $(template.find('form'))
-  $editor = template.find('div.code')
-  data = $form.serializeObject()
-  data.code = ace.edit($editor).getValue()
-  object.code = data.code # to update live
-  object.title = data.title
-  data.expanded = false
-
-  console.log "updating object by id", object._id, 'with data', data
-
-  Steps.set(object._id, data, Flash.handle)
-  Graphs.set(object._id, data, Flash.handle)
-
-  Session.set('editedObject', object)
-
-  # Animate the button
-  $button = $(template.find('.primary'))
-  $button.removeClass('pulseback').addClass('pulse')
-  setTimeout ->
-    $button.addClass('pulseback').removeClass('pulse')
-  , 200
-
-Template.source_code.rendered = ->
+didRenderCode = ->
   codeTemplate = @
   shortcuts = ['ctrl+s', 'command+s', 'command+return', 'ctrl+return', 'ctrl+enter']
   Mousetrap.bind shortcuts, (e) =>
     e.preventDefault()
     saveEditedObject()
 
-Template.source_code.helpers
-  'object': ->
-    @
-
-Template.source_code.events
-  'click .submit': (e, template) ->
-    e.preventDefault()
-    saveEditedObject(template)
-  
-  'submit form': (e, template) ->
-    e.preventDefault()
-    saveEditedObject(template)
-
-  'click .delete': (e) ->
-    e.preventDefault()
-    if confirm("Are you sure you want to remove step #{@title}?")    
-      Steps.remove {_id: @_id}
-      Graphs.remove {_id: @_id}
-      Session.set('editedObject', null)
-      Session.set('selectedStep', null)
-
-Template.source_code.helpers
-  object: ->
-    Session.get('editedObject')
-
-Template.source_code_editor.rendered = ->
+didRenderEditor = ->
   Deps.autorun =>
-    object = Session.get('editedObject')
+    object = Router.getData().step
     return unless object
     $code = @find('.code')
     return unless $code
@@ -83,3 +34,52 @@ Template.source_code_editor.rendered = ->
       bindKey: {mac: 'Command-S', win: 'Ctrl-S'}
       exec: (editor) ->
         saveEditedObject()
+
+# Saving
+# -----------------------------------------------------------------------------
+
+saveEditedObject = ->
+  template = codeTemplate
+  object = Router.getData().step
+  return unless object
+
+  $form = $(template.find('form'))
+  $editor = template.find('div.code')
+  data = $form.serializeObject()
+  data.code = ace.edit($editor).getValue()
+  object.code = data.code # to update live
+  object.title = data.title
+  data.expanded = false
+
+  Steps.set(object._id, data, Flash.handle)
+  Graphs.set(object._id, data, Flash.handle)
+
+  # TODO: Do something here to force re-rendering
+
+  # Animate the button
+  $button = $(template.find('.primary'))
+  $button.removeClass('pulseback').addClass('pulse')
+  setTimeout ->
+    $button.addClass('pulseback').removeClass('pulse')
+  , 200
+
+Template.source_code.events
+  'click .submit': (e, template) ->
+    e.preventDefault()
+    saveEditedObject(template)
+  
+  'submit form': (e, template) ->
+    e.preventDefault()
+    saveEditedObject(template)
+
+  'click .delete': (e) ->
+    e.preventDefault()
+    if confirm("Are you sure you want to remove step #{@title}?")    
+      projectId = @projectId
+      Steps.remove {_id: @_id}
+      Graphs.remove {_id: @_id}
+      Router.go 'flow.edit', {_id: projectId} 
+  
+
+Template.source_code.rendered = didRenderCode
+Template.source_code_editor.rendered = didRenderEditor

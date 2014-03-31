@@ -2,10 +2,6 @@
 # -----------------------------------------------------------------------------
 manager = null
 
-# Template
-# -----------------------------------------------------------------------------
-Template.step_edit.rendered = didRender
-
 # Lifecycle
 # -----------------------------------------------------------------------------
 
@@ -74,10 +70,7 @@ Template.step_edit.helpers
 # but we've agreed on naming convention that graph is a
 # step too.
 selectAndEditStep = (stepId) ->
-  step = Steps.findStepOrGraph(stepId)
-  Session.set('editedObject', step)
-  Session.set('selectedStep', step)
-
+  Router.go('step.edit', {branchId: stepId, _id: stepId})
 
 Template.step_edit.events
   # General
@@ -98,7 +91,7 @@ Template.step_edit.events
   # This event simply edits step that user just clicked on.
   'click div.step.collapsed': (e) ->
     return if Sources.isA(@)
-    Session.set('editedObject', @)
+    Router.go('step.edit', {branchId: @_id, _id: @_id})
 
   # This event is responsible for clicking the add step button
   # and it creates a new step at the approprite place.
@@ -156,3 +149,7 @@ Template.step_edit.events
   'click input.delete-graph': (e) ->
     e.preventDefault()
     Graphs.remove({_id: @_id}, Flash.handle)
+
+# Template
+# -----------------------------------------------------------------------------
+Template.step_edit.rendered = didRender

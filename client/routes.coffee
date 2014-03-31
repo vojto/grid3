@@ -32,7 +32,7 @@ Router.map ->
     template: 'step_edit'
     data: ->
       {
-        step: Steps.findOne({_id: @params._id})
+        step: Steps.findStepOrGraph(@params._id)
       }
 
   @route 'dashboard.show',
