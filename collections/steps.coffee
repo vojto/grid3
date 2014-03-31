@@ -1,5 +1,6 @@
 @Steps = new Meteor.Collection2 "steps",
   schema:
+    collection: { type: String, autoValue: -> 'steps' }
     projectId: { type: String }
     weight: { type: Number, label: 'Weight' }
     title: { type: String, label: 'Title', optional: true }
@@ -56,6 +57,20 @@
     title: 'Map'
     code: Steps.DEFAULT_CODE
     inputStepId: inputStep._id
+    y: Steps.nextY(project)
+    x: Steps.lastX(project)
+  _.extend(params, extraParams)
+
+  Steps.insert params, Flash.handle
+
+@Steps.insertEmptyWithInputSource = (project, source, extraParams={}) ->
+  params =
+    projectId: project._id
+    weight: Steps.nextWeight(project)
+    title: 'Map'
+    code: Steps.DEFAULT_CODE
+    inputStepId: null
+    inputSourceIds: [source._id]
     y: Steps.nextY(project)
     x: Steps.lastX(project)
   _.extend(params, extraParams)
