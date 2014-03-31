@@ -41,32 +41,47 @@ itemStyle = (step) ->
 # Finding all arrows
 # -----------------------------------------------------------------------------
 
+styleLine = (line) ->
+  selectedLineId = Session.get('selectedLineId')
+  if selectedLineId && line.id == selectedLineId
+    line.color = '#4aa8ff'
+    line.marker = 'url(#head-selected)'
+  else
+    line.color = '#fff'
+    line.marker = 'url(#head)'  
+
 arrows = ->
   lines = []
-  collect = (object) ->
+  collectRegularConnection = (object) ->
     input = Steps.findOne({_id: object.inputStepId})
     return unless input
 
-    selectedLineId = Session.get('selectedLineId')
-    if selectedLineId && object._id == selectedLineId
-      color = '#4aa8ff'
-      marker = 'url(#head-selected)'
-    else
-      color = '#fff'
-      marker = 'url(#head)'
-    
     lines.push({
       id: object._id
       x1: object.x + 10
       y1: object.y
       x2: input.x + 15
       y2: input.y + 25
-      color: color
-      marker: marker
     })
 
-  Steps.forProject(@).forEach(collect)
-  Graphs.forProject(@).forEach(collect)
+  collectSourceConnection = (step) ->
+    for sourceId in step.inputSourceIds || []
+      source = Sources.findOne(sourceId)
+
+      lines.push({
+        id: step._id
+        x1: step.x + 10
+        y1: step.y
+        x2: source.x + 15
+        y2: source.y + 25
+      })
+
+
+  Steps.forProject(@).forEach(collectRegularConnection)
+  Steps.forProject(@).forEach(collectSourceConnection)
+  Graphs.forProject(@).forEach(collectRegularConnection)
+
+  lines.forEach(styleLine)
 
   lines
 
