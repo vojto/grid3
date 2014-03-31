@@ -121,28 +121,30 @@ Template.step_edit.events
   # chart.
   'click .action.add-line-chart': (e, template) ->
     e.preventDefault()
-    source = template.data
+    step = template.data.step
+    project = Projects.findOne(step.projectId)
     params =
-      sourceId: source._id,
+      projectId: project._id
       title: 'Viz',
-      code: LINE_CHART_CODE,
-      inputStepId: Steps.lastIdForSource(source)
-      y: Steps.nextY(source)
-      x: Steps.lastX(source)
+      code: Graphs.LINE_CHART_CODE,
+      inputStepId: Steps.lastIdForProject(project)
+      y: Steps.nextY(project)
+      x: Steps.lastX(project)
 
     Graphs.insert params, (err, stepId) ->
       selectAndEditStep(stepId)
 
   'click .action.add-bar-chart': (e, template) ->
     e.preventDefault()
-    source = template.data
+    step = template.data.step
+    project = Projects.findOne(step.projectId)
     Graphs.insert {
-      sourceId: source._id,
+      projectId: project._id,
       title: 'Viz',
-      code: BAR_CHART_CODE,
-      inputStepId: Steps.lastIdForSource(source)
-      y: Steps.nextY(source)
-      x: Steps.lastX(source)
+      code: Graphs.BAR_CHART_CODE,
+      inputStepId: Steps.lastIdForProject(project)
+      y: Steps.nextY(project)
+      x: Steps.lastX(project)
     }, Flash.handle
 
   'click div.graph.collapsed': (e) ->
