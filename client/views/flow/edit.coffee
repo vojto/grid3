@@ -10,15 +10,16 @@ sourceStep = null
 # View lifecycle
 # -----------------------------------------------------------------------------
 
-didRender = ->
-  $flow = $(@find('#flow'))
-  setupKeyboardShortcuts()
-
-setupKeyboardShortcuts: ->
+setupKeyboardShortcuts = ->
   shortcuts = ['backspace', 'del']
   Mousetrap.bind shortcuts, (e) =>
     e.preventDefault()
     deleteSelectedLine()
+
+didRender = ->
+  console.log 'did render'
+  $flow = $(@find('#flow'))
+  setupKeyboardShortcuts()
 
 setupDragging = ->
   $(@find('div.step')).draggable({stop: didStopDragging})
@@ -163,12 +164,14 @@ didMouseUpAtStep = (e) ->
 createConnectionWithTarget = (step) ->
   return unless sourceStep
 
+  console.log 'creating connection', step, sourceStep
+
   if sourceStep.collection == 'sources'
     # Create connection with a source
     Steps.update({_id: step._id}, {$push: {inputSourceIds: sourceStep._id}})
   else
     # Create connection between steps/graphs
-    Steps.updateStepOrGraph(@_id, {inputStepId: sourceStep._id})
+    Steps.updateStepOrGraph(step._id, {inputStepId: sourceStep._id})
 
 deleteSelectedLine = ->
   selectedLineId = Session.get('selectedLineId')
@@ -231,5 +234,5 @@ Template.flow_edit.helpers
 Template.flow_edit_step.helpers(itemStyle: itemStyle)
 Template.flow_edit_graph.helpers(itemStyle: itemStyle)
 Template.flow_edit_source.helpers(itemStyle: itemStyle)
-Template.flow_edit.rendered = -> didRender
+Template.flow_edit.rendered = didRender
 
