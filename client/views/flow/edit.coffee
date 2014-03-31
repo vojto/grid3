@@ -158,7 +158,16 @@ createConnectionWithoutTarget = (project, mouse) ->
 
 didMouseUpAtStep = (e) ->
   e.preventDefault()
-  if sourceStep
+  createConnectionWithTarget(@)
+
+createConnectionWithTarget = (step) ->
+  return unless sourceStep
+
+  if sourceStep.collection == 'sources'
+    # Create connection with a source
+    Steps.update({_id: step._id}, {$push: {inputSourceIds: sourceStep._id}})
+  else
+    # Create connection between steps/graphs
     Steps.updateStepOrGraph(@_id, {inputStepId: sourceStep._id})
 
 deleteSelectedLine = ->
