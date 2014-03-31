@@ -17,13 +17,20 @@ Router.map ->
     path: '/source/new'
     template: 'source_new'
 
-  @route 'project.show',
-    path: '/project/:_id'
-    template: 'project_show'
-    data: -> Projects.findOne {_id: @params._id}
-    waitOn: -> @subscribe('project')
-    loadingTemplate: 'loading'
+  # This is temporarily (maybe permanently disabled), because we're
+  # moving this interface to `step.edit`.
+  #
+  # @route 'project.show',
+  #   path: '/project/:_id'
+  #   template: 'project_show'
+  #   data: -> Projects.findOne {_id: @params._id}
+  #   waitOn: -> @subscribe('project')
+  #   loadingTemplate: 'loading'
 
+  @route 'step.edit',
+    path: '/step/:branchId/:_id'
+    template: 'step_edit'
+    data: -> Steps.findOne({_id: @params._id})
 
   @route 'dashboard.show',
     path: '/dashboard/:_id'

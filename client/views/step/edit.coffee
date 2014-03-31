@@ -27,20 +27,23 @@ svg.selectAll('rect')
   .attr('x', function(d) { return x(d[0]) })
   .attr('y', function(d) { return y(d[1]) });
 """
-    
-# This snippet selects "any" step in case that no step is selected
-# and we're not on any branch.
-Template.source_show.rendered = ->
-  Deps.autorun ->
-    source = Router.getData()
-    return unless source
 
-    selectedStep = Session.get('selectedStep')
-    if !selectedStep
-      step = Steps.lastForSource(source)
-      Session.set('selectedStep', step)
+manager = null
 
-Template.source_show.helpers
+didRender = ->
+  Deps.autorun(updatePreview)
+
+updatePreview = ->
+  step = Router.getData()
+  return unless step
+  manager = new Grid.SourceManager()
+  preview = manager.preview(step)
+  console.log 'setting preview to', preview
+  Session.set('preview', preview)
+
+Template.step_edit.rendered = didRender
+
+Template.step_edit.helpers
   dataColumns: ->
     preview = Session.get('preview')
     return [] unless preview
@@ -89,7 +92,7 @@ selectAndEditStep = (stepId) ->
   Session.set('selectedStep', step)
 
 
-Template.source_show.events
+Template.step_edit.events
   # General
 
   'keydown textarea': (e) ->

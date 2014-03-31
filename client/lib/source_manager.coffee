@@ -1,32 +1,55 @@
 @Grid or= {}
 
-class Grid.SourceManager
-  constructor: (source) ->
-    @source = source
-    @_data = null
-    @_dataDep = new Deps.Dependency
-    @_isLoaded = false
+assert = Grid.Util.assert
 
-  loadData: (callback) ->
-    if @source.cachedData
-      @_data = JSON.parse(@source.cachedData)
-      @_isLoaded = true
-      @_dataDep.changed()
-      callback() if callback
+class Grid.SourceManager
+  constructor: ->
+    @_sources = {}    # Object(_id -> Object)
+    @_sourceDeps = {} # Object(_id -> Dep)
+    @_data = {}       # Object(_id -> Array)
+
+  addSource: (source) ->
+    assert source
+    assert source._id
+
+    key = source._id
+
+    return if @_sources[key]
+
+    @_sources[key] = source
+    @_sourceDeps[key] or= new Deps.Dependency()
+
+    if @_data[key]
+      @_sourceDeps[key].changed()
       return
 
-    url = @source.url
+    if source.cachedData
+      # Already loaded, don't load
+      @_data[key] = JSON.parse(source.cachedData)
+      @_sourceDeps[key].changed()
+      return
+
+    url = source.url
     IronRouterProgress.start()
-    Meteor.call 'sources.load', @source.url, (err, data) =>
+    Meteor.call 'sources.load', source.url, (err, data) =>
       IronRouterProgress.done()
-      Sources.update @source._id, {$set: {cachedData: JSON.stringify(data)}}
-      @_data = data
-      @_processedData = null
-      @_isLoaded  = true
-      @_dataDep.changed()
-      callback() if callback
+      Sources.update source._id, {$set: {cachedData: JSON.stringify(data)}}
+      @_data[key] = data
+      @_sourceDeps[key].changed()
+
+  sourcesForStep: (step) ->
+    inputStep = step
+    sources = []
+    while inputStep
+      for sourceId in (inputStep.inputSourceIds || [])
+        sources.push(Sources.findOne({_id: sourceId}))
+      inputStep = Sources.findOne(_id: step.inputStepId)
+
+    sources
+
 
   preview: (upUntil) ->
+    return [] unless upUntil
     data = @data(upUntil)
     if data instanceof Array
       data.slice(0, 10)
@@ -34,23 +57,42 @@ class Grid.SourceManager
       data
 
   data: (upUntil) ->
-    @_dataDep.depend()
+    sources = @sourcesForStep(upUntil)
+    for source in sources
+      @addSource(source)
+      @_sourceDeps[source._id].depend()
 
     # Process data with steps
     steps = Steps.stepsUpUntil(upUntil)
-
-    # Create Grid.Data object by sending it reference
-    # to our current data array.
-    data = new Grid.Data(@_data)
     success = true
 
-    steps.every (step) ->
+    currentData = null
+
+    steps.every (step) =>
       return true if step.isGraph
 
+      # Prepare input array
+      if !currentData
+        # We're not processing anything, so pass data from sources.
+        datas = for id in step.inputSourceIds
+          new Grid.Data(@_data[id])
+        console.log 'first step, so current data', datas
+      else
+        datas = [currentData]
+
+      # Figure out how to pass arguments to the step
+      console.log 'number of datas', datas.length
+      if datas.length > 1
+        argNames = (for i in [1..datas.length]
+          "data#{i}").join(",")
+      else
+        argNames = "data"
+
       try
-        code = "(function(data) { #{step.code} })"
+        code = "(function(#{argNames}) { #{step.code} })"
+        console.log 'code', code
         compiled = eval(code)
-        data = compiled(data)
+        currentData = compiled.apply(this, datas)
         
       catch e
         console.log 'Failed', e.message
@@ -58,7 +100,7 @@ class Grid.SourceManager
         console.log step.code
         Session.set('sourceError', e.message)
         success = false
-        data = [[]]
+        currentData = new Grid.Data()
       
       return true
 
@@ -74,4 +116,4 @@ class Grid.SourceManager
     #     [parseFloat(k), data[k]]
     #   data = data2
 
-    data.data()
+    currentData.data()

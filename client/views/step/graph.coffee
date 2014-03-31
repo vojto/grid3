@@ -1,15 +1,6 @@
 Template.source_graph.rendered = ->
   manager = null
 
-  # Put data into preview whenever source/steps change
-  Deps.autorun =>
-    source = Router.getData()
-    edited = Session.get('editedObject')
-    return unless source
-    manager = new Grid.SourceManager(source)
-    manager.loadData()
-    Session.set 'preview', manager.preview(edited)
-
   # Render the graph whenever source/graph changes
   Deps.autorun =>
     graph = Session.get('editedObject')

@@ -178,9 +178,6 @@ deleteSelectedLine = ->
 # -----------------------------------------------------------------------------
 
 Template.flow_edit.events
-  'click button.editor': (e, template) ->
-    Router.go 'source.show', @
-
   'click svg': (e) ->
     if e.target.nodeName != 'line'
       Session.set('selectedLineId', null)
@@ -194,9 +191,7 @@ Template.flow_edit.events
 
   'click div.step span': (e, template) ->
     e.preventDefault()
-    Router.go 'source.show', template.data
-    Session.set('editedObject', @)
-    Session.set('selectedStep', @)
+    Router.go 'step.edit', {branchId: @_id, _id: @_id}
 
   'mouseup #flow': didMouseUpAtCanvas
 
