@@ -1,47 +1,47 @@
+# Variables
+# -----------------------------------------------------------------------------
 manager = null
 
-# TODO: This code belongs to the model
+# Template
+# -----------------------------------------------------------------------------
+Template.step_edit.rendered = didRender
 
-LINE_CHART_CODE = """
-var line = d3.svg.line()
-    .interpolate('basis')  
-    .x(function(d) { return x(d[0]) })
-    .y(function(d) { return y(d[1]) });
-
-svg.append('path')
-    .attr('class', 'line')  
-    .attr('d', line(data));
-"""
-
-BAR_CHART_CODE = """
-var width = svg.attr('width') / data.length;
-var barWidth = width;
-var height = svg.attr('height');
-
-svg.selectAll('rect')
-  .data(data)
-  .enter()
-  .append('rect')
-  .attr('width', barWidth)
-  .attr('height', function(d) { return height-y(d[1])-30 })
-  .attr('x', function(d) { return x(d[0]) })
-  .attr('y', function(d) { return y(d[1]) });
-"""
-
-manager = null
+# Lifecycle
+# -----------------------------------------------------------------------------
 
 didRender = ->
   Deps.autorun(updatePreview)
 
 updatePreview = ->
-  step = Router.getData()
+  step = Router.getData().step
   return unless step
   manager = new Grid.SourceManager()
   preview = manager.preview(step)
-  console.log 'setting preview to', preview
   Session.set('preview', preview)
 
-Template.step_edit.rendered = didRender
+# Sidebar
+# -----------------------------------------------------------------------------
+
+sidebarSteps = ->
+  # This is based on the editedObject now.
+  return [] unless @step
+
+  steps = Steps.stepsUpUntil(@step)
+
+  # Find all following steps
+  next = @step
+  while next = Steps.findStepOrGraphBy({inputStepId: next._id})
+    steps.push(next)
+
+  # Return result
+  steps
+
+currentClass = ->
+  edited = Router.getData().step
+  if edited && edited._id == @_id
+    'edited'
+  else
+    ''
 
 Template.step_edit.helpers
   dataColumns: ->
@@ -51,27 +51,9 @@ Template.step_edit.helpers
     row.map (col, i) ->
       i + 1
 
-  steps: ->
-    # This is based on the editedObject now.
-    selected = Session.get('selectedStep')
-    return [] unless selected
-
-    steps = Steps.stepsUpUntil(selected)
-
-    # Find all following steps
-    next = selected
-    while next = Steps.findStepOrGraphBy({inputStepId: next._id})
-      steps.push(next)
-
-    # Return result
-    steps
-
-  currentClass: ->
-    edited = Session.get('editedObject')
-    if edited && edited._id == @_id
-      'edited'
-    else
-      ''
+  steps: sidebarSteps
+    
+  currentClass: currentClass
 
   iconForStep: ->
     if @isGraph

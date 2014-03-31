@@ -1,3 +1,29 @@
+LINE_CHART_CODE = """
+var line = d3.svg.line()
+    .interpolate('basis')  
+    .x(function(d) { return x(d[0]) })
+    .y(function(d) { return y(d[1]) });
+
+svg.append('path')
+    .attr('class', 'line')  
+    .attr('d', line(data));
+"""
+
+BAR_CHART_CODE = """
+var width = svg.attr('width') / data.length;
+var barWidth = width;
+var height = svg.attr('height');
+
+svg.selectAll('rect')
+  .data(data)
+  .enter()
+  .append('rect')
+  .attr('width', barWidth)
+  .attr('height', function(d) { return height-y(d[1])-30 })
+  .attr('x', function(d) { return x(d[0]) })
+  .attr('y', function(d) { return y(d[1]) });
+"""
+
 @Graphs = new Meteor.Collection2 'graphs',
   schema:
     projectId: { type: String }

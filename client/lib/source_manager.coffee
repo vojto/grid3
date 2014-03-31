@@ -76,12 +76,10 @@ class Grid.SourceManager
         # We're not processing anything, so pass data from sources.
         datas = for id in step.inputSourceIds
           new Grid.Data(@_data[id])
-        console.log 'first step, so current data', datas
       else
         datas = [currentData]
 
       # Figure out how to pass arguments to the step
-      console.log 'number of datas', datas.length
       if datas.length > 1
         argNames = (for i in [1..datas.length]
           "data#{i}").join(",")
@@ -90,7 +88,6 @@ class Grid.SourceManager
 
       try
         code = "(function(#{argNames}) { #{step.code} })"
-        console.log 'code', code
         compiled = eval(code)
         currentData = compiled.apply(this, datas)
         

@@ -12,9 +12,6 @@ template(name='step_edit')
   div.split
     div.sidebar
       div.steps
-        div.step.collapsed
-          i.entypo.cloud
-          span= title
         each steps
           div.draggable.step.collapsed(class=currentClass, data-id=_id)
             i.entypo(class=iconForStep)

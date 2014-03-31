@@ -30,7 +30,10 @@ Router.map ->
   @route 'step.edit',
     path: '/step/:branchId/:_id'
     template: 'step_edit'
-    data: -> Steps.findOne({_id: @params._id})
+    data: ->
+      {
+        step: Steps.findOne({_id: @params._id})
+      }
 
   @route 'dashboard.show',
     path: '/dashboard/:_id'
