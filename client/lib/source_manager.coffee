@@ -43,7 +43,9 @@ class Grid.SourceManager
     while inputStep
       for sourceId in (inputStep.inputSourceIds || [])
         sources.push(Sources.findOne({_id: sourceId}))
-      inputStep = Sources.findOne(_id: step.inputStepId)
+      console.log 'looking for previous step', inputStep.inputStepId
+      inputStep = Steps.findOne(inputStep.inputStepId)
+      console.log 'here it is', inputStep
 
     sources
 
@@ -58,6 +60,7 @@ class Grid.SourceManager
 
   data: (upUntil) ->
     sources = @sourcesForStep(upUntil)
+    console.log 'sources for step', sources
     for source in sources
       @addSource(source)
       @_sourceDeps[source._id].depend()

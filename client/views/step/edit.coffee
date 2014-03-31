@@ -11,6 +11,7 @@ didRender = ->
 updatePreview = ->
   step = Router.getData().step
   return unless step
+  console.log 'updating preview for step', step
   manager = new Grid.SourceManager()
   preview = manager.preview(step)
   Session.set('preview', preview)
@@ -99,16 +100,17 @@ Template.step_edit.events
   # branch by setting session variable `selectedStep`.
   'click .action.add-step': (e, template) ->
     e.preventDefault()
-    source = template.data
+    step = template.data.step
+    project = Projects.findOne({_id: step.projectId})
     params =
-      sourceId: source._id
-      weight: Steps.nextWeight(source)
+      projectId: project._id
+      weight: Steps.nextWeight(project)
       title: 'Map'
       code: Steps.DEFAULT_CODE
       # TODO: This should be either current branch (by selectedStep) or start at the beginning
-      inputStepId: Steps.lastIdForSource(source)
-      y: Steps.nextY(source)
-      x: Steps.lastX(source)
+      inputStepId: Steps.lastIdForProject(project)
+      y: Steps.nextY(project)
+      x: Steps.lastX(project)
 
     Steps.insert params, (err, stepId) ->
       selectAndEditStep(stepId)

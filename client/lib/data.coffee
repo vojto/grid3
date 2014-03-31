@@ -58,7 +58,5 @@ class Grid.Data
       d2 = d[1]
       return d1.concat(d2)
 
-    console.log 'merged', merged
-
     @_data = merged
     @
