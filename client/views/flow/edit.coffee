@@ -7,6 +7,22 @@ isArrowing = false
 $source = null
 sourceStep = null
 
+# View lifecycle
+# -----------------------------------------------------------------------------
+
+didRender = ->
+  $flow = $(@find('#flow'))
+  setupKeyboardShortcuts()
+
+setupKeyboardShortcuts: ->
+  shortcuts = ['backspace', 'del']
+  Mousetrap.bind shortcuts, (e) =>
+    e.preventDefault()
+    deleteSelectedLine()
+
+setupDragging = ->
+  $(@find('div.step')).draggable({stop: didStopDragging})
+
 # General helpers
 # -----------------------------------------------------------------------------
 
@@ -17,6 +33,10 @@ mousePositionInSvg = (e) ->
   mouseX = e.clientX - svgX
   mouseY = e.clientY - svgY
   {x: mouseX, y: mouseY}
+
+itemStyle = (step) ->
+  "left: #{@x || 10}px; top: #{@y || 10}px; "
+
 
 # Finding all arrows
 # -----------------------------------------------------------------------------
@@ -179,44 +199,18 @@ Template.flow_edit.events
   'dragstart div.step': (e) ->
     e.preventDefault() if e.ctrlKey
 
-setupDragging = ->
-  $(@find('div.step')).draggable({stop: didStopDragging})
-
 Template.flow_edit_step.rendered = setupDragging
 Template.flow_edit_graph.rendered = setupDragging
 Template.flow_edit_source.rendered = setupDragging
 
-# Helpers
-# -----------------------------------------------------------------------------
-
 Template.flow_edit.helpers
   lines: arrows
+  sources: -> Sources.forProject(@)
+  steps: -> Steps.forProject(@)
+  graphs: -> Graphs.forProject(@)
 
-  sources: ->
-    Sources.forProject(@)
-
-  steps: ->
-    Steps.forProject(@)
-
-  graphs: ->
-    Graphs.forProject(@)
-
-itemStyle = (step) -> "left: #{@x || 10}px; top: #{@y || 10}px; "
-
-Template.flow_edit_step.helpers
-  itemStyle: itemStyle
-
-Template.flow_edit_graph.helpers
-  itemStyle: itemStyle
-
-Template.flow_edit_source.helpers
-  itemStyle: itemStyle
-
-Template.flow_edit.rendered = ->
-  $flow = $(@find('#flow'))
-
-  shortcuts = ['backspace', 'del']
-  Mousetrap.bind shortcuts, (e) =>
-    e.preventDefault()
-    deleteSelectedLine()
+Template.flow_edit_step.helpers(itemStyle: itemStyle)
+Template.flow_edit_graph.helpers(itemStyle: itemStyle)
+Template.flow_edit_source.helpers(itemStyle: itemStyle)
+Template.flow_edit.rendered = -> didRender
 
