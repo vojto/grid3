@@ -21,11 +21,19 @@ template(name='flow_edit')
               line.handle(x1=x1 y1=y1 x2=x2 y2=y2 stroke='#5b6d7e' stroke-width='20' stroke-opacity='0.0')
               line(x1=x1 y1=y1 x2=x2 y2=y2 stroke=color stroke-width='2' marker-start=marker)
 
+          each sources
+            +flow_edit_source
+
           each steps
             +flow_edit_step
 
           each graphs
             +flow_edit_graph
+
+template(name='flow_edit_source')
+  div.step.source.collapsed(data-id=_id, style=itemStyle)
+    i.entypo.cloud
+    span=title
 
 template(name='flow_edit_step')
   div.step.collapsed(data-id=_id, style=itemStyle)

@@ -61,11 +61,12 @@ Template.flow_edit.events
   'dragstart div.step': (e) ->
     e.preventDefault() if e.ctrlKey
 
-Template.flow_edit_step.rendered = ->
+setupDragging = ->
   $(@find('div.step')).draggable({stop: didStopDragging})
 
-Template.flow_edit_graph.rendered = ->
-  $(@find('div.step')).draggable({stop: didStopDragging})
+Template.flow_edit_step.rendered = setupDragging
+Template.flow_edit_graph.rendered = setupDragging
+Template.flow_edit_source.rendered = setupDragging
 
 # Helpers
 # -----------------------------------------------------------------------------
@@ -100,6 +101,9 @@ Template.flow_edit.helpers
 
     lines
 
+  sources: ->
+    Sources.forProject(@)
+
   steps: ->
     Steps.forProject(@)
 
@@ -112,6 +116,9 @@ Template.flow_edit_step.helpers
   itemStyle: itemStyle
 
 Template.flow_edit_graph.helpers
+  itemStyle: itemStyle
+
+Template.flow_edit_source.helpers
   itemStyle: itemStyle
 
 # Actions
@@ -175,6 +182,7 @@ didStopDragging = (ev, ui) ->
 
   Steps.update({_id: id}, {$set: {x: x, y: y}})
   Graphs.update({_id: id}, {$set: {x: x, y: y}})
+  Sources.update({_id: id}, {$set: {x: x, y: y}})
 
 deleteSelectedLine = ->
   selectedLineId = Session.get('selectedLineId')
