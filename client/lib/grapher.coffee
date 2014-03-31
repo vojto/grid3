@@ -6,7 +6,7 @@ class Grid.Grapher
     data = @data
 
     width = @$el.width()
-    height = 400
+    height = 300
     svg = d3.select(@$el.get(0)).append('svg')
       .attr('class', 'chart')
       .attr('width', width)
