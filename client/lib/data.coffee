@@ -32,3 +32,33 @@ class Grid.Data
   splice: (index, count) ->
     @_data.splice(index, count)
     @
+
+  merge: (data, fn1, fn2) ->
+    merged = @_data.reduce (sum, d) ->
+      key = fn1(d)
+      sum[key] or= []
+      sum[key].push(d)
+      sum
+    , {}
+
+    merged = data._data.reduce (sum, d) ->
+      key = fn2(d)
+      sum[key] or= []
+      sum[key].push(d)
+      sum
+    , merged
+
+    keys = Object.keys(merged).filter (key) ->
+      d = merged[key]
+      d.length == 2
+
+    merged = keys.map (key) ->
+      d = merged[key]
+      d1 = d[0]
+      d2 = d[1]
+      return d1.concat(d2)
+
+    console.log 'merged', merged
+
+    @_data = merged
+    @
