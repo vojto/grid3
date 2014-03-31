@@ -19,6 +19,11 @@ updatePreview = ->
   preview = manager.preview(step)
   Session.set('preview', preview)
 
+openFlow = (e) ->
+  e.preventDefault()
+  console.log 'step', @step.projectId
+  Router.go('flow.edit', {_id: @step.projectId})
+
 # Sidebar
 # -----------------------------------------------------------------------------
 
@@ -82,9 +87,7 @@ Template.step_edit.events
       insertAtCaret(e.currentTarget, '  ')
       e.preventDefault()
 
-  'click button.flow': (e) ->
-    e.preventDefault()
-    Router.go('flow.edit', @)
+  'click button.flow': openFlow
 
   'click button.dashboard': (e) ->
     e.preventDefault()
