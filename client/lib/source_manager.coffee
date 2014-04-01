@@ -23,7 +23,7 @@ class Grid.SourceManager
       @_sourceDeps[key].changed()
       return
 
-    if source.cachedData
+    if Sources.cachedRecently(source)
       # Already loaded, don't load
       @_data[key] = JSON.parse(source.cachedData)
       @_sourceDeps[key].changed()
@@ -33,7 +33,7 @@ class Grid.SourceManager
     IronRouterProgress.start()
     Meteor.call 'sources.load', source.url, (err, data) =>
       IronRouterProgress.done()
-      Sources.update source._id, {$set: {cachedData: JSON.stringify(data)}}
+      Sources.update source._id, {$set: {cachedData: JSON.stringify(data), cachedAt: new Date()}}
       @_data[key] = data
       @_sourceDeps[key].changed()
 

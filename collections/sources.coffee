@@ -4,6 +4,7 @@
     title:      { type: String, label: 'Title', optional: true }
     url:        { type: String, label: 'URL' }
     cachedData: { type: String, label: 'Cached data', optional: true }
+    cachedAt:   { type: Date, optional: true }
     x: { type: Number, label: 'X', optional: true }
     y: { type: Number, label: 'Y', optional: true }
 
@@ -19,3 +20,11 @@
   # For now let's now worry about the project
   # but instead return ALL of the sources
   Sources.find()
+
+@Sources.cachedRecently = (source) ->
+  return false unless source.cachedAt
+  return false unless source.cachedData
+
+  difference = (new Date() - source.cachedAt)/1000
+
+  return difference < 120 # 2 minutes till expiration of cache
