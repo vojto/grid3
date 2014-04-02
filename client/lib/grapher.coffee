@@ -9,8 +9,8 @@ class Grid.Grapher
     height = 300
     svg = d3.select(@$el.get(0)).append('svg')
       .attr('class', 'chart')
-      .attr('width', width)
-      .attr('height', height+30)
+      .attr('width', width+30)
+      .attr('height', height+40)
 
     label = 0
     value = 1
@@ -18,7 +18,7 @@ class Grid.Grapher
     # Label scale
     # x = d3.scale.linear().domain(d3.extent(data, (d) -> d[label])).range([0, width])
     domain = d3.extent(data, (d) -> d[label])
-    x = d3.time.scale().domain(domain).range([40, width])
+    x = d3.time.scale().domain(domain).range([40, width-30])
     xAxis = d3.svg.axis().scale(x).orient('bottom')
     domain = @addMarginToDomain(d3.extent(data, (d) -> d[value]))
     y = d3.scale.linear().domain(domain).range([height, 0])
