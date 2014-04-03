@@ -27,6 +27,16 @@ Router.map ->
   #   waitOn: -> @subscribe('project')
   #   loadingTemplate: 'loading'
 
+  @route 'project.show',
+    path: '/project/:_id'
+    template: 'project_show'
+    data: -> Projects.findOne({_id: @params._id})
+
+  @route 'flow.edit',
+    path: '/flow/:_id'
+    template: 'flow_edit'
+    data: -> Projects.findOne {_id: @params._id}
+
   @route 'step.edit',
     path: '/step/:branchId/:_id'
     template: 'step_edit'
@@ -40,7 +50,4 @@ Router.map ->
     template: 'dashboard_show'
     data: -> Projects.findOne {_id: @params._id}
 
-  @route 'flow.edit',
-    path: '/flow/:_id'
-    template: 'flow_edit'
-    data: -> Projects.findOne {_id: @params._id}
+  

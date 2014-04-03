@@ -1,5 +1,6 @@
 @Sources = new Meteor.Collection2 "sources",
   schema:
+    projectId:  { type: String }
     collection: { type: String, autoValue: -> 'sources' }
     title:      { type: String, label: 'Title', optional: true }
     url:        { type: String, label: 'URL' }
