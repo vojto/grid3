@@ -10,6 +10,7 @@ class TableEditController extends Grid.Controller
     'click .delete-source': 'deleteSource'
     'click .add-step': 'addStep'
     'click .delete-step': 'deleteStep'
+    'click li.step': 'openStep'
 
   table: ->
     Router.getData()
@@ -59,6 +60,11 @@ class TableEditController extends Grid.Controller
     table = @template.data
     Tables.update({_id: table._id}, {$pull: {stepIds: step._id}})
     Steps.remove(step._id)
+
+  openStep: (step) ->
+    console.log 'opening step'
+    table = @template.data
+    Router.go 'step.edit', {tableId: table._id, stepId: step._id}
 
 
 controller = new TableEditController()

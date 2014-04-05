@@ -37,14 +37,6 @@ Router.map ->
     template: 'flow_edit'
     data: -> Projects.findOne {_id: @params._id}
 
-  @route 'step.edit',
-    path: '/step/:branchId/:_id'
-    template: 'step_edit'
-    data: ->
-      {
-        step: Steps.findStepOrGraph(@params._id)
-      }
-
   @route 'dashboard.show',
     path: '/dashboard/:_id'
     template: 'dashboard_show'
@@ -56,3 +48,12 @@ Router.map ->
     path: '/table/:_id'
     template: 'table_edit'
     data: -> Tables.findOne(@params._id)
+
+  @route 'step.edit',
+    path: '/table/:tableId/steps/:stepId'
+    template: 'step_edit'
+    data: ->
+      {
+        table: Tables.findOne(@params.tableId)
+        step: Steps.findOne(@params.stepId)
+      }
