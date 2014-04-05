@@ -16,7 +16,8 @@ class Grid.Controller
 
     helpers = {}
     for key, method of @helpers
-      helpers[key] = @[method]
+      helpers[key] = ->
+        controller[method].call(controller, @)
 
     for key, method of @actions
       events[key] = (e, template) ->

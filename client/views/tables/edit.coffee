@@ -13,16 +13,21 @@ class TablesEdit extends Grid.Controller
   # Working with sources
   # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-  tableSources: ->
-    sources = Tables.sources(@)
-    console.log 'here are them sources', sources
-    sources
+  tableSources: (table) ->
+    console.log 'looking for table sources'
+    return [] unless table
+    Tables.sources(table)
 
   allSources: ->
-    Sources.find()
+    table = @table()
+    console.log 'finding sources for table', table
+    Sources.find().fetch().filter (availableSource) ->
+      table.sourceIds.indexOf(availableSource._id) != -1
 
   # Adds available source to the table source
   addSource: (source) ->
+    return unless @template
+    return
     table = @template.data
     Tables.update({_id: table._id}, {$push: {sourceIds: source._id}})
 
