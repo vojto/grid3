@@ -1,0 +1,19 @@
+template(name='table_sidebar')
+  h4.small Sources
+  div.steps
+    each sources
+      div.step.collapsed(class=currentClass, data-id=_id)
+        i.entypo.large.cloud
+        span= title
+        i.small.delete-source.entypo.circled-cross
+
+  h4.small Processing
+
+  div.steps
+    each steps
+      div.step.collapsed(class=currentClass, data-id=_id)
+        i.large.entypo(class='cog')
+        span= title
+        i.small.delete-step.entypo.circled-cross
+
+  h4.small Visualizations

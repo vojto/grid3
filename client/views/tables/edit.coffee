@@ -1,4 +1,4 @@
-class TablesEdit extends Grid.Controller
+class TableEditController extends Grid.Controller
   helpers:
     'sources': 'tableSources'
     'allSources': 'allSources'
@@ -61,5 +61,6 @@ class TablesEdit extends Grid.Controller
     Steps.remove(step._id)
 
 
-
-new TablesEdit(Template.table_edit)
+controller = new TableEditController()
+controller.addTemplate(Template.table_edit)
+controller.addTemplate(Template.table_sidebar)

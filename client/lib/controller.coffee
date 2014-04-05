@@ -4,8 +4,6 @@ assert = Grid.Util.assert
 
 class Grid.Controller
   constructor: (template) ->
-    assert(template)
-
     controller = @
     @events or= {}
     @helpers or= {}
@@ -24,8 +22,22 @@ class Grid.Controller
         e.preventDefault()
         controller[method].call(controller, @, e, template)
 
-    template.events(events)
-    template.helpers(helpers)
+    @eventsForTemplate = events
+    @helpersForTemplate = helpers
+  
+    @addTemplate(template) if template
+
+  addTemplate: (template) ->
+    assert(template)
+
+    controller = @
+
+    template.events(@eventsForTemplate)
+    template.helpers(@helpersForTemplate)
 
     template.rendered = ->
-      controller.template = @
+      # Set the first template
+      controller.template = @ unless controller.template 
+      # Set all templates
+      controller.templates or= []
+      controller.templates.push(@)
