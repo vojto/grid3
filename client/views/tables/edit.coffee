@@ -3,6 +3,7 @@ class TablesEdit extends Grid.Controller
     'sources': 'tableSources'
     'allSources': 'allSources'
     'steps': 'steps'
+    'addStepLink': 'addStepLink'
 
   actions:
     'click .add-source': 'addSource'
@@ -36,6 +37,9 @@ class TablesEdit extends Grid.Controller
 
   # Working with steps
   # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+  addStepLink: ->
+    "BAZINGA"
 
   steps: ->
     Tables.steps(@)

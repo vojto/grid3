@@ -39,25 +39,16 @@ template(name='table_edit')
       h3 Processing
 
       ul.list
-        li
-          div.icon
-            i.entypo.map.large
-          small Map
-          button.add-step Add
-        li
-          div.icon
-            i.entypo.ccw.large
-          small Reduce
-          button.add-step Add
-        li
-          div.icon
-            i.entypo.flow-branch.large
-          small Merge
-          button.add-step Add
-        li
-          div.icon
-            i.entypo.layout.large
-          small Group
-          button.add-step Add
+        +table_edit_add_step(step='map', icon='map', label='Map')
+        +table_edit_add_step(step='reduce' icon='ccw' label='Map')
+        +table_edit_add_step(step='merge' icon='flow-branch' label='Map')
+        +table_edit_add_step(step='group' icon='layout' label='Map')
 
       h3 Visualizations
+
+template(name='table_edit_add_step')
+  li
+    div.icon
+      i.entypo.map.large
+    small Map
+    button.add-step Add
