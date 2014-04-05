@@ -8,7 +8,6 @@
         "git": "https://github.com/mad-eye/meteor-reactive-ace.git",
         "branch": "master"
       },
-      "jade": {},
       "collection2": {},
       "autoform": {
         "git": "https://github.com/aldeed/meteor-autoform.git",
@@ -16,7 +15,8 @@
       },
       "iron-router": {},
       "blaze-layout": {},
-      "iron-router-progress": {}
+      "iron-router-progress": {},
+      "jade": {}
     },
     "packages": {
       "npm": {
@@ -34,11 +34,6 @@
         "branch": "master",
         "commit": "869774ad51fdd130119df8cc03831172cab993f2"
       },
-      "jade": {
-        "git": "https://github.com/mquandalle/meteor-jade.git",
-        "tag": "v0.1.5",
-        "commit": "bbb23ff955d94066b74c4aa9ea760418483b3ddf"
-      },
       "collection2": {
         "git": "https://github.com/aldeed/meteor-collection2.git",
         "tag": "v0.3.11",
@@ -47,7 +42,7 @@
       "autoform": {
         "git": "https://github.com/aldeed/meteor-autoform.git",
         "branch": "ui",
-        "commit": "3db93da60fa73a2c0a20de6d186d47aba7afb6d1"
+        "commit": "6b7313a6de807d7adbafc6acf3b4bf273df4b693"
       },
       "iron-router": {
         "git": "https://github.com/EventedMind/iron-router.git",
@@ -56,13 +51,18 @@
       },
       "blaze-layout": {
         "git": "https://github.com/EventedMind/blaze-layout.git",
-        "tag": "v0.2.2",
-        "commit": "8bc53798fe5965669ae67c72f91829fcfdceabfd"
+        "tag": "v0.2.3",
+        "commit": "0166a768476c1c54d659a919a7ff0cb52f30ef81"
       },
       "iron-router-progress": {
         "git": "https://github.com/Multiply/iron-router-progress.git",
-        "tag": "v0.2.0",
-        "commit": "ce730d1d26feadb7c75ea25f22c5bfdb0c549a8b"
+        "tag": "v0.3.1",
+        "commit": "3f7900feb4bb70a1289b39a1fdcd1f438c0335b3"
+      },
+      "jade": {
+        "git": "https://github.com/mquandalle/meteor-jade.git",
+        "tag": "v0.2.1",
+        "commit": "969fc3dd0adbb15304e3e13c3e27260398d89503"
       },
       "simple-schema": {
         "git": "https://github.com/aldeed/meteor-simple-schema.git",

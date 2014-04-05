@@ -32,14 +32,11 @@ class TablesEdit extends Grid.Controller
 
   deleteSource: (source) ->
     table = @template.data
-    Tables.update({_id: table._id}, {$pull: {sourceIds: source._id}})    
+    Tables.update({_id: table._id}, {$pull: {sourceIds: source._id}})
 
 
   # Working with steps
   # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-  addStepLink: ->
-    "BAZINGA"
 
   steps: ->
     Tables.steps(@)

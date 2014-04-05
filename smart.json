@@ -6,7 +6,6 @@
     "reactive-ace": {
       "git": "https://github.com/mad-eye/meteor-reactive-ace.git"
     },
-    "jade": {},
     "collection2": {},
     "autoform": {
       "git": "https://github.com/aldeed/meteor-autoform.git",
@@ -14,6 +13,7 @@
     },
     "iron-router": {},
     "blaze-layout": {},
-    "iron-router-progress": {}
+    "iron-router-progress": {},
+    "jade": {}
   }
 }

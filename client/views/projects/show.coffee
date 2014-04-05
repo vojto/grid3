@@ -33,10 +33,10 @@ class ProjectShow extends Grid.Controller
 
   addTable: ->
     Tables.createForProject(@, {
-      title: 'New table'  
+      title: 'New table'
     }, (err, id) ->
       Flash.handle(err)
-      Router.go 'table.edit', {_id: id}
+      Router.go 'table.edit', {_id: id} if id
     )
 
   deleteTable: ->

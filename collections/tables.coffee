@@ -15,6 +15,8 @@
 
 @Tables.createForProject = (project, attrs, cb) ->
   attrs.projectId = project._id
+  attrs.sourceIds = []
+  attrs.stepIds = []
   Tables.insert(attrs, cb)
 
 @Tables.firstStep = (table) ->
