@@ -11,15 +11,8 @@ template(name='step_edit')
 
   div.split
     div.sidebar
-      div.steps
-        each steps
-          div.draggable.step.collapsed(class=currentClass, data-id=_id)
-            i.entypo(class=iconForStep)
-            span= title
-
-        {{{plusButton 'add-step' 'plus' 'Process'}}}  
-        {{{plusButton 'add-line-chart' 'plus' 'Line chart'}}}
-        {{{plusButton 'add-bar-chart' 'plus' 'Bar chart'}}}
+      with table
+        +table_sidebar
 
 
     div.left
