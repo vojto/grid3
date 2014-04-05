@@ -2,7 +2,8 @@
   schema:
     projectId: { type: String }
     title: { type: String, label: 'Title', optional: true }
-    stepsIds: { type: [String], label: 'Steps' }
+    sourceIds: { type: [String], label: 'Sources' }
+    stepIds: { type: [String], label: 'Steps' }
 
 @Tables.allow
   insert: (userId, doc) -> true
@@ -24,3 +25,6 @@
 
 @Tables.steps = (table) ->
   Steps.findArray(table.stepIds)
+
+@Tables.sources = (table) ->
+  Sources.findArray(table.sourceIds)

@@ -1,18 +1,17 @@
 class TablesEdit extends Grid.Controller
   helpers:
-    'sources': 'sources'
+    'sources': 'tableSources'
     'steps': 'steps'
+    'allSources': 'allSources'
 
   table: ->
     Router.getData()
 
-  sources: =>
-    table = @table()
-    return [] unless table
-    step = Tables.firstStep(table)
-    sources = Steps.sources(step)
+  tableSources: ->
+    Tables.sources(@)
 
-    sources
+  allSources: ->
+    Sources.find()
 
   steps: ->
     Tables.steps(@)

@@ -26,6 +26,15 @@ template(name='table_edit')
     div.left-right
       h3 Sources
 
+      ul.list
+        each allSources
+          li
+            div.icon
+              i.entypo.cloud.large
+            small
+              = title
+            button Add
+
       h3 Processing
 
       h3 Visualizations
