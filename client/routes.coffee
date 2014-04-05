@@ -50,4 +50,9 @@ Router.map ->
     template: 'dashboard_show'
     data: -> Projects.findOne {_id: @params._id}
 
-  
+  # Workflow
+
+  @route 'table.edit',
+    path: '/table/:_id'
+    template: 'table_edit'
+    data: -> Tables.findOne(@params._id)

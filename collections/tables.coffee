@@ -12,7 +12,6 @@
 @Tables.forProject = (project) ->
   Tables.find({projectId: project._id})
 
-@Tables.createForProject = (project, attrs) ->
+@Tables.createForProject = (project, attrs, cb) ->
   attrs.projectId = project._id
-  console.log attrs
-  Tables.insert(attrs, Flash.handle)
+  Tables.insert(attrs, cb)

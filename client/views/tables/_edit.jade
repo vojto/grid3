@@ -1,0 +1,18 @@
+template(name='table_edit')
+  header
+    a.logo
+
+  div.split
+    div.sidebar
+      div.steps
+        each steps
+          div.draggable.step.collapsed(class=currentClass, data-id=_id)
+            i.entypo(class=iconForStep)
+            span= title
+
+
+    div.left
+      | source code here
+
+    div.right
+      | data preview here
