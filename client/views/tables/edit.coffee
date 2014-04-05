@@ -8,6 +8,7 @@ class TablesEdit extends Grid.Controller
   actions:
     'click .add-source': 'addSource'
     'click .delete-source': 'deleteSource'
+    'click .add-step': 'addStep'
 
   table: ->
     Router.getData()
@@ -40,6 +41,22 @@ class TablesEdit extends Grid.Controller
 
   steps: ->
     Tables.steps(@)
+
+  # Adds clicked step to the current table
+  addStep: (step) ->
+    table = @template.data
+    stepType = step.step
+    params =
+      title: 'Map'
+      code: Steps.DEFAULT_CODE[stepType]
+
+    Steps.insert params, (err, stepId) ->
+      Flash.handle(err)
+      console.log 'created step with params', params, 'and id', stepId
+      return unless stepId
+      Tables.addStepWithId(table, stepId)
+      # Add this step to array of steps for current table
+
 
 
 new TablesEdit(Template.table_edit)

@@ -21,8 +21,9 @@ class Grid.Controller
 
     _.each @actions, (method, key) ->
       events[key] = (e, template) ->
+        e.preventDefault()
         controller[method].call(controller, @, e, template)
-  
+
     template.events(events)
     template.helpers(helpers)
 

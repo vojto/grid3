@@ -1,9 +1,9 @@
 @Steps = new Meteor.Collection2 "steps",
   schema:
     collection: { type: String, autoValue: -> 'steps' }
-    projectId: { type: String }
-    weight: { type: Number, label: 'Weight' }
-    title: { type: String, label: 'Title', optional: true }
+    projectId: { type: String, optional: true } # TODO: Get rid of this
+    weight: { type: Number, label: 'Weight', optional: true } # TODO: Get rid of this
+    title: { type: String, label: 'Title' }
     code: { type: String, label: 'Code' }
     expanded: { type: Boolean, label: 'expanded', optional: true }
     x: { type: Number, label: 'X', optional: true }
@@ -106,7 +106,7 @@
       stepIds.unshift(previousId)
     else
       previousId = null
-  
+
   # Do this for reactivity to work
   steps = Steps.find({_id: {$in: stepIds}}).fetch()
   # Do this to keep them in order
@@ -120,4 +120,7 @@
   return [] unless step
   Steps.findArray(step.inputSourceIds)
 
-@Steps.DEFAULT_CODE = 'return data.map(function(d) {\n  return d;\n});'
+@Steps.DEFAULT_CODE = {
+  'map': 'return data.map(function(d) {\n  return d;\n});',
+  'reduce': 'return data.reduce(function(sum, d) {\n  return d;\n}, {});'
+}

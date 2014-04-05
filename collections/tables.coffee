@@ -30,3 +30,6 @@
 
 @Tables.sources = (table) ->
   Sources.findArray(table.sourceIds)
+
+@Tables.addStepWithId = (table, stepId) ->
+  Tables.update({_id: table._id}, {$addToSet: {stepIds: stepId}})
