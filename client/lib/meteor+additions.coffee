@@ -6,7 +6,7 @@ Meteor.Collection2.prototype.set = (id, updates, callback) ->
 Meteor.Collection2.prototype.findArray = (ids) ->
   return [] unless ids
   objs = @find({_id: {$in: ids}}).fetch()
-  objs = objs.reduce (obj, sum) ->
+  objs = objs.reduce (sum, obj) ->
     sum[obj._id] = obj
     sum
   , {}

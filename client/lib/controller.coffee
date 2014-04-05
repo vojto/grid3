@@ -6,6 +6,7 @@ class Grid.Controller
   constructor: (template) ->
     assert(template)
 
+    controller = @
     @events or= {}
     @helpers or= {}
 
@@ -17,5 +18,12 @@ class Grid.Controller
     for key, method of @helpers
       helpers[key] = @[method]
 
+    for key, method of @actions
+      events[key] = (e, template) ->
+        controller[method].call(controller, @, e, template)
+  
     template.events(events)
     template.helpers(helpers)
+
+    template.rendered = ->
+      controller.template = @
