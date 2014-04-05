@@ -39,8 +39,8 @@ class TablesEdit extends Grid.Controller
   # Working with steps
   # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-  steps: ->
-    Tables.steps(@)
+  steps: (table) ->
+    Tables.steps(table)
 
   # Adds clicked step to the current table
   addStep: (step) ->

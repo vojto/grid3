@@ -17,8 +17,8 @@ template(name='table_edit')
 
       div.steps
         each steps
-          div.draggable.step.collapsed(class=currentClass, data-id=_id)
-            i.entypo(class=iconForStep)
+          div.step.collapsed(class=currentClass, data-id=_id)
+            i.large.entypo(class='cog')
             span= title
 
       h4.small Visualizations
