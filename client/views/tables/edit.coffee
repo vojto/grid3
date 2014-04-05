@@ -6,6 +6,7 @@ class TablesEdit extends Grid.Controller
 
   actions:
     'click .add-source': 'addSource'
+    'click .delete-source': 'deleteSource'
 
   table: ->
     Router.getData()
@@ -26,7 +27,11 @@ class TablesEdit extends Grid.Controller
   # Adds available source to the table source
   addSource: (source) ->
     table = @template.data
-    Tables.update({_id: table._id}, {$push: {sourceIds: source._id}})
+    Tables.update({_id: table._id}, {$addToSet: {sourceIds: source._id}})
+
+  deleteSource: (source) ->
+    table = @template.data
+    Tables.update({_id: table._id}, {$pull: {sourceIds: source._id}})    
 
 
   # Working with steps

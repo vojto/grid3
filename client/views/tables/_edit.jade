@@ -9,8 +9,9 @@ template(name='table_edit')
       div.steps
         each sources
           div.step.collapsed(class=currentClass, data-id=_id)
-            i.entypo.cloud
+            i.entypo.large.cloud
             span= title
+            i.small.delete-source.entypo.circled-cross
 
       h4.small Processing
 
