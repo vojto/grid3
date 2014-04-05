@@ -4,15 +4,28 @@ template(name='table_edit')
 
   div.split
     div.sidebar
+      h4.small Sources
+
+      div.steps
+        each sources
+          div.step.collapsed(class=currentClass, data-id=_id)
+            i.entypo.cloud
+            span= title
+
+      h4.small Processing
+
       div.steps
         each steps
           div.draggable.step.collapsed(class=currentClass, data-id=_id)
             i.entypo(class=iconForStep)
             span= title
 
+      h4.small Visualizations
 
-    div.left
-      | source code here
 
-    div.right
-      | data preview here
+    div.left-right
+      h3 Sources
+
+      h3 Processing
+
+      h3 Visualizations

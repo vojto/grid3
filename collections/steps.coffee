@@ -115,4 +115,18 @@
   steps.push(selected)
   steps
 
+# Finds all sources for a step
+@Steps.sources = (step) ->
+  return [] unless step
+  ids = step.inputSourceIds
+  # Call all steps to enable reactivity
+  steps = Steps.find({_id: {$in: stepIds}}).fetch()
+  # Map them by their ids
+  steps = steps.reduce (step, sum) ->
+    sum[step._id] = step
+    sum
+  , {}
+  # Return steps in order
+  return ids.map (id) -> steps[id]
+
 @Steps.DEFAULT_CODE = 'return data.map(function(d) {\n  return d;\n});'
