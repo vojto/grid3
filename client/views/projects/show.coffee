@@ -22,14 +22,14 @@ class ProjectShow extends Grid.Controller
   # Working with graphs
   # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-  graphs: ->
-    Graphs.forProject(@)
+  graphs: (project) ->
+    Graphs.forProject(project)
 
   # Working with tables
   # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-  tables: ->
-    Tables.forProject(@)
+  tables: (project) ->
+    Tables.forProject(project)
 
   addTable: ->
     Tables.createForProject(@, {

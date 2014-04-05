@@ -11,15 +11,15 @@ class Grid.Controller
     @helpers or= {}
 
     events = {}
-    for key, method of @events
-      events[key] = @[method]
+    _.each @events, (method, key) ->
+      events[key] = controller[method]
 
     helpers = {}
-    for key, method of @helpers
+    _.each @helpers, (method, key) ->
       helpers[key] = ->
         controller[method].call(controller, @)
 
-    for key, method of @actions
+    _.each @actions, (method, key) ->
       events[key] = (e, template) ->
         controller[method].call(controller, @, e, template)
   
