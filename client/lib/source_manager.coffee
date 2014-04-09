@@ -30,23 +30,10 @@ class Grid.SourceManager
       return
 
     url = source.url
-    IronRouterProgress.start()
     Meteor.call 'sources.load', source.url, (err, data) =>
-      IronRouterProgress.done()
       Sources.update source._id, {$set: {cachedData: JSON.stringify(data), cachedAt: new Date()}}
       @_data[key] = data
       @_sourceDeps[key].changed()
-
-  sourcesForStep: (step) ->
-    inputStep = step
-    sources = []
-    while inputStep
-      for sourceId in (inputStep.inputSourceIds || [])
-        sources.push(Sources.findOne({_id: sourceId}))
-      inputStep = Steps.findOne(inputStep.inputStepId)
-
-    sources
-
 
   preview: (upUntil) ->
     return [] unless upUntil
@@ -56,21 +43,30 @@ class Grid.SourceManager
     else
       data
 
-  data: (upUntil) ->
-    sources = @sourcesForStep(upUntil)
-    for source in sources
+  data: (finalStep) ->
+    throw new Error("No finalStep step specified") unless finalStep
+
+    # Find table
+    table = Tables.findOne(finalStep.tableId)
+
+    return unless table
+
+    # Find all the steps until upUntil
+    steps = []
+    for step in Tables.steps(table)
+      steps.push(step)
+      break if step._id == finalStep._id
+
+    # Add sources
+    for source in Sources.findArray(table.sourceIds)
       @addSource(source)
       @_sourceDeps[source._id].depend()
 
-    # Process data with steps
-    steps = Steps.stepsUpUntil(upUntil)
     success = true
 
     currentData = null
 
     steps.every (step) =>
-      return true if step.isGraph
-
       # Prepare input array
       if !currentData
         # We're not processing anything, so pass data from sources.

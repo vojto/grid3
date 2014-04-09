@@ -33,3 +33,4 @@
 
 @Tables.addStepWithId = (table, stepId) ->
   Tables.update(table._id, {$addToSet: {stepIds: stepId}})
+  Steps.update(stepId, {$set: {tableId: table._id}})

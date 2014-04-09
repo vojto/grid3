@@ -57,3 +57,5 @@ Router.map ->
         table: Tables.findOne(@params.tableId)
         step: Steps.findOne(@params.stepId)
       }
+    waitOn: ->
+      Meteor.subscribe('tables')

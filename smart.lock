@@ -15,7 +15,6 @@
       },
       "iron-router": {},
       "blaze-layout": {},
-      "iron-router-progress": {},
       "jade": {}
     },
     "packages": {
@@ -51,13 +50,8 @@
       },
       "blaze-layout": {
         "git": "https://github.com/EventedMind/blaze-layout.git",
-        "tag": "v0.2.3",
-        "commit": "0166a768476c1c54d659a919a7ff0cb52f30ef81"
-      },
-      "iron-router-progress": {
-        "git": "https://github.com/Multiply/iron-router-progress.git",
-        "tag": "v0.3.1",
-        "commit": "3f7900feb4bb70a1289b39a1fdcd1f438c0335b3"
+        "tag": "v0.2.4",
+        "commit": "b40e9b0612329288d75cf52ad14a7da64bb8618f"
       },
       "jade": {
         "git": "https://github.com/mquandalle/meteor-jade.git",

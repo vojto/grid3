@@ -8,7 +8,7 @@ Template.source_graph.rendered = ->
     return unless manager
     return unless graph
     step = Steps.findOne({_id: graph.inputStepId})
-    # console.log 'getting graph data for step', step
+    return unless step
     data = manager.data(step)
 
     $chart = $(@find('.graph'))
