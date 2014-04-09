@@ -9,42 +9,46 @@ class StepCode extends Grid.Controller
     super
 
   didRender: (template) ->
+    console.log 'just rendered', template
+
     setTimeout =>
       @setupEditor()
     , 10
 
   setupEditor: ->
-    return if @isSetup
-    @isSetup = true
-
     shortcuts = ['ctrl+s', 'command+s', 'command+return', 'ctrl+return', 'ctrl+enter']
     Mousetrap.bind shortcuts, (e) =>
       e.preventDefault()
       @saveEditedObject()  
 
-    Deps.autorun =>
-      object = Router.getData().step
-      return unless object
-      $code = @template.find('.code')
-      return unless $code
 
-      if @editor
-        # Editor already exists
-      else
-        @editor = new ReactiveAce()
+    console.log 'template', @template
 
-      @editor.attach($code)
-      @editor.theme = "tomorrow_night"
-      @editor.syntaxMode = "javascript"
-      @editor.fontSize = 14
+    object = Router.getData().step
+    $code = @template.find('.code')
 
-      @editor._editor.setValue(object.code, 1)
+    console.log 'template', @template
+    console.log 'object', object
+    console.log '$code', $code
 
-      @editor._editor.commands.addCommand
-        name: 'saveCode'
-        bindKey: {mac: 'Command-S', win: 'Ctrl-S'}
-        exec: (editor) =>
-          @saveEditedObject()
+    # if @editor
+      # Editor already exists
+    # else
+    @editor = new ReactiveAce()
+    console.log 'creating editor in ', $code
+
+    @editor.attach($code)
+    @editor.theme = "tomorrow_night"
+    @editor.syntaxMode = "javascript"
+    @editor.fontSize = 14
+
+    @editor._editor.setValue(object.code, 1)
+
+    @editor._editor.commands.addCommand
+      name: 'saveCode'
+      bindKey: {mac: 'Command-S', win: 'Ctrl-S'}
+      exec: (editor) =>
+        @saveEditedObject()
 
   saveEditedObject: ->
     template = @template
@@ -84,5 +88,5 @@ class StepCode extends Grid.Controller
     Router.go 'table.edit', {_id: step.tableId}
 
 controller = new StepCode()
-controller.addTemplate(Template.source_code)
 controller.addTemplate(Template.source_code_editor)
+controller.addTemplate(Template.source_code)
