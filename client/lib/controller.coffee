@@ -41,3 +41,5 @@ class Grid.Controller
       # Set all templates
       controller.templates or= []
       controller.templates.push(@)
+
+      controller.didRender.call(controller, @) if controller.didRender
