@@ -19,8 +19,8 @@ class TableEditController extends Grid.Controller
   # Working with sources
   # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-  tableSources: (data) ->
-    table = data.table
+  tableSources: ->
+    table = @table()
     return [] unless table
     Tables.sources(table)
 
@@ -44,7 +44,7 @@ class TableEditController extends Grid.Controller
   # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
   steps: (data) ->
-    table = data.table
+    table = @table()
     return [] unless table
     Tables.steps(table)
 
