@@ -11,7 +11,7 @@ template(name='table_sidebar')
 
   ul.sidebar-list
     each steps
-      li.step(class=currentClass, data-id=_id)
+      li.step(class=stepClass, data-id=_id)
         i.large.entypo(class='cog')
         span= title
         i.small.delete-step.entypo.circled-cross

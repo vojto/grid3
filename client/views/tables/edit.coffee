@@ -4,6 +4,7 @@ class TableEditController extends Grid.Controller
     'allSources': 'allSources'
     'steps': 'steps'
     'addStepLink': 'addStepLink'
+    'stepClass': 'stepClass'
 
   actions:
     'click .add-source': 'addSource'
@@ -44,6 +45,15 @@ class TableEditController extends Grid.Controller
   steps: (table) ->
     Tables.steps(table)
 
+  stepClass: (step) ->
+    currentStep = Router.getData().step
+    if currentStep && step._id == currentStep._id
+      console.log 'selected'
+      'active'
+    else
+      console.log 'not selected'
+      ''
+
   # Adds clicked step to the current table
   addStep: (step) ->
     table = @template.data
@@ -62,7 +72,6 @@ class TableEditController extends Grid.Controller
     Steps.remove(step._id)
 
   openStep: (step) ->
-    console.log 'opening step'
     table = @template.data
     Router.go 'step.edit', {tableId: table._id, stepId: step._id}
 
