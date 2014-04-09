@@ -18,10 +18,17 @@ form.step
   margin-right -20px
   position relative
 
-  .actions
+  .row
+    padding-left 50px
+
+  .actions, .actions-left
     position absolute
     right 15px
     top 20px
+
+    &.actions-left
+      left 0
+      right auto
 
     i.entypo
       font-size 36px
@@ -54,11 +61,11 @@ form.step
     padding 20px
     outline none
 
-  input
+  div.row
     border-bottom 1px solid fg2
 
   div.code
-    height 400px
+    height 600px
 
 .ace_editor
   font-family: 'Menlo', 'Monaco', 'Ubuntu Mono', 'Consolas', 'source-code-pro', monospace !important
