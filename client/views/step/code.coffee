@@ -3,6 +3,7 @@ class StepCode extends Grid.Controller
     'click .submit': 'saveEditedObject'
     'submit form': 'saveEditedObject'
     'click .delete': 'deleteEditedObject'
+    'click i.back': 'goBack'
 
   constructor: ->
     super
@@ -22,8 +23,6 @@ class StepCode extends Grid.Controller
       @saveEditedObject()  
 
     Deps.autorun =>
-      console.log 'running deps bro'
-
       object = Router.getData().step
       return unless object
       $code = @template.find('.code')
@@ -80,6 +79,9 @@ class StepCode extends Grid.Controller
       Steps.remove {_id: step._id}
       Graphs.remove {_id: step._id}
       Router.go 'flow.edit', {_id: projectId} 
+
+  goBack: (step) ->
+    Router.go 'table.edit', {_id: step.tableId}
 
 controller = new StepCode()
 controller.addTemplate(Template.source_code)

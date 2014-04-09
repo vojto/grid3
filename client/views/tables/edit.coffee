@@ -73,7 +73,7 @@ class TableEditController extends Grid.Controller
     Steps.remove(step._id)
 
   openStep: (step) ->
-    table = @template.data.table
+    table = @table()
     Router.go 'step.edit', {tableId: table._id, stepId: step._id}
 
 
