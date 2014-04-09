@@ -47,7 +47,7 @@ Router.map ->
   @route 'table.edit',
     path: '/table/:_id'
     template: 'table_edit'
-    data: -> Tables.findOne(@params._id)
+    data: -> {table: Tables.findOne(@params._id)}
 
   @route 'step.edit',
     path: '/table/:tableId/steps/:stepId'

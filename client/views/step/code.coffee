@@ -40,23 +40,23 @@ didRenderEditor = ->
 
 saveEditedObject = ->
   template = codeTemplate
-  object = Router.getData().step
-  return unless object
+  step = Router.getData().step
+  return unless step
 
   $form = $(template.find('form'))
   $editor = template.find('div.code')
   data = $form.serializeObject()
   data.code = ace.edit($editor).getValue()
-  object.code = data.code # to update live
-  object.title = data.title
+  step.code = data.code # to update live
+  step.title = data.title
   data.expanded = false
 
-  Steps.set(object._id, data, Flash.handle)
-  Graphs.set(object._id, data, Flash.handle)
+  Steps.set(step._id, data, Flash.handle)
+  Graphs.set(step._id, data, Flash.handle)
 
   # Doing something to force re-rendering (hack)
-  Router.go 'step.edit', {branchId: null, _id: null}
-  Router.go 'step.edit', {branchId: object._id, _id: object._id}
+  # Router.go 'step.edit', {tableId: null, stepId: null}
+  Router.go 'step.edit', {tableId: step.tableId, stepId: step._id}
 
   # Animate the button
   $button = $(template.find('.primary'))
