@@ -48,8 +48,10 @@ class Grid.SourceManager
 
     # Find table
     table = Tables.findOne(finalStep.tableId)
-
     return unless table
+
+    # Prepare the sources
+    sourceIds = table.sourceIds
 
     # Find all the steps until upUntil
     steps = []
@@ -58,7 +60,7 @@ class Grid.SourceManager
       break if step._id == finalStep._id
 
     # Add sources
-    for source in Sources.findArray(table.sourceIds)
+    for source in Sources.findArray(sourceIds)
       @addSource(source)
       @_sourceDeps[source._id].depend()
 
@@ -70,7 +72,7 @@ class Grid.SourceManager
       # Prepare input array
       if !currentData
         # We're not processing anything, so pass data from sources.
-        datas = for id in (step.inputSourceIds || [])
+        datas = for id in (sourceIds || [])
           new Grid.Data(@_data[id])
       else
         datas = [currentData]
