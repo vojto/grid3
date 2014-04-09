@@ -37,7 +37,7 @@ class Grid.Controller
 
     template.rendered = ->
       # Set the first template
-      controller.template = @ unless controller.template 
+      controller.template = @
       # Set all templates
       controller.templates or= []
       controller.templates.push(@)

@@ -1,3 +1,24 @@
+class StepCodeEditor extends Grid.Controller
+  didRender: (template) ->
+    $code = @template.find('.code')
+
+    @editor = new ReactiveAce()
+
+    @editor.attach($code)
+    @editor.theme = "tomorrow_night"
+    @editor.syntaxMode = "javascript"
+    @editor.fontSize = 14
+
+    @editor._editor.commands.addCommand
+      name: 'saveCode'
+      bindKey: {mac: 'Command-S', win: 'Ctrl-S'}
+      exec: (editor) =>
+        $(document).trigger('editorSaveShortcut')
+
+    Deps.autorun =>
+      step = @template.data
+      @editor._editor.setValue(step.code, 1)
+
 class StepCode extends Grid.Controller
   actions:
     'click .submit': 'saveEditedObject'
@@ -9,46 +30,16 @@ class StepCode extends Grid.Controller
     super
 
   didRender: (template) ->
-    console.log 'just rendered', template
-
-    setTimeout =>
-      @setupEditor()
-    , 10
-
-  setupEditor: ->
     shortcuts = ['ctrl+s', 'command+s', 'command+return', 'ctrl+return', 'ctrl+enter']
     Mousetrap.bind shortcuts, (e) =>
       e.preventDefault()
-      @saveEditedObject()  
+      @saveEditedObject()
+
+    $(document).bind 'editorSaveShortcut', =>
+      @saveEditedObject()
 
 
-    console.log 'template', @template
-
-    object = Router.getData().step
-    $code = @template.find('.code')
-
-    console.log 'template', @template
-    console.log 'object', object
-    console.log '$code', $code
-
-    # if @editor
-      # Editor already exists
-    # else
-    @editor = new ReactiveAce()
-    console.log 'creating editor in ', $code
-
-    @editor.attach($code)
-    @editor.theme = "tomorrow_night"
-    @editor.syntaxMode = "javascript"
-    @editor.fontSize = 14
-
-    @editor._editor.setValue(object.code, 1)
-
-    @editor._editor.commands.addCommand
-      name: 'saveCode'
-      bindKey: {mac: 'Command-S', win: 'Ctrl-S'}
-      exec: (editor) =>
-        @saveEditedObject()
+    
 
   saveEditedObject: ->
     template = @template
@@ -87,6 +78,5 @@ class StepCode extends Grid.Controller
   goBack: (step) ->
     Router.go 'table.edit', {_id: step.tableId}
 
-controller = new StepCode()
-controller.addTemplate(Template.source_code_editor)
-controller.addTemplate(Template.source_code)
+new StepCode(Template.source_code)
+new StepCodeEditor(Template.source_code_editor)
