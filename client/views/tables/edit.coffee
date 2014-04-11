@@ -5,6 +5,7 @@ class TableEditController extends Grid.Controller
     'steps': 'steps'
     'addStepLink': 'addStepLink'
     'stepClass': 'stepClass'
+    'graphs': 'graphs'
 
   actions:
     'click .add-source': 'addSource'
@@ -12,6 +13,8 @@ class TableEditController extends Grid.Controller
     'click .add-step': 'addStep'
     'click .delete-step': 'deleteStep'
     'click li.step': 'openStep'
+    'click .add-vis': 'addGraph'
+    'click .delete-graph': 'deleteGraph'
 
   table: ->
     Router.getData().table
@@ -32,11 +35,11 @@ class TableEditController extends Grid.Controller
 
   # Adds available source to the table source
   addSource: (source) ->
-    table = @template.data
+    table = @table()
     Tables.update({_id: table._id}, {$addToSet: {sourceIds: source._id}})
 
   deleteSource: (source) ->
-    table = @template.data
+    table = @table()
     Tables.update({_id: table._id}, {$pull: {sourceIds: source._id}})
 
 
@@ -57,7 +60,7 @@ class TableEditController extends Grid.Controller
 
   # Adds clicked step to the current table
   addStep: (step) ->
-    table = @template.data
+    table = @table()
     params =
       title: step.label
       code: Steps.DEFAULT_CODE[step.step]
@@ -68,13 +71,38 @@ class TableEditController extends Grid.Controller
       Tables.addStepWithId(table, stepId)
 
   deleteStep: (step) ->
-    table = @template.data
+    table = @table()
     Tables.update({_id: table._id}, {$pull: {stepIds: step._id}})
     Steps.remove(step._id)
 
   openStep: (step) ->
     table = @table()
     Router.go 'step.edit', {tableId: table._id, stepId: step._id}
+
+  # Working with visualization
+  # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+  graphs: ->
+    table = @table()
+    return [] unless table
+    Tables.graphs(table)
+
+  addGraph: ->
+    table = @table()
+    params =
+      title: 'Visualization',
+      code: Graphs.LINE_CHART_CODE,
+
+    Graphs.insert params, (err, graphId) ->
+      Flash.handle(err)
+      return unless graphId
+      Tables.addGraphWithId(table, graphId)
+
+  deleteGraph: (graph) ->
+    console.log 'removing graph', graph
+    table = @table()
+    Tables.update({_id: table._id}, {$pull: {graphIds: graph._id}})
+    Graphs.remove(graph._id)
 
 
 controller = new TableEditController()

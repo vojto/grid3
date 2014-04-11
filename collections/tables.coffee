@@ -4,6 +4,7 @@
     title: { type: String, label: 'Title', optional: true }
     sourceIds: { type: [String], label: 'Sources' }
     stepIds: { type: [String], label: 'Steps' }
+    graphIds: { type: [String], label: 'Graphs' }
 
 @Tables.allow
   insert: (userId, doc) -> true
@@ -34,3 +35,10 @@
 @Tables.addStepWithId = (table, stepId) ->
   Tables.update(table._id, {$addToSet: {stepIds: stepId}})
   Steps.update(stepId, {$set: {tableId: table._id}})
+
+@Tables.graphs = (table) ->
+  Graphs.findArray(table.graphIds)
+
+@Tables.addGraphWithId = (table, graphId) ->
+  Tables.update(table._id, {$addToSet: {graphIds: graphId}})
+  Graphs.update(graphId, {$set: {tableId: table._id}})

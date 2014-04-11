@@ -1,13 +1,11 @@
 @Graphs = new Meteor.Collection2 'graphs',
   schema:
-    projectId: { type: String }
+    collection: { type: String, autoValue: -> 'graphs' }
+    tableId: { type: String, optional: true }
     title: { type: String, label: 'Title', optional: true }
     code: { type: String, label: 'Code' }
-    expanded: { type: Boolean, label: 'expanded', optional: true }
-    isGraph: { type: Boolean, label: 'graph', autoValue: -> true }
     x: { type: Number, label: 'X', optional: true }
     y: { type: Number, label: 'Y', optional: true }
-    inputStepId: { type: String, optional: true }
 
 @Graphs.allow
   insert: (userId, doc) -> true

@@ -17,3 +17,10 @@ template(name='table_sidebar')
         i.small.delete-step.entypo.circled-cross
 
   h4.small Visualizations
+
+  ul.sidebar-list
+    each graphs
+      li.graph(class=graphClass, data-id=_id)
+        i.large.entypo.line-graph
+        span=title
+        i.small.delete-graph.entypo.circled-cross
