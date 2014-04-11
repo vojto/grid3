@@ -53,9 +53,14 @@ Router.map ->
     path: '/table/:tableId/steps/:stepId'
     template: 'step_edit'
     data: ->
-      {
-        table: Tables.findOne(@params.tableId)
-        step: Steps.findOne(@params.stepId)
-      }
+      table: Tables.findOne(@params.tableId),
+      step: Steps.findOne(@params.stepId)
     waitOn: ->
       Meteor.subscribe('tables')
+
+  @route 'graph.edit',
+    path: '/table/:tableId/graphs/:graphId'
+    template: 'graph_edit'
+    data: ->
+      table: Tables.findOne(@params.tableId),
+      graph: Graphs.findOne(@params.graphId)

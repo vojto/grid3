@@ -99,7 +99,6 @@ class TableEditController extends Grid.Controller
       Tables.addGraphWithId(table, graphId)
 
   deleteGraph: (graph) ->
-    console.log 'removing graph', graph
     table = @table()
     Tables.update({_id: table._id}, {$pull: {graphIds: graph._id}})
     Graphs.remove(graph._id)
