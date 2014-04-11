@@ -4,7 +4,7 @@ class TableEditController extends Grid.Controller
     'allSources': 'allSources'
     'steps': 'steps'
     'addStepLink': 'addStepLink'
-    'stepClass': 'stepClass'
+    'currentClass': 'currentClass'
     'graphs': 'graphs'
 
   actions:
@@ -15,6 +15,7 @@ class TableEditController extends Grid.Controller
     'click li.step': 'openStep'
     'click .add-vis': 'addGraph'
     'click .delete-graph': 'deleteGraph'
+    'click li.graph': 'openGraph'
 
   table: ->
     Router.getData().table
@@ -51,13 +52,6 @@ class TableEditController extends Grid.Controller
     return [] unless table
     Tables.steps(table)
 
-  stepClass: (step) ->
-    currentStep = Router.getData().step
-    if currentStep && step._id == currentStep._id
-      'active'
-    else
-      ''
-
   # Adds clicked step to the current table
   addStep: (step) ->
     table = @table()
@@ -92,6 +86,7 @@ class TableEditController extends Grid.Controller
     params =
       title: 'Visualization',
       code: Graphs.LINE_CHART_CODE,
+      projectId: table.projectId
 
     Graphs.insert params, (err, graphId) ->
       Flash.handle(err)
@@ -102,6 +97,21 @@ class TableEditController extends Grid.Controller
     table = @table()
     Tables.update({_id: table._id}, {$pull: {graphIds: graph._id}})
     Graphs.remove(graph._id)
+
+  openGraph: (graph) ->
+    Router.go 'graph.edit', {tableId: graph.tableId, graphId: graph._id}
+
+  # Support
+  # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+  currentClass: (item) ->
+    {step, graph} = Router.getData()
+    if step && step._id == item._id
+      'active'
+    else if graph && graph._id == item._id
+      'active'
+    else
+      ''
 
 
 controller = new TableEditController()

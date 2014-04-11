@@ -1,6 +1,7 @@
 @Graphs = new Meteor.Collection2 'graphs',
   schema:
     collection: { type: String, autoValue: -> 'graphs' }
+    projectId: { type: String }
     tableId: { type: String, optional: true }
     title: { type: String, label: 'Title', optional: true }
     code: { type: String, label: 'Code' }
