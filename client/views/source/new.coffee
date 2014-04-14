@@ -4,9 +4,7 @@ Template.source_new.events
 
     data = $(ev.currentTarget).serializeObject()
 
-    Sources.insert data, (err) ->
-      console.log 'failed', err if err
-      Router.go 'home'
+    Sources.insert data, Flash.handle
 
 Template.source_new.helpers
   source: ->

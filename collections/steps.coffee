@@ -123,4 +123,5 @@
 @Steps.DEFAULT_CODE = {
   'map': 'return data.map(function(d) {\n  return d;\n});',
   'reduce': 'return data.reduce(function(sum, d) {\n  return d;\n}, {});'
+  'group': 'return data.group([0], function(sum, d) {\n\t\n});';
 }

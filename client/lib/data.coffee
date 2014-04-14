@@ -10,11 +10,15 @@ class Grid.Data
 
   group: (fields, fn) ->
     grouped = @_data.reduce (sum, d) ->
-      key = fields.map((field) -> d[field]).join()  
-      if !sum[key]
-        sum[key] = d
+      if _.isFunction(fields)
+        sumKey = fields(d)
+      else
+        sumKey = fields.map((field) -> d[field]).join()  
+
+      if !sum[sumKey]
+        sum[sumKey] = d
       
-      fn(sum[key], d)
+      fn(sum[sumKey], d)
 
       sum
     , {}
