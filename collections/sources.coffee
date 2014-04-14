@@ -28,4 +28,4 @@
 
   difference = (new Date() - source.cachedAt)/1000
 
-  return difference < 120 # 2 minutes till expiration of cache
+  return difference < 1200

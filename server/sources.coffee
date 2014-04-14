@@ -12,8 +12,10 @@ findArray = (obj) ->
 
 Meteor.methods
   'sources.load': (url) ->
-    console.log 'loading', url
+    console.log 'Loading', url
     data = HTTP.get url
+
+    console.log 'done loading'
 
     # TODO: Logic for determining response format
     # For now we'll just go with JSON

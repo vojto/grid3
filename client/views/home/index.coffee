@@ -4,7 +4,7 @@ Template['home.index'].events
     Projects.remove {_id: @_id}, Flash.handle
 
   'click i.text-doc': (ev) ->
-    Router.go 'source.show', @
+    Router.go 'source.edit', @
 
   'click li.add-document': (ev) ->
     Router.go 'source.new'

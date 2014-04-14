@@ -1,0 +1,18 @@
+template(name='source_edit')
+  header
+    .buttons
+      button.editor.back
+        | Back
+    a.logo(href='/')
+
+  div.split
+    div.main
+      form.medium
+        .row
+          label Title
+          input(type='text', name='title', value=title)
+        .row
+          label URL
+          input(type='text', name='url', value=url)
+        .row
+          input(type='submit', value='Save')

@@ -17,6 +17,11 @@ Router.map ->
     path: '/source/new'
     template: 'source_new'
 
+  @route 'source.edit',
+    path: '/source/:_id'
+    template: 'source_edit'
+    data: -> Sources.findOne({_id: @params._id})
+
   # This is temporarily (maybe permanently disabled), because we're
   # moving this interface to `step.edit`.
   #
