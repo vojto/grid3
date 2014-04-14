@@ -26,6 +26,9 @@ class StepCode extends Grid.Controller
     'click .delete': 'deleteEditedObject'
     'click i.back': 'goBack'
 
+  helpers:
+    'object': 'editedObject'
+
   constructor: ->
     super
 
@@ -38,28 +41,30 @@ class StepCode extends Grid.Controller
     $(document).bind 'editorSaveShortcut', =>
       @saveEditedObject()
 
-
-    
+  editedObject: ->
+    data = Router.getData()
+    data.step || data.graph
 
   saveEditedObject: ->
     template = @template
-    step = Router.getData().step
-    return unless step
+    object = @editedObject()
+    return unless object
 
     $form = $(template.find('form'))
     $editor = template.find('div.code')
     data = $form.serializeObject()
     data.code = ace.edit($editor).getValue()
-    step.code = data.code # to update live
-    step.title = data.title
+    object.code = data.code # to update live
+    object.title = data.title
     data.expanded = false
 
-    Steps.set(step._id, data, Flash.handle)
-    Graphs.set(step._id, data, Flash.handle)
+    Steps.set(object._id, data, Flash.handle)
+    Graphs.set(object._id, data, Flash.handle)
 
-    # Doing something to force re-rendering (hack)
-    # Router.go 'step.edit', {tableId: null, stepId: null}
-    Router.go 'step.edit', {tableId: step.tableId, stepId: step._id}
+    if object.collection == 'steps'
+      Router.go 'step.edit', {tableId: object.tableId, stepId: object._id}
+    else
+      Router.go 'graph.edit', {tableId: object.tableId, graphId: object._id}
 
     # Animate the button
     $button = $(template.find('.primary'))
