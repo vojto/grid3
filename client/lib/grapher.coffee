@@ -6,10 +6,12 @@ class Grid.Grapher
     data = @data
 
     return unless data
-    console.log 'charting', data
 
-    metadata = new Grid.Metadata(data)
-    columns = metadata.columnsOfPreferredTypes(['date', 'number'])
+    # Wrap data
+    data = new Grid.Data(data)
+    
+    columns = data.metadata().columnsOfPreferredTypes(['date', 'number'])
+    console.log 'columns', columns
     label = columns[0]
     value = columns[1]
 
@@ -21,7 +23,7 @@ class Grid.Grapher
       .attr('height', height+40)
 
     # Pick only the columns for vis
-    data = _.map data, (d) -> [d[label], d[value]]
+    data = data.pick([label, value])
     console.log 'data', data
 
     # Label scale

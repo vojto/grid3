@@ -2,8 +2,25 @@
 
 class Grid.Data
   constructor: (data) ->
-    @_data = []
-    _.extend(@_data, data)
+    @_metadata = new Grid.Metadata(data)
+    metadata = @_metadata
+
+    # Parse data based on metadata
+    @_data = _.map data, (row) ->
+      _.map row, (value, column) ->
+        type = metadata.types[column]
+        if type == 'number'
+          parseFloat(value)
+        else
+          value
+
+  metadata: ->
+    @_metadata
+
+  pick: (columns) ->
+    console.log 'picking', columns
+    @_data.map (d) ->
+      d.filter (value, i) -> columns.indexOf(i) != -1
 
   filter: (fn) ->
     @_data = @_data.filter(fn)
