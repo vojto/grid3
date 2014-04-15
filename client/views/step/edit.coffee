@@ -11,7 +11,7 @@ didRender = ->
 updatePreview = ->
   step = Router.getData().step
   return unless step
-  manager = new Grid.SourceManager()
+  manager = new Grid.SourceManager() unless manager
   preview = manager.preview(step)
   Session.set('preview', preview)
 

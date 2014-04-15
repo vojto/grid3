@@ -41,3 +41,8 @@ Meteor.methods
     )
 
     return data
+
+  'sources.data': (tableId, finalStepId) ->
+    console.log 'processing data on the server'
+
+    return [1]

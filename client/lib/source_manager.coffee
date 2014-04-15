@@ -8,6 +8,11 @@ class Grid.SourceManager
     @_sourceDeps = {} # Object(_id -> Dep)
     @_data = {}       # Object(_id -> Array)
 
+    @_serverResult = null
+    @_serverResultDep = new Deps.Dependency()
+
+    @_id = Math.random()
+
   addSource: (source) ->
     assert source
     assert source._id
@@ -49,18 +54,47 @@ class Grid.SourceManager
     return unless table
 
     # Prepare the sources
-    sourceIds = table.sourceIds
+    sources = Sources.findArray(table.sourceIds)
+    for source in sources
+      @addSource(source)
+      @_sourceDeps[source._id].depend()
 
+    # Move processing to the server side if
+    # there are sources too large.
+    if _.any(sources, (s) -> s.isTooLarge)
+      fromServer = @processOnServer(table, finalStep)
+      console.log 'result from server', fromServer
+      return fromServer
+    else
+      return @processNow(table, finalStep)
+
+  processOnServer: (table, finalStep) ->
+    @_serverResultDep.depend()
+
+    if @_serverResult
+      result = @_serverResult
+      @_serverResult = null
+      return result
+
+    Meteor.call 'sources.data',
+      table._id,
+      finalStep._id,
+      @didFinishProcessOnServer
+
+    return null
+
+  didFinishProcessOnServer: (err, data) =>
+    @_serverResult = data
+    @_serverResultDep.changed()
+
+    return null
+
+  processNow: (table, finalStep) ->
     # Find all the steps until upUntil
     steps = []
     for step in Tables.steps(table)
       steps.push(step)
       break if step._id == finalStep._id
-
-    # Add sources
-    for source in Sources.findArray(sourceIds)
-      @addSource(source)
-      @_sourceDeps[source._id].depend()
 
     success = true
 
@@ -99,14 +133,5 @@ class Grid.SourceManager
 
     Session.set('sourceError', null) if success
 
-    # Tento zazrak nam vyraba floaty pre graph.
-    # Toto tu urcite nebudeme riesit, ale presunieme
-    # to do kodu, ktory sa stara o pripravu dat pre
-    # graf, ktory este vlastne nemame.
-    
-    # if !(data instanceof Array)
-    #   data2 = Object.keys(data).map (k) ->
-    #     [parseFloat(k), data[k]]
-    #   data = data2
 
     currentData.data()
