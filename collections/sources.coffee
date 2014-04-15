@@ -6,6 +6,7 @@
     url:        { type: String, label: 'URL' }
     cachedData: { type: String, label: 'Cached data', optional: true }
     cachedAt:   { type: Date, optional: true }
+    isTooLarge: { type: Boolean, optional: true }
     x: { type: Number, label: 'X', optional: true }
     y: { type: Number, label: 'Y', optional: true }
 

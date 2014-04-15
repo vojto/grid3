@@ -11,19 +11,33 @@ findArray = (obj) ->
     null
 
 Meteor.methods
-  'sources.load': (url) ->
-    console.log 'Loading', url
-    data = HTTP.get url
+  'sources.load': (id) ->
+    source = Sources.findOne(id)
+    console.log 'Loading source', id
 
-    console.log 'done loading'
+    return unless source
 
-    # TODO: Logic for determining response format
-    # For now we'll just go with JSON
+    response = HTTP.get(source.url)
+    length = response.content.length
 
     try
       # Try JSON
-      parsed = JSON.parse(data.content)
+      parsed = JSON.parse(response.content)
     catch e
-      parsed = d3.csv.parseRows(data.content)
+      parsed = d3.csv.parseRows(response.content)
 
-    findArray(parsed)
+    data = findArray(parsed)
+
+    isTooLarge = length > 4000000
+    console.log 'is too large?', isTooLarge
+
+    Sources.update(source._id, {
+        $set: {
+          cachedData: JSON.stringify(data),
+          cachedAt: new Date(),
+          isTooLarge: isTooLarge
+        }
+      }
+    )
+
+    return data

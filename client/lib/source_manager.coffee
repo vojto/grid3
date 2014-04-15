@@ -29,9 +29,7 @@ class Grid.SourceManager
       @_sourceDeps[key].changed()
       return
 
-    url = source.url
-    Meteor.call 'sources.load', source.url, (err, data) =>
-      Sources.update source._id, {$set: {cachedData: JSON.stringify(data), cachedAt: new Date()}}
+    Meteor.call 'sources.load', source._id, (err, data) =>
       @_data[key] = data
       @_sourceDeps[key].changed()
 
