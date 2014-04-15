@@ -61,9 +61,8 @@ class Grid.SourceManager
 
     # Move processing to the server side if
     # there are sources too large.
-    if _.any(sources, (s) -> s.isTooLarge)
+    if Meteor.isClient && _.any(sources, (s) -> s.isTooLarge)
       fromServer = @processOnServer(table, finalStep)
-      console.log 'result from server', fromServer
       return fromServer
     else
       return @processNow(table, finalStep)
@@ -90,6 +89,8 @@ class Grid.SourceManager
     return null
 
   processNow: (table, finalStep) ->
+    sourceIds = table.sourceIds
+
     # Find all the steps until upUntil
     steps = []
     for step in Tables.steps(table)
@@ -125,13 +126,13 @@ class Grid.SourceManager
         console.log 'Failed', e.message
         console.log e
         console.log step.code
-        Session.set('sourceError', e.message)
+        # Session.set('sourceError', e.message) if Session
         success = false
         currentData = new Grid.Data()
       
       return true
 
-    Session.set('sourceError', null) if success
+    # Session.set('sourceError', null) if Session && success
 
 
     currentData.data()

@@ -2,7 +2,8 @@
 
 class Grid.Data
   constructor: (data) ->
-    @_data = $.extend(true, [], data)
+    @_data = []
+    _.extend(@_data, data)
 
   filter: (fn) ->
     @_data = @_data.filter(fn)

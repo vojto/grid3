@@ -43,6 +43,9 @@ Meteor.methods
     return data
 
   'sources.data': (tableId, finalStepId) ->
-    console.log 'processing data on the server'
+    manager = new Grid.SourceManager()
 
-    return [1]
+    step = Steps.findOne(finalStepId)
+    result =  manager.data(step)
+
+    return result
