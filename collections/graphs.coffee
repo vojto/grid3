@@ -41,3 +41,7 @@ svg.selectAll('rect')
   .attr('x', function(d) { return x(d[0]) })
   .attr('y', function(d) { return y(d[1]) });
 """
+
+Graphs.DEFAULT_CODE =
+  line: Graphs.LINE_CHART_CODE
+  bar: Graphs.BAR_CHART_CODE

@@ -81,11 +81,11 @@ class TableEditController extends Grid.Controller
     return [] unless table
     Tables.graphs(table)
 
-  addGraph: ->
+  addGraph: (graph) ->
     table = @table()
     params =
-      title: 'Visualization',
-      code: Graphs.LINE_CHART_CODE,
+      title: graph.label
+      code: Graphs.DEFAULT_CODE[graph.graph],
       projectId: table.projectId
 
     Graphs.insert params, (err, graphId) ->

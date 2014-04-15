@@ -5,6 +5,14 @@ class Grid.Grapher
     @data = options.data
     data = @data
 
+    return unless data
+    console.log 'charting', data
+
+    metadata = new Grid.Metadata(data)
+    columns = metadata.columnsOfPreferredTypes(['date', 'number'])
+    label = columns[0]
+    value = columns[1]
+
     width = @$el.width()
     height = 300
     svg = d3.select(@$el.get(0)).append('svg')
