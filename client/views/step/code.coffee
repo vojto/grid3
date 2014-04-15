@@ -16,7 +16,7 @@ class StepCodeEditor extends Grid.Controller
         $(document).trigger('editorSaveShortcut')
 
     Deps.autorun =>
-      step = @template.data
+      step = Router.getData().step
       @editor._editor.setValue(step.code, 1)
 
 class StepCode extends Grid.Controller
