@@ -16,8 +16,9 @@ class StepCodeEditor extends Grid.Controller
         $(document).trigger('editorSaveShortcut')
 
     Deps.autorun =>
-      step = Router.getData().step
-      @editor._editor.setValue(step.code, 1)
+      data = Router.getData()
+      object = data.step || data.graph
+      @editor._editor.setValue(object.code, 1) if object
 
 class StepCode extends Grid.Controller
   actions:
