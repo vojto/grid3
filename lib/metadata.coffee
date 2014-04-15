@@ -17,8 +17,6 @@ class Grid.Metadata
 
       type
 
-    console.log 'types', @types
-
     # TODO: Integers/Floats should also be converted from strings.
 
   typeForValue: (value) ->
@@ -34,5 +32,13 @@ class Grid.Metadata
       else
         'string'
 
-  columnsOfPreferredTypes: (types) ->
-    []
+  columnsOfPreferredTypes: (preferredTypes) ->
+    columns = []
+
+    for preferredType in preferredTypes
+      for type, column in @types
+        if type == preferredType
+          columns.push(column)
+
+    _.uniq(columns)
+        

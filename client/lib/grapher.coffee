@@ -20,15 +20,16 @@ class Grid.Grapher
       .attr('width', width+30)
       .attr('height', height+40)
 
-    label = 0
-    value = 1
+    # Pick only the columns for vis
+    data = _.map data, (d) -> [d[label], d[value]]
+    console.log 'data', data
 
     # Label scale
     # x = d3.scale.linear().domain(d3.extent(data, (d) -> d[label])).range([0, width])
-    domain = d3.extent(data, (d) -> d[label])
+    domain = d3.extent(data, (d) -> d[0])
     x = d3.time.scale().domain(domain).range([40, width-30])
     xAxis = d3.svg.axis().scale(x).orient('bottom')
-    domain = @addMarginToDomain(d3.extent(data, (d) -> d[value]))
+    domain = @addMarginToDomain(d3.extent(data, (d) -> d[1]))
     y = d3.scale.linear().domain(domain).range([height, 0])
     yAxis = d3.svg.axis().scale(y).orient('left')
 
