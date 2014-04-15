@@ -48,4 +48,6 @@ Meteor.methods
     step = Steps.findOne(finalStepId)
     result =  manager.data(step)
 
+    console.log 'processed data on the server'
+
     return result

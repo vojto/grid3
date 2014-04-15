@@ -59,6 +59,10 @@ class Grid.SourceManager
       @addSource(source)
       @_sourceDeps[source._id].depend()
 
+    # Get steps to establish dependency, even if we delegate
+    # the actual work to the server.
+    steps = Tables.steps(table)
+
     # Move processing to the server side if
     # there are sources too large.
     if Meteor.isClient && _.any(sources, (s) -> s.isTooLarge)
