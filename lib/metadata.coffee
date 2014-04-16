@@ -22,6 +22,8 @@ class Grid.Metadata
   typeForValue: (value) ->
     if value == ''
       'string'
+    else if value == null
+      'string'
     else if !isNaN(value)
       'number'
     else
