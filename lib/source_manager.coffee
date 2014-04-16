@@ -2,6 +2,8 @@
 
 assert = Grid.Util.assert
 
+_instance = null
+
 class Grid.SourceManager
   constructor: ->
     @_sources = {}    # Object(_id -> Object)
@@ -12,6 +14,10 @@ class Grid.SourceManager
     @_serverResultDep = new Deps.Dependency()
 
     @_id = Math.random()
+
+  @instance: ->
+    _instance = new Grid.SourceManager() unless _instance
+    _instance
 
   addSource: (source) ->
     assert source
@@ -74,6 +80,8 @@ class Grid.SourceManager
   processOnServer: (table, finalStep) ->
     @_serverResultDep.depend()
 
+    console.log 'called process, current result', @_id, @_serverResult
+
     if @_serverResult
       result = @_serverResult
       @_serverResult = null
@@ -87,6 +95,7 @@ class Grid.SourceManager
     return null
 
   didFinishProcessOnServer: (err, data) =>
+    console.log 'finished remote', data
     @_serverResult = data
     @_serverResultDep.changed()
 

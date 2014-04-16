@@ -9,9 +9,10 @@ didRender = ->
   Deps.autorun(updatePreview)
 
 updatePreview = ->
+  console.log 'updating preview'
   step = Router.getData().step
   return unless step
-  manager = new Grid.SourceManager() unless manager
+  manager = Grid.SourceManager.instance() unless manager
   preview = manager.preview(step)
   Session.set('preview', preview)
 

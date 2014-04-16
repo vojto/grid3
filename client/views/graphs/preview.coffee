@@ -1,6 +1,7 @@
 class GraphPreview extends Grid.Controller
   didRender: ->
-    manager = new Grid.SourceManager()
+    console.log 'graph preview just rendered, creating new source manager'
+    manager = Grid.SourceManager.instance()
 
     # Render the graph whenever source/graph changes
     Deps.autorun =>
