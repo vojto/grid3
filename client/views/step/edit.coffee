@@ -11,6 +11,7 @@ didRender = ->
 updatePreview = ->
   console.log 'updating preview'
   step = Router.getData().step
+  console.log 'current step', step
   return unless step
   manager = Grid.SourceManager.instance() unless manager
   preview = manager.preview(step)

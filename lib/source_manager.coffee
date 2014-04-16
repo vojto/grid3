@@ -84,7 +84,6 @@ class Grid.SourceManager
 
     if @_serverResult
       result = @_serverResult
-      @_serverResult = null
       return result
 
     Meteor.call 'sources.data',
