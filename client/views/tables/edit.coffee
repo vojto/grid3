@@ -16,9 +16,22 @@ class TableEditController extends Grid.Controller
     'click .add-vis': 'addGraph'
     'click .delete-graph': 'deleteGraph'
     'click li.graph': 'openGraph'
+    'submit form.table': 'updateTable'
+    'click i.submit': 'updateTable'
+    'click i.back': 'goBack'
+
+  # Working with tables
+  # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+  updateTable: (table) ->
+    data = $(@template.find('form.table')).serializeObject()
+    Tables.set(table._id, data)
 
   table: ->
     Router.getData().table
+
+  goBack: (table) ->
+    Router.go 'project.show', _id: table.projectId
 
   # Working with sources
   # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

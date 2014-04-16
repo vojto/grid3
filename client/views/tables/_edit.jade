@@ -7,6 +7,16 @@ template(name='table_edit')
       +table_sidebar
 
     div.left-right
+      with table
+        form.heading-form.table
+          div.actions-left
+            i.entypo.back
+          div.row.title
+            input(type='text', name='title', value=title, autocomplete='off')
+          div.actions
+            i.entypo.check.submit.primary
+            i.entypo.cross.delete
+
       h3 Sources
 
       ul.list
