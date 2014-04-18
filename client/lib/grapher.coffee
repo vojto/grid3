@@ -19,7 +19,7 @@ class Grid.Grapher
     height = 300
     svg = d3.select(@$el.get(0)).append('svg')
       .attr('class', 'chart')
-      .attr('width', width+30)
+      .attr('width', width)
       .attr('height', height+40)
 
     # Pick only the columns for vis
@@ -29,8 +29,8 @@ class Grid.Grapher
     # Label scale
     # x = d3.scale.linear().domain(d3.extent(data, (d) -> d[label])).range([0, width])
     domain = d3.extent(data, (d) -> d[0])
-    x = d3.time.scale().domain(domain).range([40, width-30])
-    xAxis = d3.svg.axis().scale(x).orient('bottom')
+    x = d3.time.scale().domain(domain).range([40, width-20])
+    xAxis = d3.svg.axis().scale(x).orient('bottom').tickFormat(d3.time.format('%m/%d')).ticks(4)
     domain = @addMarginToDomain(d3.extent(data, (d) -> d[1]))
     y = d3.scale.linear().domain(domain).range([height, 0])
     yAxis = d3.svg.axis().scale(y).orient('left')

@@ -29,7 +29,7 @@ svg.append('path')
 
 Graphs.BAR_CHART_CODE = """
 var width = svg.attr('width') / data.length;
-var barWidth = width;
+var barWidth = Math.round(width - 10);
 var height = svg.attr('height');
 
 svg.selectAll('rect')
@@ -37,7 +37,7 @@ svg.selectAll('rect')
   .enter()
   .append('rect')
   .attr('width', barWidth)
-  .attr('height', function(d) { return height-y(d[1])-30 })
+  .attr('height', function(d) { return height-y(d[1])-40 })
   .attr('x', function(d) { return x(d[0]) })
   .attr('y', function(d) { return y(d[1]) });
 """
