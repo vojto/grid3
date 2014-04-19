@@ -14,6 +14,7 @@ class Grid.Grapher
     console.log 'columns', columns
     label = columns[0]
     value = columns[1]
+    value2 = columns[2]
 
     width = @$el.width()
     height = 300
@@ -23,7 +24,7 @@ class Grid.Grapher
       .attr('height', height+40)
 
     # Pick only the columns for vis
-    data = data.pick([label, value])
+    data = data.pick([label, value, value2])
     console.log 'data', data
 
     # Label scale
