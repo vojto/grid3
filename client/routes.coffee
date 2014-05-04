@@ -47,6 +47,11 @@ Router.map ->
     template: 'dashboard_show'
     data: -> Projects.findOne {_id: @params._id}
 
+  @route 'dashboard.edit',
+    path: '/dashboard/:_id/edit'
+    template: 'dashboard_edit'
+    data: -> Projects.findOne {id: @params._id}
+
   # Workflow
 
   @route 'table.edit',

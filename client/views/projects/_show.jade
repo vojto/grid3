@@ -8,24 +8,6 @@ template(name='project_show')
   div.main
     .split
       .main
-        h2 Sources
-
-        ul.list-grid
-          each sources
-            li
-              div
-                i.entypo.cloud.large
-              small
-                = title
-                i.delete.entypo.circled-cross
-
-          li.add-source
-            div
-              i.entypo.circled-plus.large
-              small Add source
-
-        h2 Tables
-
         ul.list-grid
           each tables
             li.edit-table
@@ -39,19 +21,3 @@ template(name='project_show')
             div
               i.entypo.circled-plus.large
               small Add table
-
-        h2 Graphs
-
-        ul.list-grid
-          each graphs
-            li
-              div
-                i.entypo.line-graph.large
-              small
-                = title
-                i.delete.entypo.circled-cross
-
-          li.add-graph
-            div
-              i.entypo.circled-plus.large
-              small Add graph

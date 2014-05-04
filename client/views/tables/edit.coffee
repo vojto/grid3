@@ -9,6 +9,7 @@ class TableEditController extends Grid.Controller
 
   actions:
     'click .add-source': 'addSource'
+    'click .create-source': 'createSource'
     'click .delete-source': 'deleteSource'
     'click .add-step': 'addStep'
     'click .delete-step': 'deleteStep'
@@ -51,6 +52,11 @@ class TableEditController extends Grid.Controller
   addSource: (source) ->
     table = @table()
     Tables.update({_id: table._id}, {$addToSet: {sourceIds: source._id}})
+
+  # Redirects to the page for creating sources
+  createSource: ->
+    Session.set 'returnUrl', Router.current().path
+    Router.go 'source.new'
 
   deleteSource: (source) ->
     table = @table()
