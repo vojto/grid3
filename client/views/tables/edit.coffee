@@ -8,6 +8,7 @@ class TableEditController extends Grid.Controller
     'graphs': 'graphs'
 
   actions:
+    'click li.source': 'openSource'
     'click .add-source': 'addSource'
     'click .create-source': 'createSource'
     'click .delete-source': 'deleteSource'
@@ -36,6 +37,10 @@ class TableEditController extends Grid.Controller
 
   # Working with sources
   # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+  openSource: (source) ->
+    table = @table()
+    Router.go 'source.show', {tableId: table._id, sourceId: source._id}
 
   tableSources: ->
     table = @table()

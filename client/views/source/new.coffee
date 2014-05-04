@@ -6,7 +6,6 @@ Template.source_new.events
     Sources.insert data, Flash.handle
 
     if next = sessionRemove('nextUrl')
-      console.log 'coming back to', next
       Router.go(next)
     else
       Router.go(home)

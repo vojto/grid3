@@ -22,6 +22,13 @@ Router.map ->
     template: 'source_edit'
     data: -> Sources.findOne({_id: @params._id})
 
+  @route 'source.show',
+    path: '/table/:tableId/sources/:sourceId'
+    template: 'source_show'
+    data: ->
+      table: Tables.findOne(@params.tableId),
+      source: Sources.findOne(@params.sourceId)
+
   # This is temporarily (maybe permanently disabled), because we're
   # moving this interface to `step.edit`.
   #
