@@ -11,3 +11,8 @@ Meteor.Collection2.prototype.findArray = (ids) ->
     sum
   , {}
   return ids.map (id) -> objs[id]
+
+@sessionRemove = (key) ->
+  value = Session.get(key)
+  Session.set(key, null)
+  return value

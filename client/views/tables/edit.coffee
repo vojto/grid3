@@ -55,7 +55,7 @@ class TableEditController extends Grid.Controller
 
   # Redirects to the page for creating sources
   createSource: ->
-    Session.set 'returnUrl', Router.current().path
+    Session.set 'nextUrl', Router.current().path
     Router.go 'source.new'
 
   deleteSource: (source) ->
