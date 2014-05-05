@@ -23,7 +23,7 @@ Template['home.index'].helpers
 
 Template.home_index_projects.events
   'click li': (ev) ->
-    Router.go 'project.show', @
+    Router.go 'dashboard.show', @
 
 Template.home_index_projects.helpers
   projects: ->

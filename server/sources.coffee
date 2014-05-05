@@ -11,6 +11,10 @@ findArray = (obj) ->
     null
 
 Meteor.methods
+  'sources.loadUrl': (url) ->
+    response = HTTP.get(url)
+    d3.csv.parseRows(response.content)
+
   'sources.load': (id) ->
     source = Sources.findOne(id)
     console.log 'Loading source', id
