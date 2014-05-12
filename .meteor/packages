@@ -8,11 +8,11 @@ insecure
 preserve-inputs
 stylus
 coffeescript
-d3
 http
-npm
 moment
 reactive-ace
 collection2
 iron-router
 jade
+d3
+npm

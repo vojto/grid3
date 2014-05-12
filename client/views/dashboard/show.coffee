@@ -70,7 +70,7 @@ dashboard = ->
 
       line = d3.svg.line()
         .interpolate('basis')  
-        .x((d) -> x(d[0]) )
+        .x((d) -> x(d[0])-barWidth/2 )
         .y((d) -> y2(d[1]) )
 
       svg.append('path')
@@ -84,7 +84,7 @@ dashboard = ->
         .data(weightData)
         .enter()
         .append('circle')
-        .attr 'cx', (d) -> x(d[0])
+        .attr 'cx', (d) -> x(d[0]) - barWidth/2
         .attr 'cy', (d) -> y2(d[1])
         .attr 'r', 3
         .style 'fill', 'none'

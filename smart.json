@@ -1,7 +1,6 @@
 {
   "meteor": {},
   "packages": {
-    "npm": {},
     "moment": {},
     "reactive-ace": {
       "git": "https://github.com/mad-eye/meteor-reactive-ace.git"
@@ -13,6 +12,7 @@
     },
     "iron-router": {},
     "blaze-layout": {},
-    "jade": {}
+    "jade": {},
+    "d3": {}
   }
 }
