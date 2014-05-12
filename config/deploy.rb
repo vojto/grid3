@@ -35,6 +35,7 @@ end
 
 after 'deploy:updated', :meteor_bundle do
   on roles(:app), in: :sequence, wait: 5 do
+    execute "cd #{release_path}; #{fetch(:meteor)} update"
     execute "cd #{release_path}; #{fetch(:meteor)} bundle bundle.tgz"
     execute "cd #{release_path}; tar xvf #{File.join(release_path, "bundle.tgz")}"
     execute "rm -rf #{File.join(release_path, "bundle.tgz")}"
