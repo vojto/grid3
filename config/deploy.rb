@@ -14,9 +14,9 @@ set :pty, true
 # set :linked_dirs, %w{public/photos}
 
 set :default_env, {
-  :root_url => "http://g3.rinik.net",
+  :root_url => "http://grid3.co",
   :mongo_url => "mongodb://localhost/grid3",
-  :port => "6001",
+  :port => "8014",
   :public_path => "#{fetch(:deploy_to)}/current/public"
 }
 set :keep_releases, 5
