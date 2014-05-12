@@ -1,5 +1,6 @@
 set :application, 'grid3'
 set :repo_url, 'git@github.com:vojto/grid3.git'
+set :branch, 'manual'
 set :scm, :git
 set :deploy_to, '/var/apps/grid3'
 set :user, 'vojto'
