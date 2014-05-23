@@ -5,7 +5,7 @@ Router.configure
 Router.map ->
   @route 'home',
     path: '/'
-    template: 'home.index'
+    template: 'hack_index'
 
   # Projects
 
