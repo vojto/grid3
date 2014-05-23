@@ -4,3 +4,12 @@ template(name='hack_index')
       li.add-source
           i.entypo.shareable
           | Add source
+
+  .sources
+    each sources
+      +source
+
+template(name='source')
+  div.source(style=sourceStyle, data-id=_id)
+    = title
+    = url
