@@ -23,7 +23,16 @@ class Grid.Data
     @_metadata = new Grid.Metadata(@_data)
 
     if @_metadata.hasHeader()
+      headerRow = @_data[0]
+      @_columns = headerRow
       @_data.splice(0, 1)
+    else
+      firstLetter = "A".charCodeAt(0)
+      @_columns = for cell, i in @_data[0]
+        String.fromCharCode(firstLetter + i)
 
   preview: ->
     @_data
+
+  columns: ->
+    @_columns

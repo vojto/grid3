@@ -34,19 +34,32 @@ body
       &:active
         color #656f77
 
+header-style()
+  border-color #c4c4c4
+  background linear-gradient(#fff, #fff, #f8f8f8)
+  font-weight 500
+  font-size 11px
+  color #383838
+
 .sources
   padding-top 60px
 
   .source
     width 400px
-    overflow hidden
     height 150px
     background #fff
     border 1px solid #c4c4c4
     border-radius 3px
-    // box-shadow 0 1px 5px rgba(0,0,0,0.15)
+    box-shadow 0 1px 5px rgba(0,0,0,0.15)
     position absolute
     box-sizing border-box
+
+    .source-wrapper
+      height 100%
+
+    .table-wrapper
+      overflow hidden
+      height 100%
 
     table
       border-collapse collapse
@@ -63,3 +76,24 @@ body
 
         &:last-child
           border-right none
+
+      th
+        header-style()
+
+  .source-wrapper
+    position relative
+    .handle
+      position absolute
+      top -14px
+      left -14px
+      z-index 20
+      header-style()
+      border 1px solid #c4c4c4
+      border-radius 50%
+      width 24px
+      height 24px
+
+      i.entypo
+        font-size 36px
+        line-height 25px
+        padding-left 1px

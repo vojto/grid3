@@ -11,8 +11,15 @@ template(name='hack_index')
 
 template(name='hack_index_source')
   div.source(style=sourceStyle, data-id=_id)
-    table
-      each dataPreview
-        tr
-          each this
-            td= this
+    .source-wrapper
+      .handle
+        i.entypo.shareable
+      .table-wrapper
+        table
+          tr
+            each columns
+              th= this
+          each dataPreview
+            tr
+              each this
+                td= this

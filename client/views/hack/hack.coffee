@@ -12,6 +12,7 @@ class HackIndexSource extends Grid.Controller
   helpers: [
     'sourceStyle',
     'dataPreview'
+    'columns'
   ]
 
   constructor: ->
@@ -19,7 +20,7 @@ class HackIndexSource extends Grid.Controller
     @dataManager = Grid.DataManager.instance()
 
   didRender: ->
-    $(@template.firstNode).draggable(stop: @didStopDragging)
+    $(@template.firstNode).draggable(stop: @didStopDragging, handle: '.handle')
     $(@template.firstNode).resizable(stop: @didStopDragging)
 
   didStopDragging: (ev) =>
@@ -38,8 +39,11 @@ class HackIndexSource extends Grid.Controller
 
   dataPreview: (source) ->
     data = @dataManager.dataForSource(source)
-
     data.preview()
+
+  columns: (source) ->
+    data = @dataManager.dataForSource(source)
+    data.columns()    
 
 
 main = new HackIndex(Template.hack_index)
