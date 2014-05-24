@@ -11,6 +11,7 @@
     y: { type: Number, label: 'Y', optional: true }
     width: { type: Number, optional: true }
     height: { type: Number, optional: true }
+    isLoading: { type: Boolean, optional: true }
 
 
 @Sources.allow

@@ -31,7 +31,7 @@ class HackIndex extends Grid.Controller
   # Working with selection
 
   deselect: (e) ->
-    if e.target == document.body
+    if e.target == $('div.sources').get(0)
       $('input').blur()
       Session.set('selection', null)
 

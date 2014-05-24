@@ -10,11 +10,30 @@ class Grid.DataManager
   constructor: ->
     @_datas = {}
 
+    if Meteor.isClient
+      Meteor.startup =>
+        console.log 'startup'
+        Sources.find().observeChanges
+          changed: (id, fields) =>
+            if fields['url']
+              @reloadSource(Sources.findOne(id))
+
   dataForSource: (source) ->
     key = source._id
     if !@_datas[key]
       @_datas[key] = new Grid.Data(source)
     @_datas[key]
+
+  reloadSource: (source) ->
+    # Workaround for meteor not calling remote method from inside
+    # this callback.
+    setTimeout =>
+      Sources.set(source._id, {isLoading: true})
+      Meteor.call 'sources.load', source._id, (err, data) =>
+        Sources.set(source._id, {isLoading: false})
+        delete @_datas[source._id]
+        console.log 'finished', err, data
+    , 0
 
 
 class Grid.Data

@@ -12,13 +12,27 @@ findArray = (obj) ->
 
 Meteor.methods
   'sources.load': (id) ->
+    console.log 'reloading source by id', id
+
     source = Sources.findOne(id)
     console.log 'Loading source', id
 
     return unless source
 
-    response = HTTP.get(source.url)
-    length = response.content.length
+    Sources.update source._id, {
+        $set: {
+          cachedData: null,
+          cachedAt: null,
+          isTooLarge: false
+        }
+      }
+
+    try
+      response = HTTP.get(source.url)
+      length = response.content.length
+    catch e
+      throw new Meteor.Error(500, 'Malformed URL')
+    
 
     try
       # Try JSON

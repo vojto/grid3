@@ -18,14 +18,17 @@ template(name='hack_index_source')
       .handle
         i.entypo.shareable
       .table-wrapper
-        table
-          tr
-            each columns
-              th= this
-          each dataPreview
+        if isLoading
+          +spinner
+        else
+          table
             tr
-              each row
-                td!= cell
+              each columns
+                th= this
+            each dataPreview
+              tr
+                each row
+                  td!= cell
 
 
 template(name='hack_inspector')
@@ -54,3 +57,13 @@ template(name='hack_inspector_source')
 
     .actions-bottom
       button.delete Delete
+
+template(name='modal')
+  .modal
+    .overlay
+    .dialog
+      h2 Si zabel
+      p si zabel
+      .actions
+        button.primary Zabel
+        button Nezabel
