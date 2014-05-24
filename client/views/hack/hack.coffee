@@ -9,6 +9,9 @@ class HackIndex extends Grid.Controller
   constructor: ->
     super
 
+  didRender: ->
+    $(document.body).mousedown(@deselect.bind(@))
+
   sources: ->
     Sources.find().fetch()
 
@@ -24,12 +27,20 @@ class HackIndex extends Grid.Controller
       y: _.random(50, height-200)
     })
 
+  deselect: (e) ->
+    if e.target == document.body
+      Session.set('selection', null)
+
 class HackIndexSource extends Grid.Controller
   helpers: [
     'sourceStyle',
-    'dataPreview'
+    'sourceClass',
+    'dataPreview',
     'columns'
   ]
+
+  actions:
+    'mousedown .source': 'selectSource'
 
   constructor: ->
     super
@@ -38,6 +49,7 @@ class HackIndexSource extends Grid.Controller
   didRender: ->
     $(@template.firstNode).draggable(stop: @didStopDragging, handle: '.handle')
     $(@template.firstNode).resizable(stop: @didStopDragging)
+
 
   didStopDragging: (ev) =>
     $el = $(ev.target)
@@ -53,13 +65,31 @@ class HackIndexSource extends Grid.Controller
   sourceStyle: (source) ->
     "left: #{source.x||10}px; top: #{source.y||60}px; width: #{source.width||200}px; height: #{source.height||100}px; "
 
+
+  # Previews
+
   dataPreview: (source) ->
     data = @dataManager.dataForSource(source)
     data.preview()
 
   columns: (source) ->
     data = @dataManager.dataForSource(source)
-    data.columns()    
+    data.columns()
+
+
+  # Handling selection
+
+  selectSource: (source) ->
+    console.log 'selecting source'
+    Session.set('selection', source)
+
+  sourceClass: (source) ->
+    selection = Session.get('selection')
+    if selection && selection._id == source._id
+      'selected'
+    else
+      ''
+
 
 
 main = new HackIndex(Template.hack_index)
