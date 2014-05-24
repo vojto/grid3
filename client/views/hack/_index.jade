@@ -9,6 +9,9 @@ template(name='hack_index')
     each sources
       +hack_index_source
 
+  with selection
+    +hack_inspector
+
 template(name='hack_index_source')
   div.source(style=sourceStyle, data-id=_id, class=sourceClass)
     .source-wrapper
@@ -21,5 +24,33 @@ template(name='hack_index_source')
               th= this
           each dataPreview
             tr
-              each this
-                td= this
+              each row
+                td!= cell
+
+
+template(name='hack_inspector')
+  +hack_inspector_source
+
+template(name='hack_inspector_source')
+  .inspector
+    .header Source options
+
+    form
+      table.form
+        tr
+          td
+            label Title
+          td
+            input.title(value=title)
+        tr
+          td
+            label URL
+          td
+            input.url(value=url)
+        tr
+          td
+            label Status
+          td
+
+    .actions-bottom
+      button.delete Delete

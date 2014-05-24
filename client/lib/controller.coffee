@@ -28,7 +28,13 @@ class Grid.Controller
     @eventsForTemplate = events
     @helpersForTemplate = helpers
   
-    @addTemplate(template) if template
+    if template
+      @addTemplate(template)
+    else if @template
+      @addTemplate(Template[@template])
+
+  $: (selector) ->
+    @$el.find(selector)
 
   addTemplate: (template) ->
     assert(template)

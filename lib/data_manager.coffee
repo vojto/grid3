@@ -23,7 +23,8 @@ class Grid.Data
     # figure out the whole trip to server and caching
     # and stuff like that.
     if !source.cachedData
-      return    
+      @_isEmpty = true
+      return
 
     @_data = JSON.parse(source.cachedData)
     @_metadata = new Grid.Metadata(@_data)
@@ -42,3 +43,6 @@ class Grid.Data
 
   columns: ->
     @_columns
+
+  isEmpty: ->
+    @_isEmpty
