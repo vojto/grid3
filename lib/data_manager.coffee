@@ -19,6 +19,12 @@ class Grid.DataManager
 
 class Grid.Data
   constructor: (source) ->
+    # TODO: Instead of expecting prepared cached data,
+    # figure out the whole trip to server and caching
+    # and stuff like that.
+    if !source.cachedData
+      return    
+
     @_data = JSON.parse(source.cachedData)
     @_metadata = new Grid.Metadata(@_data)
 

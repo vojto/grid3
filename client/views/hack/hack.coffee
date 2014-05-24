@@ -1,12 +1,28 @@
 class HackIndex extends Grid.Controller
-  helpers:
-    'sources': 'sources'
+  helpers: [
+    'sources'
+  ]
+
+  actions:
+    'click .add-source': 'addSource'
 
   constructor: ->
     super
 
   sources: ->
     Sources.find().fetch()
+
+  addSource: ->
+    console.log 'adding source heres el', @$el
+    width = $(document).width()
+    height = $(document).height()
+    Sources.insert({
+      title: 'New source',
+      width: 230,
+      height: 180,
+      x: _.random(10, width-250),
+      y: _.random(50, height-200)
+    })
 
 class HackIndexSource extends Grid.Controller
   helpers: [
@@ -29,8 +45,8 @@ class HackIndexSource extends Grid.Controller
     pos = $el.position()
     x = pos.left
     y = pos.top
-    width = $el.width()
-    height = $el.height()
+    width = $el.outerWidth()
+    height = $el.outerHeight()
 
     Sources.set id, {x: x, y: y, width: width, height: height}
 

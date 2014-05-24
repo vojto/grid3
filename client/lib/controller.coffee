@@ -41,8 +41,7 @@ class Grid.Controller
     template.rendered = ->
       # Set the first template
       controller.template = @
+      controller.$el = controller.el = $(@firstNode)
       # Set all templates
-      controller.templates or= []
-      controller.templates.push(@)
 
       controller.didRender.call(controller, @) if controller.didRender

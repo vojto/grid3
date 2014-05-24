@@ -4,14 +4,13 @@ body
   background #ebeced
 
 .toolbar
-  border-radius 3px
   background linear-gradient(#fafafa, #fafafa, #edeff0)
   box-shadow 0 1px 1px #b9c1c8
   padding 10px 10px
   position absolute
-  left 20px
-  right 20px
-  top 15px
+  left 0
+  right 0
+  top 0
   font-weight 500
   color #818c96
   font-size 10pt
@@ -79,6 +78,9 @@ header-style()
 
       th
         header-style()
+
+        &:last-child
+          border-radius 0 3px 0 0
 
   .source-wrapper
     position relative

@@ -3,7 +3,7 @@
     collection: { type: String, autoValue: -> 'sources' }
     projectId:  { type: String, optional: true }
     title:      { type: String, label: 'Title', optional: true }
-    url:        { type: String, label: 'URL' }
+    url:        { type: String, label: 'URL', optional: true }
     cachedData: { type: String, label: 'Cached data', optional: true }
     cachedAt:   { type: Date, optional: true }
     isTooLarge: { type: Boolean, optional: true }
