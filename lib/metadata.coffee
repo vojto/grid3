@@ -1,23 +1,27 @@
 class Grid.Metadata
   constructor: (data) ->
-    console.log 'constructing metadata'
-
     # Take a sample of data, and find the most likely data
     # type for them.
-    sample = _.sample(data, 20)
+    @sample = _.sample(data, 20)
+    @firstRow = data[0]
 
-    @columns = (_.max sample, (row) -> row.length).length
+    @columns = (_.max @sample, (row) -> row.length).length
 
     @types = for i in [0...@columns]
-      columnSample = _.map sample, (row) -> row[i]
+      columnSample = _.map @sample, (row) -> row[i]
       types = _.map columnSample, @typeForValue
       counts = _.pairs(_.countBy(types))
       topPair = _.max counts, (pair) -> pair[1]
       type = topPair[0]
-
       type
 
-    # TODO: Integers/Floats should also be converted from strings.
+    # Decide if it has header
+    hasHeader = false
+    for type, i in @types
+      firstRowType = @typeForValue(@firstRow)
+      if firstRowType != type
+        hasHeader = true
+    @_hasHeader = hasHeader
 
   typeForValue: (value) ->
     if value == ''
@@ -43,4 +47,7 @@ class Grid.Metadata
           columns.push(column)
 
     _.uniq(columns)
-        
+
+
+  hasHeader: ->
+    @_hasHeader

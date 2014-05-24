@@ -4,14 +4,23 @@ class HackIndex extends Grid.Controller
 
   constructor: ->
     super
-    console.log 'constructor'
-    controller = @
-    Template.source.rendered = ->
-      console.log 'source rendered'
-      $(@firstNode).draggable(stop: controller.didStopDragging)
 
   sources: ->
     Sources.find().fetch()
+
+class HackIndexSource extends Grid.Controller
+  helpers: [
+    'sourceStyle',
+    'dataPreview'
+  ]
+
+  constructor: ->
+    super
+    @dataManager = Grid.DataManager.instance()
+
+  didRender: ->
+    $(@template.firstNode).draggable(stop: @didStopDragging)
+    $(@template.firstNode).resizable(stop: @didStopDragging)
 
   didStopDragging: (ev) =>
     $el = $(ev.target)
@@ -19,18 +28,19 @@ class HackIndex extends Grid.Controller
     pos = $el.position()
     x = pos.left
     y = pos.top
+    width = $el.width()
+    height = $el.height()
 
-    console.log 'updating', id, {x: x, y: y}
-    Sources.set id, {x: x, y: y}
-
-new HackIndex(Template.hack_index)
-
-class Source extends Grid.Controller
-  helpers:
-    'sourceStyle': 'sourceStyle'
+    Sources.set id, {x: x, y: y, width: width, height: height}
 
   sourceStyle: (source) ->
-    "left: #{source.x||10}px; top: #{source.y||60}px;"
+    "left: #{source.x||10}px; top: #{source.y||60}px; width: #{source.width||200}px; height: #{source.height||100}px; "
+
+  dataPreview: (source) ->
+    data = @dataManager.dataForSource(source)
+
+    data.preview()
 
 
-new Source(Template.source)
+main = new HackIndex(Template.hack_index)
+source = new HackIndexSource(Template.hack_index_source)

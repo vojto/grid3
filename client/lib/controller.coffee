@@ -13,9 +13,12 @@ class Grid.Controller
       events[key] = controller[method]
 
     helpers = {}
-    _.each @helpers, (method, key) ->
-      helpers[key] = ->
-        controller[method].call(controller, @)
+    if _.isArray @helpers
+      _(@helpers).each (method) ->
+        helpers[method] = -> controller[method].call(controller, @)
+    else
+      _(@helpers).each (method, key) ->
+        helpers[key] = -> controller[method].call(controller, @)
 
     _.each @actions, (method, key) ->
       events[key] = (e, template) ->

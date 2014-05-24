@@ -38,10 +38,28 @@ body
   padding-top 60px
 
   .source
-    width 200px
+    width 400px
+    overflow hidden
     height 150px
     background #fff
     border 1px solid #c4c4c4
     border-radius 3px
     // box-shadow 0 1px 5px rgba(0,0,0,0.15)
     position absolute
+    box-sizing border-box
+
+    table
+      border-collapse collapse
+      width 100%
+
+      th, td
+        font-size 12px
+        border-bottom 1px solid #dbdbdb
+        border-right 1px solid #dbdbdb
+        padding 3px 5px
+
+        &:first-child
+          padding-left 8px
+
+        &:last-child
+          border-right none

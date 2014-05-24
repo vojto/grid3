@@ -9,6 +9,9 @@
     isTooLarge: { type: Boolean, optional: true }
     x: { type: Number, label: 'X', optional: true }
     y: { type: Number, label: 'Y', optional: true }
+    width: { type: Number, optional: true }
+    height: { type: Number, optional: true }
+
 
 @Sources.allow
   insert: (userId, doc) -> true

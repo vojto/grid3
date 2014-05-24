@@ -1,3 +1,5 @@
+
+###
 @Grid or= {}
 
 class Grid.Data
@@ -85,3 +87,5 @@ class Grid.Data
 
     @_data = merged
     @
+
+  ###

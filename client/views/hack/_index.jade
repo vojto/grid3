@@ -7,9 +7,12 @@ template(name='hack_index')
 
   .sources
     each sources
-      +source
+      +hack_index_source
 
-template(name='source')
+template(name='hack_index_source')
   div.source(style=sourceStyle, data-id=_id)
-    = title
-    = url
+    table
+      each dataPreview
+        tr
+          each this
+            td= this
