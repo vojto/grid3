@@ -2,12 +2,13 @@ class HackIndex extends Grid.Controller
   helpers:
     'sources': 'sources'
 
-  didRender: ->
+  constructor: ->
+    super
+    console.log 'constructor'
     controller = @
     Template.source.rendered = ->
-      console.log 'rendered', this.firstNode
+      console.log 'source rendered'
       $(@firstNode).draggable(stop: controller.didStopDragging)
-      # $(@template.find('div.source')).draggable({stop: @didStopDragging})
 
   sources: ->
     Sources.find().fetch()
