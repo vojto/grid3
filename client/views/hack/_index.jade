@@ -4,40 +4,60 @@ template(name='hack_index')
       li.add-source
           i.entypo.shareable
           | Add source
+      li.add-graph
+          i.entypo.line-graph
+          | Add graph
 
-  .sources
+  .items
     each sources
-      +hack_index_source
+      +hack_index_item
+    each graphs
+      +hack_index_item
 
   with selection
+    | co to ma kurva
     +hack_inspector
 
+template(name='hack_index_item')
+  div.item(style=itemStyle, data-id=_id, class=itemClass)
+    if isSource
+      +hack_index_source
+    else if isGraph
+      +hack_index_graph
+
 template(name='hack_index_source')
-  div.source(style=sourceStyle, data-id=_id, class=sourceClass)
-    .source-wrapper
-      .handle
-        i.entypo.shareable
-      .table-wrapper
-        if isLoading
-          +spinner
-        else
-          table
+  .item-wrapper
+    .handle
+      i.entypo.shareable
+    .content-wrapper
+      if isLoading
+        +spinner
+      else
+        table
+          tr
+            each columns
+              th= this
+          each dataPreview
             tr
-              each columns
-                th= this
-            each dataPreview
-              tr
-                each row
-                  td!= cell
+              each row
+                td!= cell
 
+template(name='hack_index_graph')
+  .item-wrapper
+    .handle
+      i.entypo.line-graph
+    .content-wrapper
+      | Graph
 
-template(name='hack_inspector')
-  +hack_inspector_source
+template(name='hack_inspector')  
+  if isSource
+    +hack_inspector_source
+  else if isGraph
+    +hack_inspector_graph
 
 template(name='hack_inspector_source')
   .inspector
     .header Source options
-
     form
       table.form
         tr
@@ -58,12 +78,51 @@ template(name='hack_inspector_source')
     .actions-bottom
       button.delete Delete
 
+template(name='hack_inspector_graph')
+  .inspector
+    .header Sources
+    form
+      table.form
+        tr
+          td
+            label Source
+          td
+            select.source
+              option(value='')
+              each sources
+                option(value=_id)= title
+
+    .header Graph
+    form
+      table.form
+        tr
+          td
+            label X
+          td
+            select.x
+              option(value='')
+        tr
+          td
+            label Y
+          td
+            select.y
+              option(value='')
+        tr
+          td
+            label Color
+          td
+            select.color
+              option(value='')
+
+    .actions-bottom
+      button.delete Delete
+
 template(name='modal')
   .modal
     .overlay
     .dialog
-      h2 Si zabel
-      p si zabel
+      .content
+        h2= title
+        p= description
       .actions
-        button.primary Zabel
-        button Nezabel
+        button.primary OK

@@ -31,6 +31,7 @@ class Grid.DataManager
       Sources.set(source._id, {isLoading: true})
       Meteor.call 'sources.load', source._id, (err, data) =>
         Sources.set(source._id, {isLoading: false})
+        return if Flash.handle(err)
         delete @_datas[source._id]
         console.log 'finished', err, data
     , 0

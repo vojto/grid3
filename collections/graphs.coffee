@@ -1,12 +1,16 @@
 @Graphs = new Meteor.Collection2 'graphs',
   schema:
     collection: { type: String, autoValue: -> 'graphs' }
-    projectId: { type: String }
+    projectId: { type: String, optional: true }
     tableId: { type: String, optional: true }
     title: { type: String, label: 'Title', optional: true }
-    code: { type: String, label: 'Code' }
+    code: { type: String, label: 'Code', optional: true }
     x: { type: Number, label: 'X', optional: true }
     y: { type: Number, label: 'Y', optional: true }
+    width: { type: Number, optional: true }
+    height: { type: Number, optional: true }
+    # SUCH TEMPORARY, REMOVE MUCH SOON
+    sourceId: { type: String, optional: true }
 
 @Graphs.allow
   insert: (userId, doc) -> true

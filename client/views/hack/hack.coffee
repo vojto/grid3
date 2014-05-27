@@ -1,11 +1,22 @@
+ItemsHelpers =
+  isSource: (item) -> item.collection == 'sources'
+  isGraph: (item) -> item.collection == 'graphs'
+  sources: -> Sources.find().fetch()
+  graphs: -> Graphs.find().fetch()
+
 class HackIndex extends Grid.Controller
+  @template 'hack_index'
+  @include ItemsHelpers
+
   helpers: [
     'sources',
+    'graphs',
     'selection'
   ]
 
   actions:
     'click .add-source': 'addSource'
+    'click .add-graph': 'addGraph'
 
   constructor: ->
     super
@@ -13,11 +24,7 @@ class HackIndex extends Grid.Controller
   didRender: ->
     $(document.body).mousedown(@deselect.bind(@))
 
-  sources: ->
-    Sources.find().fetch()
-
   addSource: ->
-    console.log 'adding source heres el', @$el
     width = $(document).width()
     height = $(document).height()
     Sources.insert({
@@ -28,10 +35,22 @@ class HackIndex extends Grid.Controller
       y: _.random(50, height-200)
     })
 
+  addGraph: ->
+    width = $(document).width()
+    height = $(document).height()
+    Graphs.insert({
+      title: 'New graph',
+      width: 280,
+      height: 160,
+      x: _.random(10, width-250),
+      y: _.random(50, height-200)
+    })
+
+
   # Working with selection
 
   deselect: (e) ->
-    if e.target == $('div.sources').get(0)
+    if e.target == $('div.items').get(0)
       $('input').blur()
       Session.set('selection', null)
 
@@ -39,25 +58,27 @@ class HackIndex extends Grid.Controller
     Session.get('selection')
 
 
-class HackIndexSource extends Grid.Controller
+class HackIndexItem extends Grid.Controller
+  @template 'hack_index_item'
+
   helpers: [
-    'sourceStyle',
-    'sourceClass',
-    'dataPreview',
-    'columns'
+    'itemStyle',
+    'itemClass',
+    'isSource',
+    'isGraph'
   ]
 
   actions:
-    'mousedown .source': 'selectSource'
+    'mousedown .item': 'selectItem'
 
   constructor: ->
     super
-    @dataManager = Grid.DataManager.instance()
 
   didRender: ->
     $(@template.firstNode).draggable(stop: @didStopDragging, handle: '.handle')
     $(@template.firstNode).resizable(stop: @didStopDragging)
 
+  # Dragging
 
   didStopDragging: (ev) =>
     $el = $(ev.target)
@@ -69,12 +90,44 @@ class HackIndexSource extends Grid.Controller
     height = $el.outerHeight()
 
     Sources.set id, {x: x, y: y, width: width, height: height}
+    Graphs.set id, {x: x, y: y, width: width, height: height}
 
-  sourceStyle: (source) ->
+  itemStyle: (source) ->
     "left: #{source.x||10}px; top: #{source.y||60}px; width: #{source.width||200}px; height: #{source.height||100}px; "
 
+  # Types of items
+
+  isSource: (item) -> item.collection == 'sources'
+  isGraph: (item) -> item.collection == 'graphs'
+
+  # Handling selection
+
+  selectItem: (item) ->
+    $(document).trigger('hack.willSelect')
+    Session.set('selection', item)
+
+  itemClass: (source) ->
+    selection = Session.get('selection')
+    if selection && selection._id == source._id
+      'selected'
+    else
+      ''
+
+class HackIndexSource extends Grid.Controller
+  @template 'hack_index_source'
+
+  helpers: [
+    'dataPreview',
+    'columns',
+  ]
 
   # Previews
+
+  constructor: ->
+    super
+    @dataManager = Grid.DataManager.instance()
+
+  didRender: ->
 
   dataPreview: (source) ->
     data = @dataManager.dataForSource(source)
@@ -99,25 +152,38 @@ class HackIndexSource extends Grid.Controller
 
       data.columns()
 
-
-  # Handling selection
-
-  selectSource: (source) ->
-    console.log 'selecting source'
-    $(document).trigger('hack.willSelect')
-    Session.set('selection', source)
-
-  sourceClass: (source) ->
-    selection = Session.get('selection')
-    if selection && selection._id == source._id
-      'selected'
-    else
-      ''
-
 # Source inspector
 
+class HackInspector extends Grid.Controller
+  @include ItemsHelpers
+  @template 'hack_inspector'
+  helpers: ['isSource', 'isGraph']
+
+class HackInspectorGraph extends Grid.Controller
+  @template 'hack_inspector_graph'
+  @include ItemsHelpers
+
+  helpers: ['sources']
+
+  actions:
+    'click .delete': 'delete'
+
+  events:
+    'change select.source': 'changeSource'
+
+  didRender: ->
+    graph = @template.data
+
+    @$('select.source').val(graph.sourceId)
+
+  delete: ({_id}) ->
+    Graphs.remove(_id)
+
+  changeSource: (e) =>
+    Graphs.set(@template.data._id, {sourceId: @$('select.source').val()})
+
 class HackInspectorSource extends Grid.Controller
-  template: 'hack_inspector_source'
+  @template 'hack_inspector_source'
 
   actions:
     'blur input': 'saveChanges'
@@ -136,8 +202,3 @@ class HackInspectorSource extends Grid.Controller
   delete: (source) ->
     Sources.remove(source._id)
     Session.set('selection', null)
-
-
-main = new HackIndex(Template.hack_index)
-source = new HackIndexSource(Template.hack_index_source)
-new HackInspectorSource

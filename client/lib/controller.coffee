@@ -51,3 +51,16 @@ class Grid.Controller
       # Set all templates
 
       controller.didRender.call(controller, @) if controller.didRender
+
+  @template: (template) ->
+    setTimeout =>
+      @instance = new @(Template[template])
+    , 0
+
+  @include: (obj) ->
+    moduleKeywords = ['included', 'extended']
+    throw new Error('include(obj) requires obj') unless obj
+    for key, value of obj when key not in moduleKeywords
+      @::[key] = value
+    obj.included?.apply(this)
+    this
