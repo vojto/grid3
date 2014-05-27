@@ -38,12 +38,13 @@ class Grid.Metadata
       else
         'string'
 
-  columnsOfPreferredTypes: (preferredTypes) ->
+  columnsOfPreferredTypes: (preferredTypes, options={}) ->
     columns = []
+    except = options.except
 
     for preferredType in preferredTypes
       for type, column in @types
-        if type == preferredType
+        if type == preferredType && !(except && column in except)
           columns.push(column)
 
     _.uniq(columns)

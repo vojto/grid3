@@ -173,8 +173,27 @@ class HackInspectorGraph extends Grid.Controller
 
   didRender: ->
     graph = @template.data
-
     @$('select.source').val(graph.sourceId)
+
+    source = Sources.findOne(graph.sourceId)
+    return unless source
+
+    console.log 'rendering the graph...'
+    manager = Grid.DataManager.instance()
+    info = manager.dataForSource(source)
+    data = info.data()
+    meta = info.metadata()
+
+    index = {x: 0, y: 1}
+    domain =
+      x: d3.extent(data, (d) -> d[index.x])
+      y: d3.extent(data, (d) -> d[index.y])
+
+    console.log 'domains', domain
+    # scale =
+      # x: 
+
+
 
   delete: ({_id}) ->
     Graphs.remove(_id)

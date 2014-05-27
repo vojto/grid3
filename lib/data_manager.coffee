@@ -46,9 +46,17 @@ class Grid.Data
       @_isEmpty = true
       return
 
-    @_data = JSON.parse(source.cachedData)
+    data = JSON.parse(source.cachedData)
     @_metadata = new Grid.Metadata(@_data)
 
+    # Parse data using datatypes from metadata
+    @_data = data.map (d) ->
+      d.map (value, column) ->
+        type = 
+    # TODO: Finish up
+
+
+    # Detect header
     if @_metadata.hasHeader()
       headerRow = @_data[0]
       @_columns = headerRow
@@ -60,6 +68,12 @@ class Grid.Data
 
   preview: ->
     @_data
+
+  data: ->
+    @_data
+
+  metadata: ->
+    @_metadata
 
   columns: ->
     @_columns
