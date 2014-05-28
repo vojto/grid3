@@ -201,7 +201,7 @@ class HackIndexGraph extends Grid.Controller
       .attr('class', 'line')  
       .attr('d', line(data))
       # .style('fill', '#f591f4')
-      .style('fill', color(source._id))
+      .style('fill', color(graph._id))
       .style('stroke-width', '0')
 
 # Source inspector
@@ -266,7 +266,7 @@ class HackInspectorGraph extends Grid.Controller
     svg.append('path')
       .attr('class', 'line')  
       .attr('d', line(data))
-      .style('fill', color(source._id))
+      .style('fill', color(graph._id))
       .style('stroke-width', '0')
 
 
