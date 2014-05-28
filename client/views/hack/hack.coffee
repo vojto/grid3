@@ -160,10 +160,9 @@ Graphing =
 
     Graphs.find(_id: graph._id).observeChanges 
       changed: (id, fields) =>
-        if 'sourceId' of fields
+        if ('sourceId' of fields) or ('width' of fields) or ('height' of fields)
           # Graph object is not automatically refreshed
-          graph.sourceId = fields.sourceId
-          @renderPreview(graph, options)
+          @renderPreview(Graphs.findOne(graph._id), options)
 
   renderPreview: (graph, {$el, width, height}) ->
     # Refresh the graph
@@ -179,6 +178,9 @@ Graphing =
     domain =
       x: d3.extent(data, (d) -> d[index.x])
       y: d3.extent(data, (d) -> d[index.y])
+
+    width = width($el) if typeof width == 'function'
+    height = height($el) if typeof height == 'function'
 
     scale =
       x: d3.time.scale().domain(domain.x).range([0, width])
@@ -214,8 +216,8 @@ class HackIndexGraph extends Grid.Controller
 
     @autoRenderPreview graph,
       $el: @$el.find('.content-wrapper')
-      width: @$el.width()
-      height: @$el.height()
+      width: ($el) -> $el.width()
+      height: ($el) -> $el.height()
 
 # Source inspector
 
@@ -243,8 +245,8 @@ class HackInspectorGraph extends Grid.Controller
 
     @autoRenderPreview graph,
       $el: @$el
-      width: @$el.width() - 20
-      height: 150
+      width: ($el) -> $el.width() - 20
+      height: -> 150
 
   delete: ({_id}) ->
     Graphs.remove(_id)
