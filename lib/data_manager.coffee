@@ -47,30 +47,37 @@ class Grid.Data
       return
 
     data = JSON.parse(source.cachedData)
-    @_metadata = new Grid.Metadata(@_data)
-
-    # Parse data using datatypes from metadata
-    @_data = data.map (d) ->
-      d.map (value, column) ->
-        type = 
-    # TODO: Finish up
-
+    @_metadata = new Grid.Metadata(data)
 
     # Detect header
     if @_metadata.hasHeader()
-      headerRow = @_data[0]
+      headerRow = data[0]
       @_columns = headerRow
-      @_data.splice(0, 1)
+      data.splice(0, 1)
     else
       firstLetter = "A".charCodeAt(0)
-      @_columns = for cell, i in @_data[0]
+      @_columns = for cell, i in data[0]
         String.fromCharCode(firstLetter + i)
+
+    # Parse data using datatypes from metadata
+    @_data = data.map (d) =>
+      d.map (value, column) =>
+        type = @_metadata.typeForColumn(column)
+        if type == 'number'
+          parseFloat(value)
+        else if type == 'date'
+          moment(value).toDate()
+        else
+          value
+    # TODO: Finish up
+
 
   preview: ->
     @_data
 
   data: ->
     @_data
+
 
   metadata: ->
     @_metadata

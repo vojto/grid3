@@ -38,6 +38,9 @@ class Grid.Metadata
       else
         'string'
 
+  typeForColumn: (column) ->
+    @types[column]
+
   columnsOfPreferredTypes: (preferredTypes, options={}) ->
     columns = []
     except = options.except

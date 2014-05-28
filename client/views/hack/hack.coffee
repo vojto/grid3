@@ -4,6 +4,8 @@ ItemsHelpers =
   sources: -> Sources.find().fetch()
   graphs: -> Graphs.find().fetch()
 
+color = d3.scale.category10()
+
 class HackIndex extends Grid.Controller
   @template 'hack_index'
   @include ItemsHelpers
@@ -152,6 +154,56 @@ class HackIndexSource extends Grid.Controller
 
       data.columns()
 
+class HackIndexGraph extends Grid.Controller
+  @template 'hack_index_graph'
+
+  didRender: ->
+    graph = @template.data
+    @$('select.source').val(graph.sourceId)
+
+    source = Sources.findOne(graph.sourceId)
+    return unless source
+
+    console.log 'rendering the graph...'
+    manager = Grid.DataManager.instance()
+    info = manager.dataForSource(source)
+    data = info.data()
+    meta = info.metadata()
+
+    width = this.$el.width()
+    height = this.$el.height()
+
+    index = {x: 0, y: 1}
+    domain =
+      x: d3.extent(data, (d) -> d[index.x])
+      y: d3.extent(data, (d) -> d[index.y])
+
+    console.log 'domain', domain
+
+    scale =
+      x: d3.time.scale().domain(domain.x).range([0, width])
+      y: d3.scale.linear().domain(domain.y).range([height, 0])
+
+    line = d3.svg.area()
+        .interpolate('basis')  
+        .x((d) -> scale.x(d[index.x]) )
+        .y1((d) -> scale.y(d[index.y]) )
+        .y0(height)
+
+    el = d3.select(@$el.find('.content-wrapper').get(0))
+    console.log 'el', el
+    svg = el.append('svg')
+      .attr('class', 'preview')
+      .attr('width', width)
+      .attr('height', height)
+
+    svg.append('path')
+      .attr('class', 'line')  
+      .attr('d', line(data))
+      # .style('fill', '#f591f4')
+      .style('fill', color(source._id))
+      .style('stroke-width', '0')
+
 # Source inspector
 
 class HackInspector extends Grid.Controller
@@ -184,14 +236,38 @@ class HackInspectorGraph extends Grid.Controller
     data = info.data()
     meta = info.metadata()
 
+    width = this.$el.width() - 20
+    height = 150
+
     index = {x: 0, y: 1}
     domain =
       x: d3.extent(data, (d) -> d[index.x])
       y: d3.extent(data, (d) -> d[index.y])
 
-    console.log 'domains', domain
-    # scale =
-      # x: 
+    console.log 'domain', domain
+
+    scale =
+      x: d3.time.scale().domain(domain.x).range([0, width])
+      y: d3.scale.linear().domain(domain.y).range([height, 0])
+
+    line = d3.svg.area()
+        .interpolate('basis')  
+        .x((d) -> scale.x(d[index.x]) )
+        .y1((d) -> scale.y(d[index.y]) )
+        .y0(height)
+
+    el = d3.select(@$el.get(0))
+    console.log 'el', el
+    svg = el.append('svg')
+      .attr('class', 'preview')
+      .attr('width', width)
+      .attr('height', height)
+
+    svg.append('path')
+      .attr('class', 'line')  
+      .attr('d', line(data))
+      .style('fill', color(source._id))
+      .style('stroke-width', '0')
 
 
 
