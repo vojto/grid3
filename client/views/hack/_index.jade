@@ -94,19 +94,19 @@ template(name='hack_inspector_graph')
 
     ul.graph-types
       with 'line'
-        li.line(class=graphTypeClass)
+        li.line(class='{{graphTypeClass ..}}')
           .image
           | Line chart
       with 'bar'
-        li.bar(class=graphTypeClass)
+        li.bar(class='{{graphTypeClass ..}}')
           .image
           | Bar chart
       with 'area'
-        li.area(class=graphTypeClass)
+        li.area(class='{{graphTypeClass ..}}')
           .image
           | Area chart
       with 'scatterplot'
-        li.scatterplot(class=graphTypeClass)
+        li.scatterplot(class='{{graphTypeClass ..}}')
           .image
           | Scatterplot
 

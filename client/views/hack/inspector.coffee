@@ -39,18 +39,21 @@ class HackInspectorGraph extends Grid.Controller
   changeSource: (e) =>
     Graphs.set(@template.data._id, {sourceId: @$('select.source').val()})
 
-  graphTypeClass: (type) ->
+  graphTypeClass: (type, graph) ->
+    # console.log 'args', arguments
+    # console.log 'checking'
     type = JSON.parse(JSON.stringify(type))
-    graph = Graphs.findOne(@template.data._id)
+    # graph = Session.get('selection')
     if graph.type == type
       'selected'
     else
       ''
 
   changeType: (type) ->
+    $(".graph-types li").removeClass('selected')
+    $(".graph-types li.#{type}").addClass('selected')
     type = JSON.parse(JSON.stringify(type))
     Graphs.set(@template.data._id, {type: type})
-    console.log(@template.data._id, {type: type})
 
 class HackInspectorSource extends Grid.Controller
   @template 'hack_inspector_source'
