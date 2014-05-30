@@ -10,7 +10,9 @@ Meteor.Collection2.prototype.findArray = (ids) ->
     sum[obj._id] = obj
     sum
   , {}
-  return ids.map (id) -> objs[id]
+  objs = ids.map (id) -> objs[id]
+  return (obj for obj in objs when obj?)
+
 
 @sessionRemove = (key) ->
   value = Session.get(key)

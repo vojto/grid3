@@ -1,0 +1,16 @@
+template(name='hack_index_grouped_table')
+  .item-wrapper
+    .handle.grouped-table
+      i.entypo.layout
+    .content-wrapper
+      each groups
+        .header
+          = name
+        table
+          tr
+            each columns
+              td= title
+          each data
+            tr
+              each this
+                td!= this

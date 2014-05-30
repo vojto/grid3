@@ -165,8 +165,7 @@ class HackIndexSource extends Grid.Controller
   dataPreview: (table) ->
     data = @dataManager.dataForTable(table)
     if data.isEmpty()
-      preview = for i in [0..6]
-        ['&nbsp;', '&nbsp;', '&nbsp;']
+      preview = []
     else
       preview = data.preview()
 
@@ -178,7 +177,7 @@ class HackIndexSource extends Grid.Controller
     mapped
 
   columns: (table) ->
-    TableColumns.findArray(table.columnIds)
+    @dataManager.columnsForTable(table)
 
 class HackIndexGraph extends Grid.Controller
   @template 'hack_index_graph'

@@ -6,6 +6,9 @@ Router.map ->
   @route 'home',
     path: '/'
     template: 'hack_index'
+    waitOn: ->
+      Meteor.subscribe('tables')
+      Meteor.subscribe('table_columns')
 
   # Projects
 

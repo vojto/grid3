@@ -1,4 +1,5 @@
-Meteor.subscribe('sources')
+Meteor.subscribe('tables')
+Meteor.subscribe('table_columns')
 Meteor.subscribe('steps')
 Meteor.subscribe('graphs')
 Meteor.subscribe('projects')

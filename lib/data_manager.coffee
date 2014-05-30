@@ -8,64 +8,136 @@ class Grid.DataManager
     _instance
 
   constructor: ->
-    @_datas = {}
-    @_managedTables = {}
-    # This is used to reactively respond to methods requesting things about
-    # tables that might change as we work with their data.
-    @_managedTablesDeps = {}
+    @_tables = {}
+    # Key: Table ID
+    # Value: Array of table IDs that depend on that table
+    @_deps = {}
 
     if Meteor.isClient
       Meteor.startup =>
-        console.log 'startup'
         Tables.find().observeChanges
           # Here also we should only observe for changes in source and reload it.
           # This logic should also be moved to something called "Loader."
           changed: (id, fields) =>
-            if fields['url']
-              @reloadTable(Tables.findOne(id))
+            if fields['url'] or fields['groupColumnIndex']
+              setTimeout =>
+                @markTableNeedingEval(Tables.findOne(id))
+              , 0
+
+  # Managing tables
+  # ------------------------------------------------------------------
+
+  addTable: (table) ->
+    return if @_tables[table._id]
+
+    if table.inputTableId
+      depIds = [table.inputTableId]
+    else
+      depIds = []
+    
+
+    @_tables[table._id] =
+      table: table
+      data: @emptyData(table)
+      needsEval: true
+      # This dependency is only used for updating the user interface
+      # not tracking cross-table dependencies.
+      uiDep: new Deps.Dependency()
+      dependsOn: depIds
+
+
+    # Evaluate tables in the next run loop, to store all tables needed
+    # for the UI, so we could compute in one run.
+    @scheduleEvaluation()
 
   dataForTable: (table) ->
-    key = table._id
-    if !@_managedTables[key]
-      # We're not managing this table yet, add it to managedTables and load it
-      # from the source.
-      @addManagedTable(table)
-      @reloadTable(table)
-      return new Grid.Data()
-    # @_managedTablesDeps[table._id].depend()
-    if !@_datas[key]
-      # The table isn't cached at the moment -- it either hasn't arrived from the
-      # source yet, or there was an error. Either way, return an empty table.
-      return new Grid.Data()
-    @_datas[key]
+    @addTable(table)
+    @depend(table)
+    @_tables[table._id].data
 
-  addManagedTable: (table) ->
-    @_managedTables[table._id] = table
-    dep = new Deps.Dependency()
-    @_managedTablesDeps[table._id] = dep
-    # dep.depend()
+  # Marks UI dependency on a table
+  depend: (table) ->
+    @_tables[table._id].uiDep.depend()
 
-  updateManagedTableDep: (table) ->
-    # console.log 'updating dep', @_managedTablesDeps
-    # @_managedTablesDeps[table._id].changed()
 
-  reloadTable: (table) ->
-    # Workaround for meteor not calling remote method from inside
-    # this callback.
-    setTimeout =>
-      if not table.url or table.url == ''
-        # This is the initial state after creating a table.
-        return
-      
+  columnsForTable: (table) ->
+    TableColumns.findArray(table.columnIds)
 
-      Tables.set(table._id, {isLoading: true})
-      # This should now look what type of table we're dealing with, and act
-      # accordingly. For now we'll just assume it's a source and load it.
-      Meteor.call 'sources.load', table._id, (err, data) =>
-        Tables.set(table._id, {isLoading: false}) # this probably updates the table in the UI
-        return if Flash.handle(err)
-        @handleTableDataReceive(table, data)
-    , 0
+  # Managing data in tables
+  # ------------------------------------------------------------------
+
+  setData: (table, data) ->
+    # Set data
+    @_tables[table._id].data = data
+
+    # Re-evaluate tables that depend on it
+    @markDependentTablesNeedingEval(table)
+
+    # Update the UI
+    @_tables[table._id].uiDep.changed()
+
+  setDataToEmpty: (table) ->
+    @_tables[table._id].data = @emptyData(table)
+
+  emptyData: (table) ->
+    if table.type is Tables.SOURCE
+      new Grid.Data()
+    else if table.type is Tables.GROUPED
+      new Grid.GroupedData()
+
+  # Marking evaluation
+  # ------------------------------------------------------------------
+
+  markDependentTablesNeedingEval: (table) ->
+    # Reverse order of dependencies
+    dependentTables = []
+    for id, info of @_tables
+      if table._id in info.dependsOn
+        dependentTables.push(info.table)
+
+    @markTableNeedingEval(table) for table in dependentTables
+
+  markTableNeedingEval: (table) ->
+    @_tables[table._id].needsEval = true
+    @scheduleEvaluation()
+
+  markTableNotNeedingEval: (table) ->
+    @_tables[table._id].needsEval = false
+
+  # Evaluation
+  # ------------------------------------------------------------------
+
+  scheduleEvaluation: ->
+    clearTimeout(@evaluateTimer)
+    @evaluateTimer = setTimeout @evaluateTables.bind(@), 0
+
+  evaluateTables: ->
+    console.log 'tables', @_tables
+
+    infos = (info for id, info of @_tables when info.needsEval)
+    for info in infos
+      @evaluateTable(info.table)
+      info.needsEval = false
+
+  evaluateTable: (table) ->
+    @markTableNotNeedingEval(table)
+
+    if table.type is Tables.SOURCE
+      @evaluateSourceTable(table)
+    else if table.type is Tables.GROUPED
+      @evaluateGroupedTable(table)
+    else
+      throw new Error("Cannot evaluate table of unknown type #{table.type}")
+
+  evaluateSourceTable: (table) ->
+    console.log 'evaluating source table', table
+    table = Tables.findOne(table._id)
+    if not table.url or table.url == ''
+      @setDataToEmpty(table)
+      return
+    Meteor.call 'sources.load', table._id, (err, data) =>
+      return @setDataToEmpty(table) if Flash.handle(err)
+      @handleTableDataReceive(table, data)
 
   # This method does THREE important things:
   # 1. Updates the schema based on received data
@@ -78,26 +150,75 @@ class Grid.DataManager
     # 1. Wipe existing columns (if user made any modifications --
     # too bad, changing the URL removes all columns and creates
     # the automatically inferred from data.
-    TableColumns.remove(id) for id in table.columnIds
-    Tables.set(table._id, {columnIds: []})
+    TableColumns.removeAllForTable(table)
 
-    # Detect header
-    columnIds = for columnName, i in metadata.columnNames()
-      TableColumns.insert({
-        title: columnName,
-        type: metadata.typeForColumn(i)
-      })
-    Tables.set(table._id, {columnIds: columnIds})
+    # Store columns
+    columns = for columnName, i in metadata.columnNames()
+      {title: columnName, type: metadata.typeForColumn(i)}
+    TableColumns.insertForTable(table, columns)
+
+    # Remove the header
+    if metadata.hasHeader()
+      data.splice(0, 1)
+
+    # Parse data using datatypes from metadata
+    # TODO: Not make a copy with map, but instead do it in-place
+    data = data.map (d) =>
+      d.map (value, column) =>
+        type = metadata.typeForColumn(column)
+        if type == 'number'
+          parseFloat(value)
+        else if type == 'date'
+          moment(value).toDate()
+        else
+          value
+
+    console.log 'finished', data
+
+    # Set data
+    @setData(table, new Grid.Data(data))
+
+  evaluateGroupedTable: (table) ->
+    table = Tables.findOne(table._id)
+
+    console.log '<<< EVALUATING GROUPED TABLE >>>'
+    inputTable = Tables.findOne(table.inputTableId)
+    inputData = @dataForTable(inputTable)
+    groupIndex = table.groupColumnIndex
+    groupColumn = TableColumns.findOne(inputTable.columnIds[groupIndex])
+
+    if inputData.isEmpty()
+      @setDataToEmpty(table)
+      return
+
+    if not groupColumn
+      return
+
+    columns = TableColumns.findArray(inputTable.columnIds)
+    columns.splice(table.groupColumnIndex, 1)
+    TableColumns.removeAllForTable(table)
+    TableColumns.insertForTable(table, columns)
+
+    groupedData = new Grid.GroupedData()
+
+    data = inputData.data()
+    groups = {}
+    for row in data
+      groupValue = row[groupIndex]
+      group = groups[groupValue]
+      if !group
+        group = groups[groupValue] = []
+      row = row.map (d) -> d # copy row
+      row.splice(groupIndex, 1)
+      group.push(row)
+
+    for group, rows of groups
+      groupedData.addGroup(group, new Grid.Data(rows))
     
-    
+    console.log 'grouped data', groupedData
 
-    # Create columns from metadata
+    @setData(table, groupedData)
 
-    delete @_datas[table._id]
-    @_datas[table._id] = new Grid.Data(data)
-    @updateManagedTableDep(table)
-
-  
 
 class Grid.Data
   constructor: (data) ->
@@ -109,35 +230,31 @@ class Grid.Data
       @_isEmpty = true
       return
 
-    @_metadata = new Grid.Metadata(data)
+    @_data = data
 
-    # Remove the header
-    if @_metadata.hasHeader()
-      data.splice(0, 1)
+  preview: -> @_data
+  data: -> @_data
+  metadata: -> @_metadata
+  isEmpty: -> @_isEmpty
 
-    # Parse data using datatypes from metadata
-    @_data = data.map (d) =>
-      d.map (value, column) =>
-        type = @_metadata.typeForColumn(column)
-        if type == 'number'
-          parseFloat(value)
-        else if type == 'date'
-          moment(value).toDate()
-        else
-          value
-    # TODO: Finish up
+# This class holds structure of grouped data
+# Does it also process the data? Apply the grouping?
+# For now, lets make this just a dumb container and not deal with 
+# that here. We might split processing into classes other that DataManager
+# but it sure as hell won't be data container that will do the processing.
+class Grid.GroupedData extends Grid.Data
+  constructor: (groupedData) ->
+    if !groupedData
+      @_isEmpty = true
 
+    @_groups = {}
 
-  preview: ->
-    @_data
+  addGroup: (groupName, data) ->
+    @_isEmpty = false
+    @_groups[groupName] = data
 
-  data: ->
-    @_data
+  groups: ->
+    _(@_groups).keys()
 
-
-  metadata: ->
-    @_metadata
-
-
-  isEmpty: ->
-    @_isEmpty
+  dataForGroup: (group) ->
+    @_groups[group]

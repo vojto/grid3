@@ -19,7 +19,7 @@
     columnIds:    { type: [String], defaultValue: [] }
 
     # Grouped Table
-    groupColumnId: { type: String, optional: true }
+    groupColumnIndex: { type: String, optional: true }
 
 Tables.SOURCE = 'source'
 Tables.GROUPED = 'grouped'
@@ -49,8 +49,19 @@ Tables.GROUPED = 'grouped'
     collection: { type: String, autoValue: -> 'table_columns' }
     title:      { type: String }
     type:       { type: String }
+    index:      { type: Number }
 
 @TableColumns.allow
   insert: (userId, doc) -> true
   update: (userId, doc) -> true
   remove: (userId, doc) -> true
+
+TableColumns.removeAllForTable = (table) ->
+  TableColumns.remove(id) for id in table.columnIds
+  Tables.set(table._id, {columnIds: []})
+
+TableColumns.insertForTable = (table, columns) ->
+  ids = for column, i in columns
+    column.index = i
+    TableColumns.insert(column)
+  Tables.set(table._id, {columnIds: ids})

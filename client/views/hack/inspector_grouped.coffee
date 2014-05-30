@@ -17,8 +17,9 @@ class HackInspectorGroupedTable extends Grid.Controller
   # Events
 
   rendered: ->
-    console.log 'highlight selected option', @data.groupColumnId
-    @$('select.group-column').val(@data.groupColumnId)
+    console.log 'highlight selected option', @data.groupColumnIndex
+    console.log 'el', @$el
+    @$('select.group-column').val(@data.groupColumnIndex)
 
   # Actions
 
@@ -28,4 +29,5 @@ class HackInspectorGroupedTable extends Grid.Controller
 
   changeGroupColumn: (column) ->
     table = @data
-    Tables.set table._id, {groupColumnId: @$('select.group-column').val()}
+    console.log 'updating column id to', @$('select.group-column').val()
+    Tables.set table._id, {groupColumnIndex: @$('select.group-column').val()}
