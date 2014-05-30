@@ -19,7 +19,7 @@
     columnIds:    { type: [String], defaultValue: [] }
 
     # Grouped Table
-    groupColumnId: { type: Number, optional: true }
+    groupColumnId: { type: String, optional: true }
 
 Tables.SOURCE = 'source'
 Tables.GROUPED = 'grouped'
