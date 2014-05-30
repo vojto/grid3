@@ -1,8 +1,12 @@
 ItemsHelpers =
   isSource: (item) -> item.collection == 'sources'
   isGraph: (item) -> item.collection == 'graphs'
-  sources: -> Sources.find().fetch()
-  graphs: -> Graphs.find().fetch()
+  sources: ->
+    Sources.find().fetch()
+    # []
+  graphs: ->
+    Graphs.find().fetch()
+    # []
 
 color = d3.scale.category10()
 
@@ -25,6 +29,11 @@ class HackIndex extends Grid.Controller
 
   didRender: ->
     $(document.body).mousedown(@deselect.bind(@))
+
+    Mousetrap.bind 'backspace', (e) =>
+      e.preventDefault()
+      @deleteSelected()
+      false
 
   addSource: ->
     width = $(document).width()
@@ -59,6 +68,13 @@ class HackIndex extends Grid.Controller
   selection: ->
     Session.get('selection')
 
+  deleteSelected: ->
+    item = Session.get('selection')
+    if item
+      Sources.remove(item._id)
+      Graphs.remove(item._id)
+    Session.set('selection', null)
+
 
 class HackIndexItem extends Grid.Controller
   @template 'hack_index_item'
@@ -67,11 +83,16 @@ class HackIndexItem extends Grid.Controller
     'itemStyle',
     'itemClass',
     'isSource',
-    'isGraph'
+    'isGraph',
+    'controllerId'
   ]
 
   actions:
     'mousedown .item': 'selectItem'
+    'click .handle': 'showInfo'
+
+  controllerId: ->
+    @_id
 
   constructor: ->
     super

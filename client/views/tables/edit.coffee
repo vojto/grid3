@@ -138,6 +138,3 @@ class TableEditController extends Grid.Controller
       ''
 
 
-controller = new TableEditController()
-controller.addTemplate(Template.table_edit)
-controller.addTemplate(Template.table_sidebar)
