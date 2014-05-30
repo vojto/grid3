@@ -1,14 +1,14 @@
 @ItemsHelpers =
-  isTable: (item) ->
-    item.collection == 'tables'
+  isSource: (item) ->
+    item.collection == 'tables' && item.type == Tables.SOURCE
   isGraph: (item) ->
     item.collection == 'graphs'
+  isGroupedTable: (item) ->
+    item.collection == 'tables' && item.type == Tables.GROUPED
   tables: ->
     Tables.find().fetch()
-    # []
   graphs: ->
     Graphs.find().fetch()
-    # []
 
 class HackIndex extends Grid.Controller
   @template 'hack_index'
@@ -21,8 +21,9 @@ class HackIndex extends Grid.Controller
   ]
 
   actions:
-    'click .add-source': 'addSource'
-    'click .add-graph': 'addGraph'
+    'click .toolbar .add-source': 'addSource'
+    'click .toolbar .add-graph': 'addGraph'
+    'click .toolbar .group': 'addGroupTable'
 
   constructor: ->
     super
@@ -36,28 +37,32 @@ class HackIndex extends Grid.Controller
       false
 
   addSource: ->
-    width = $(document).width()
-    height = $(document).height()
-    Tables.insert({
-      title: 'New source',
-      type: 'source',
-      width: 230,
-      height: 180,
-      x: _.random(10, width-250),
-      y: _.random(50, height-200)
-    })
+    options = @defaultTableOptions()
+    options.title = 'New source'
+    options.type = 'source'
+    Tables.insert(options)
 
   addGraph: ->
+    options = @defaultTableOptions(280, 160)
+    options.title = 'New graph'
+    Graphs.insert(options)
+
+  addGroupTable: ->
+    options = @defaultTableOptions()
+    options.title = 'New group table'
+    options.type = Tables.GROUPED
+    Tables.insert(options)
+
+
+  defaultTableOptions: (width=230, height=180) ->
     width = $(document).width()
     height = $(document).height()
-    Graphs.insert({
-      title: 'New graph',
+    return {
       width: 280,
       height: 160,
       x: _.random(10, width-250),
       y: _.random(50, height-200)
-    })
-
+    }
 
   # Working with selection
 
@@ -79,11 +84,13 @@ class HackIndex extends Grid.Controller
 
 class HackIndexItem extends Grid.Controller
   @template 'hack_index_item'
+  @include ItemsHelpers
 
   helpers: [
     'itemStyle',
     'itemClass',
-    'isTable',
+    'isSource',
+    'isGroupedTable',
     'isGraph',
     'controllerId'
   ]
@@ -119,11 +126,6 @@ class HackIndexItem extends Grid.Controller
   itemStyle: (table) ->
     "left: #{table.x||10}px; top: #{table.y||60}px; width: #{table.width||200}px; height: #{table.height||100}px; "
 
-  # Types of items
-
-  isTable: (item) -> item.collection == 'tables'
-  isGraph: (item) -> item.collection == 'graphs'
-
   # Handling selection
 
   selectItem: (item) ->
@@ -137,8 +139,8 @@ class HackIndexItem extends Grid.Controller
     else
       ''
 
-class HackIndexTable extends Grid.Controller
-  @template 'hack_index_table'
+class HackIndexSource extends Grid.Controller
+  @template 'hack_index_source'
 
   helpers: [
     'dataPreview',
@@ -173,7 +175,6 @@ class HackIndexTable extends Grid.Controller
     if data.isEmpty()
       ['A', 'B', 'C']
     else
-
       data.columns()
 
 class HackIndexGraph extends Grid.Controller

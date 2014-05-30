@@ -23,12 +23,14 @@ template(name='hack_index')
 
 template(name='hack_index_item')
   div.item(style=itemStyle, data-id=_id, class=itemClass)
-    if isTable
-      +hack_index_table
+    if isSource
+      +hack_index_source
     else if isGraph
       +hack_index_graph
+    else if isGroupedTable
+      +hack_index_grouped_table
 
-template(name='hack_index_table')
+template(name='hack_index_source')
   .item-wrapper
     .handle
       i.entypo.shareable
@@ -44,6 +46,13 @@ template(name='hack_index_table')
             tr
               each row
                 td!= cell
+
+template(name='hack_index_grouped_table')
+  .item-wrapper
+    .handle.grouped-table
+      i.entypo.layout
+    .content-wrapper
+      | grouped table here
 
 template(name='hack_index_graph')
   .item-wrapper

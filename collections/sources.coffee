@@ -14,6 +14,8 @@
     height: { type: Number, optional: true }
     isLoading: { type: Boolean, optional: true }
 
+Tables.SOURCE = 'source'
+Tables.GROUPED = 'grouped'
 
 @Tables.allow
   insert: (userId, doc) -> true
