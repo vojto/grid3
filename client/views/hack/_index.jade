@@ -65,6 +65,8 @@ template(name='hack_inspector')
     +hack_inspector_table
   else if isGraph
     +hack_inspector_graph
+  else if isGroupedTable
+    +hack_inspector_grouped_table
 
 template(name='hack_inspector_table')
   .inspector

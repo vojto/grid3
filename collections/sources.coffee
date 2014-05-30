@@ -13,6 +13,10 @@
     width: { type: Number, optional: true }
     height: { type: Number, optional: true }
     isLoading: { type: Boolean, optional: true }
+    inputTableId: { type: String, optional: true }
+
+    # Grouped Table
+    groupColumnIndex: { type: Number, optional: true }
 
 Tables.SOURCE = 'source'
 Tables.GROUPED = 'grouped'

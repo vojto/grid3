@@ -42,19 +42,27 @@ class Grid.Controller
 
         helpers = {}
 
-        addHelper = (method, key) ->
+        addHelper = (key, fun) ->
           helpers[key] = ->
             args = (a for a in arguments)
             args.unshift(@)
-            controller[method].apply(controller, args)
+            fun.apply(controller, args)
+
+        addHelperByKey = (method, key) ->
+          addHelper(key, controller[method])
 
         # Collect helpers
         if _(controller.helpers).isArray()
           _(controller.helpers).each (method) ->
-            addHelper(method, method)
+            addHelperByKey(method, method)
         else
           _(controller.helpers).each (method, key) ->
-            addHelper(method, key)
+            addHelperByKey(method, key)
+
+        # Helpers from class methods
+        ignored = ['__super__', 'template', 'include']
+        for method, fun of constructor
+          addHelper(method, fun) unless method in ignored
 
 
         templateConstructor.helpers(helpers)
@@ -66,6 +74,7 @@ class Grid.Controller
         controller = template.controller
         controller.$el = $(template.firstNode)
         controller.el = controller.$el
+        controller.data = template.data
         controller.rendered.call(controller, @) if controller.rendered
 
       templateConstructor.destroyed = ->

@@ -9,6 +9,10 @@ class Grid.DataManager
 
   constructor: ->
     @_datas = {}
+    @_managedTables = {}
+    # This is used to reactively respond to methods requesting things about
+    # tables that might change as we work with their data.
+    @_managedTablesDeps = {}
 
     if Meteor.isClient
       Meteor.startup =>
@@ -22,35 +26,60 @@ class Grid.DataManager
 
   dataForTable: (table) ->
     key = table._id
+    if !@_managedTables[key]
+      # We're not managing this table yet, add it to managedTables and load it
+      # from the source.
+      @addManagedTable(table)
+      @reloadTable(table)
+      return new Grid.Data()
+    # @_managedTablesDeps[table._id].depend()
     if !@_datas[key]
-      @_datas[key] = new Grid.Data(table)
+      # The table isn't cached at the moment -- it either hasn't arrived from the
+      # source yet, or there was an error. Either way, return an empty table.
+      return new Grid.Data()
     @_datas[key]
+
+  addManagedTable: (table) ->
+    @_managedTables[table._id] = table
+    dep = new Deps.Dependency()
+    @_managedTablesDeps[table._id] = dep
+    # dep.depend()
+
+  updateManagedTableDep: (table) ->
+    console.log 'updating dep', @_managedTablesDeps
+    # @_managedTablesDeps[table._id].changed()
 
   reloadTable: (table) ->
     # Workaround for meteor not calling remote method from inside
     # this callback.
     setTimeout =>
+      if not table.url or table.url == ''
+        # This is the initial state after creating a table.
+        return
+      
+
       Tables.set(table._id, {isLoading: true})
       # This should now look what type of table we're dealing with, and act
       # accordingly. For now we'll just assume it's a source and load it.
       Meteor.call 'sources.load', table._id, (err, data) =>
-        Tables.set(table._id, {isLoading: false})
+        Tables.set(table._id, {isLoading: false}) # this probably updates the table in the UI
         return if Flash.handle(err)
         delete @_datas[table._id]
-        console.log 'finished', err, data
+        @_datas[table._id] = new Grid.Data(data)
+        @updateManagedTableDep(table)
     , 0
 
 
 class Grid.Data
-  constructor: (table) ->
+  constructor: (data) ->
     # TODO: Instead of expecting prepared cached data,
     # figure out the whole trip to server and caching
     # and stuff like that.
-    if !table.cachedData
+
+    if !data
       @_isEmpty = true
       return
 
-    data = JSON.parse(table.cachedData)
     @_metadata = new Grid.Metadata(data)
 
     # Detect header

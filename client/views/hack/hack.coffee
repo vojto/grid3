@@ -51,6 +51,12 @@ class HackIndex extends Grid.Controller
     options = @defaultTableOptions()
     options.title = 'New group table'
     options.type = Tables.GROUPED
+    current = Session.get('selection')
+    if current.type != 'source'
+      alert('Cannot group data from this table')
+      return
+    
+    options.inputTableId = current._id
     Tables.insert(options)
 
 

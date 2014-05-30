@@ -1,0 +1,24 @@
+template(name='hack_inspector_grouped_table')
+  .inspector
+    .header Source
+    form
+      table.form
+        tr
+          td
+            label Table
+          td
+            = inputTableName
+
+    .header Grouping
+
+    form
+      table.form
+        tr
+          td
+            label Group column
+          td
+            select
+              option(value='foo') column
+
+    .actions-bottom
+      button.delete Delete
