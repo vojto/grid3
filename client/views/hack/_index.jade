@@ -61,7 +61,7 @@ template(name='hack_index_graph')
     .content-wrapper
 
 template(name='hack_inspector')  
-  if isTable
+  if isSource
     +hack_inspector_table
   else if isGraph
     +hack_inspector_graph
