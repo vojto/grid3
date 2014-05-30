@@ -64,7 +64,8 @@ class Grid.Controller
       templateConstructor.rendered = ->
         template = @
         controller = template.controller
-        controller.$el = controller.el = $(template.firstNode)
+        controller.$el = $(template.firstNode)
+        controller.el = controller.$el
         controller.rendered.call(controller, @) if controller.rendered
 
       templateConstructor.destroyed = ->
