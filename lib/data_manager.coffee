@@ -13,40 +13,44 @@ class Grid.DataManager
     if Meteor.isClient
       Meteor.startup =>
         console.log 'startup'
-        Sources.find().observeChanges
+        Tables.find().observeChanges
+          # Here also we should only observe for changes in source and reload it.
+          # This logic should also be moved to something called "Loader."
           changed: (id, fields) =>
             if fields['url']
-              @reloadSource(Sources.findOne(id))
+              @reloadTable(Tables.findOne(id))
 
-  dataForSource: (source) ->
-    key = source._id
+  dataForTable: (table) ->
+    key = table._id
     if !@_datas[key]
-      @_datas[key] = new Grid.Data(source)
+      @_datas[key] = new Grid.Data(table)
     @_datas[key]
 
-  reloadSource: (source) ->
+  reloadTable: (table) ->
     # Workaround for meteor not calling remote method from inside
     # this callback.
     setTimeout =>
-      Sources.set(source._id, {isLoading: true})
-      Meteor.call 'sources.load', source._id, (err, data) =>
-        Sources.set(source._id, {isLoading: false})
+      Tables.set(table._id, {isLoading: true})
+      # This should now look what type of table we're dealing with, and act
+      # accordingly. For now we'll just assume it's a source and load it.
+      Meteor.call 'sources.load', table._id, (err, data) =>
+        Tables.set(table._id, {isLoading: false})
         return if Flash.handle(err)
-        delete @_datas[source._id]
+        delete @_datas[table._id]
         console.log 'finished', err, data
     , 0
 
 
 class Grid.Data
-  constructor: (source) ->
+  constructor: (table) ->
     # TODO: Instead of expecting prepared cached data,
     # figure out the whole trip to server and caching
     # and stuff like that.
-    if !source.cachedData
+    if !table.cachedData
       @_isEmpty = true
       return
 
-    data = JSON.parse(source.cachedData)
+    data = JSON.parse(table.cachedData)
     @_metadata = new Grid.Metadata(data)
 
     # Detect header

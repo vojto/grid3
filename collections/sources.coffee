@@ -1,6 +1,7 @@
-@Sources = new Meteor.Collection2 "sources",
+@Tables = new Meteor.Collection2 "tables",
   schema:
-    collection: { type: String, autoValue: -> 'sources' }
+    collection: { type: String, autoValue: -> 'tables' }
+    type:       { type: String }
     projectId:  { type: String, optional: true }
     title:      { type: String, label: 'Title', optional: true }
     url:        { type: String, label: 'URL', optional: true }
@@ -14,23 +15,23 @@
     isLoading: { type: Boolean, optional: true }
 
 
-@Sources.allow
+@Tables.allow
   insert: (userId, doc) -> true
   update: (userId, doc) -> true
   remove: (userId, doc) -> true
 
-@Sources.isA = (obj) ->
+@Tables.isA = (obj) ->
   return obj.cachedData
 
-@Sources.forProject = (project) ->
-  # For now let's now worry about the project
-  # but instead return ALL of the sources
-  Sources.find()
+@Tables.forProject = (project) ->
+  Tables.find()
 
-@Sources.cachedRecently = (source) ->
-  return false unless source.cachedAt
-  return false unless source.cachedData
+@Tables.cachedRecently = (table) ->
+  return false unless table.cachedAt
+  return false unless table.cachedData
 
-  difference = (new Date() - source.cachedAt)/1000
+  difference = (new Date() - table.cachedAt)/1000
 
   return difference < 1200
+
+

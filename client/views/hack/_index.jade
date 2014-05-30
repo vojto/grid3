@@ -4,12 +4,16 @@ template(name='hack_index')
       li.add-source
           i.entypo.shareable
           | Add source
+      if selection
+        li.group
+          i.entypo.layout
+          | Group
       li.add-graph
           i.entypo.line-graph
           | Add graph
 
   .items
-    each sources
+    each tables
       +hack_index_item
     each graphs
       +hack_index_item
@@ -19,12 +23,12 @@ template(name='hack_index')
 
 template(name='hack_index_item')
   div.item(style=itemStyle, data-id=_id, class=itemClass)
-    if isSource
-      +hack_index_source
+    if isTable
+      +hack_index_table
     else if isGraph
       +hack_index_graph
 
-template(name='hack_index_source')
+template(name='hack_index_table')
   .item-wrapper
     .handle
       i.entypo.shareable
@@ -48,14 +52,14 @@ template(name='hack_index_graph')
     .content-wrapper
 
 template(name='hack_inspector')  
-  if isSource
-    +hack_inspector_source
+  if isTable
+    +hack_inspector_table
   else if isGraph
     +hack_inspector_graph
 
-template(name='hack_inspector_source')
+template(name='hack_inspector_table')
   .inspector
-    .header Source options
+    .header Table options
     form
       table.form
         tr
@@ -78,16 +82,16 @@ template(name='hack_inspector_source')
 
 template(name='hack_inspector_graph')
   .inspector
-    .header Sources
+    .header Tables
     form
       table.form
         tr
           td
-            label Source
+            label Table
           td
-            select.source
+            select.table
               option(value='')
-              each sources
+              each tables
                 option(value=_id)= title
 
     .header Graph type

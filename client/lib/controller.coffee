@@ -6,7 +6,7 @@ class Grid.Controller
   constructor: (template) ->
 
   $: (selector) ->
-    @$el.find(selector)
+    @el.find(selector)
 
 
   @template: (name) ->
@@ -71,7 +71,8 @@ class Grid.Controller
       templateConstructor.destroyed = ->
         template = @
         controller = template.controller
-        controller.$el = null
+        # controller.$el = null
+        # controller.el = null
         controller.destroyed.call(controller, @) if controller.destroyed
 
     , 0

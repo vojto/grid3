@@ -7,17 +7,17 @@ color = d3.scale.category10()
     @query.stop() if @query
     @query = Graphs.find(_id: graph._id).observeChanges 
       changed: (id, fields) =>
-        if ('sourceId' of fields) or ('width' of fields) or ('height' of fields) or ('type' of fields)
+        if ('tableId' of fields) or ('width' of fields) or ('height' of fields) or ('type' of fields)
           # Graph object is not automatically refreshed
           @renderPreview(Graphs.findOne(graph._id), options)
 
   renderPreview: (graph, {$el, width, height}) ->
     # Refresh the graph
-    source = Sources.findOne(graph.sourceId)
-    return unless source
+    table = Tables.findOne(graph.tableId)
+    return unless table
 
     manager = Grid.DataManager.instance()
-    info = manager.dataForSource(source)
+    info = manager.dataForTable(table)
     data = info.data()
     meta = info.metadata()
 

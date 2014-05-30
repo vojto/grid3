@@ -14,12 +14,12 @@ Meteor.methods
   'sources.load': (id) ->
     console.log 'reloading source by id', id
 
-    source = Sources.findOne(id)
+    source = Tables.findOne(id)
     console.log 'Loading source', id
 
     return unless source
 
-    Sources.update source._id, {
+    Tables.update source._id, {
         $set: {
           cachedData: null,
           cachedAt: null,
@@ -45,7 +45,7 @@ Meteor.methods
     isTooLarge = length > 4000000
     console.log 'is too large?', isTooLarge
 
-    Sources.update(source._id, {
+    Tables.update(source._id, {
         $set: {
           cachedData: JSON.stringify(data),
           cachedAt: new Date(),

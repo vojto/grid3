@@ -1,10 +1,10 @@
 @ItemsHelpers =
-  isSource: (item) ->
-    item.collection == 'sources'
+  isTable: (item) ->
+    item.collection == 'tables'
   isGraph: (item) ->
     item.collection == 'graphs'
-  sources: ->
-    Sources.find().fetch()
+  tables: ->
+    Tables.find().fetch()
     # []
   graphs: ->
     Graphs.find().fetch()
@@ -15,7 +15,7 @@ class HackIndex extends Grid.Controller
   @include ItemsHelpers
 
   helpers: [
-    'sources',
+    'tables',
     'graphs',
     'selection'
   ]
@@ -38,8 +38,9 @@ class HackIndex extends Grid.Controller
   addSource: ->
     width = $(document).width()
     height = $(document).height()
-    Sources.insert({
+    Tables.insert({
       title: 'New source',
+      type: 'source',
       width: 230,
       height: 180,
       x: _.random(10, width-250),
@@ -71,7 +72,7 @@ class HackIndex extends Grid.Controller
   deleteSelected: ->
     item = Session.get('selection')
     if item
-      Sources.remove(item._id)
+      Tables.remove(item._id)
       Graphs.remove(item._id)
     Session.set('selection', null)
 
@@ -82,7 +83,7 @@ class HackIndexItem extends Grid.Controller
   helpers: [
     'itemStyle',
     'itemClass',
-    'isSource',
+    'isTable',
     'isGraph',
     'controllerId'
   ]
@@ -112,15 +113,15 @@ class HackIndexItem extends Grid.Controller
     width = $el.outerWidth()
     height = $el.outerHeight()
 
-    Sources.set id, {x: x, y: y, width: width, height: height}
+    Tables.set id, {x: x, y: y, width: width, height: height}
     Graphs.set id, {x: x, y: y, width: width, height: height}
 
-  itemStyle: (source) ->
-    "left: #{source.x||10}px; top: #{source.y||60}px; width: #{source.width||200}px; height: #{source.height||100}px; "
+  itemStyle: (table) ->
+    "left: #{table.x||10}px; top: #{table.y||60}px; width: #{table.width||200}px; height: #{table.height||100}px; "
 
   # Types of items
 
-  isSource: (item) -> item.collection == 'sources'
+  isTable: (item) -> item.collection == 'tables'
   isGraph: (item) -> item.collection == 'graphs'
 
   # Handling selection
@@ -129,15 +130,15 @@ class HackIndexItem extends Grid.Controller
     $(document).trigger('hack.willSelect')
     Session.set('selection', item)
 
-  itemClass: (source) ->
+  itemClass: (table) ->
     selection = Session.get('selection')
-    if selection && selection._id == source._id
+    if selection && selection._id == table._id
       'selected'
     else
       ''
 
-class HackIndexSource extends Grid.Controller
-  @template 'hack_index_source'
+class HackIndexTable extends Grid.Controller
+  @template 'hack_index_table'
 
   helpers: [
     'dataPreview',
@@ -152,8 +153,8 @@ class HackIndexSource extends Grid.Controller
 
   rendered: ->
 
-  dataPreview: (source) ->
-    data = @dataManager.dataForSource(source)
+  dataPreview: (table) ->
+    data = @dataManager.dataForTable(table)
     if data.isEmpty()
       preview = for i in [0..6]
         ['&nbsp;', '&nbsp;', '&nbsp;']
@@ -167,8 +168,8 @@ class HackIndexSource extends Grid.Controller
 
     mapped
 
-  columns: (source) ->
-    data = @dataManager.dataForSource(source)
+  columns: (table) ->
+    data = @dataManager.dataForTable(table)
     if data.isEmpty()
       ['A', 'B', 'C']
     else
@@ -181,7 +182,7 @@ class HackIndexGraph extends Grid.Controller
 
   rendered: ->
     graph = @template.data
-    @$('select.source').val(graph.sourceId)
+    @$('select.table').val(graph.tableId)
 
     @autoRenderPreview graph,
       $el: @$el.find('.content-wrapper')

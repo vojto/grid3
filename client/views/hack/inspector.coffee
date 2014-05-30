@@ -1,21 +1,21 @@
 class HackInspector extends Grid.Controller
   @include ItemsHelpers
   @template 'hack_inspector'
-  helpers: ['isSource', 'isGraph']
+  helpers: ['isTable', 'isGraph']
 
 class HackInspectorGraph extends Grid.Controller
   @template 'hack_inspector_graph'
   @include ItemsHelpers
   @include Graphing
 
-  helpers: ['sources', 'graphTypeClass']
+  helpers: ['tables', 'graphTypeClass']
 
   actions:
     'click .delete': 'delete'
     'click ul.graph-types li': 'changeType'
 
   events:
-    'change select.source': 'changeSource'
+    'change select.table': 'changeTable'
 
   created: ->
 
@@ -27,7 +27,7 @@ class HackInspectorGraph extends Grid.Controller
       graph = Session.get('selection')
       return unless graph
 
-      @$('select.source').val(graph.sourceId)
+      @$('select.table').val(graph.tableId)
       @autoRenderPreview graph,
         $el: @$el
         width: ($el) -> $el.width() - 20
@@ -36,8 +36,8 @@ class HackInspectorGraph extends Grid.Controller
   delete: ({_id}) ->
     Graphs.remove(_id)
 
-  changeSource: (e) =>
-    Graphs.set(@template.data._id, {sourceId: @$('select.source').val()})
+  changeTable: (e) =>
+    Graphs.set(@template.data._id, {tableId: @$('select.table').val()})
 
   graphTypeClass: (type, graph) ->
     # console.log 'args', arguments
@@ -55,8 +55,8 @@ class HackInspectorGraph extends Grid.Controller
     type = JSON.parse(JSON.stringify(type))
     Graphs.set(@template.data._id, {type: type})
 
-class HackInspectorSource extends Grid.Controller
-  @template 'hack_inspector_source'
+class HackInspectorTable extends Grid.Controller
+  @template 'hack_inspector_table'
 
   actions:
     'blur input': 'saveChanges'
@@ -66,12 +66,12 @@ class HackInspectorSource extends Grid.Controller
     $(document).on 'hack.willSelect', =>
       @$('input').blur()
 
-  saveChanges: (source) ->
+  saveChanges: (table) ->
     data =
       title: @$('input.title').val()
       url: @$('input.url').val()
-    Sources.set(source._id, data)
+    Tables.set(table._id, data)
 
-  delete: (source) ->
-    Sources.remove(source._id)
+  delete: (table) ->
+    Tables.remove(table._id)
     Session.set('selection', null)

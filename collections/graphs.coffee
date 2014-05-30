@@ -9,8 +9,6 @@
     y: { type: Number, label: 'Y', optional: true }
     width: { type: Number, optional: true }
     height: { type: Number, optional: true }
-    # SUCH TEMPORARY, REMOVE MUCH SOON
-    sourceId: { type: String, optional: true }
     type: { type: String, optional: true }
 
 @Graphs.allow

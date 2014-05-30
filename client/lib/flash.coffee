@@ -9,7 +9,7 @@ class @Flash
 
 
 class @Modal extends Grid.Controller
-  template: 'modal'
+  @template 'modal'
 
   actions:
     'click button': 'hide'
@@ -21,6 +21,8 @@ class @Modal extends Grid.Controller
     UI.insert(component, document.body)
 
     @instance.component = component
+
+    @instance.$('button').focus()
 
   hide: ->
     @$el.remove()
