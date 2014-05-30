@@ -1,4 +1,4 @@
-ItemsHelpers =
+@ItemsHelpers =
   isSource: (item) ->
     item.collection == 'sources'
   isGraph: (item) ->
@@ -9,8 +9,6 @@ ItemsHelpers =
   graphs: ->
     Graphs.find().fetch()
     # []
-
-color = d3.scale.category10()
 
 class HackIndex extends Grid.Controller
   @template 'hack_index'
@@ -177,92 +175,6 @@ class HackIndexSource extends Grid.Controller
 
       data.columns()
 
-Graphing =
-  autoRenderPreview: (graph, options) ->
-    @renderPreview(graph, options)
-
-    @query.stop() if @query
-    @query = Graphs.find(_id: graph._id).observeChanges 
-      changed: (id, fields) =>
-        if ('sourceId' of fields) or ('width' of fields) or ('height' of fields)
-          # Graph object is not automatically refreshed
-          @renderPreview(Graphs.findOne(graph._id), options)
-
-  renderPreview: (graph, {$el, width, height}) ->
-    # Refresh the graph
-    source = Sources.findOne(graph.sourceId)
-    return unless source
-
-    manager = Grid.DataManager.instance()
-    info = manager.dataForSource(source)
-    data = info.data()
-    meta = info.metadata()
-
-    index = {x: 0, y: 1}
-    domain =
-      x: d3.extent(data, (d) -> d[index.x])
-      y: d3.extent(data, (d) -> d[index.y])
-
-    margin =
-      top: 10
-      right: 0
-      bottom: 20
-      left: 40
-
-    outerWidth = width($el) if typeof width == 'function'
-    outerHeight = height($el) if typeof height == 'function'
-
-    return if outerWidth < 0
-
-    width = outerWidth - margin.left - margin.right
-    height = outerHeight - margin.top - margin.bottom
-
-    size = {width: width, height: height}
-
-    scale =
-      x: d3.time.scale().domain(domain.x).range([0, width])
-      y: d3.scale.linear().domain(domain.y).range([height, 0])
-
-    line = d3.svg.area()
-      .interpolate('basis')  
-      .x((d) -> scale.x(d[index.x]) )
-      .y1((d) -> scale.y(d[index.y]) )
-      .y0(height)
-
-
-    $el.find('svg').remove()
-    el = d3.select($el.get(0))
-    svg = el.append('svg')
-      .attr('class', 'preview')
-      .attr('width', outerWidth)
-      .attr('height', outerHeight)
-      .append('g')
-        .attr('transform', "translate(#{margin.left}, #{margin.top})")
-
-    svg.call(@addAxes, scale, size)
-
-    svg.append('path')
-      .attr('class', 'line')  
-      .attr('d', line(data))
-      # .style('fill', '#f591f4')
-      .style('fill', color(graph._id))
-      .style('stroke-width', '0')
-
-  addAxes: (svg, scale, size) ->
-    axis =
-      x: d3.svg.axis().scale(scale.x).orient('bottom')
-      y: d3.svg.axis().scale(scale.y).orient('left')
-
-    svg.append('g')
-      .attr('class', 'axis')
-      .attr('transform', "translate(0, #{size.height+1})")
-      .call(axis.x)
-
-    svg.append('g')
-      .attr('class', 'axis')
-        .attr('transform', "translate(-1, 0)")
-      .call(axis.y)
-
 class HackIndexGraph extends Grid.Controller
   @template 'hack_index_graph'
   @include Graphing
@@ -276,65 +188,3 @@ class HackIndexGraph extends Grid.Controller
       width: ($el) -> $el.width()
       height: ($el) -> $el.height()
 
-# Source inspector
-
-class HackInspector extends Grid.Controller
-  @include ItemsHelpers
-  @template 'hack_inspector'
-  helpers: ['isSource', 'isGraph']
-
-class HackInspectorGraph extends Grid.Controller
-  @template 'hack_inspector_graph'
-  @include ItemsHelpers
-  @include Graphing
-
-  helpers: ['sources']
-
-  actions:
-    'click .delete': 'delete'
-
-  events:
-    'change select.source': 'changeSource'
-
-  created: ->
-
-  destroyed: ->
-    @comp.stop()
-
-  rendered: ->
-    @comp = Deps.autorun =>
-      graph = Session.get('selection')
-      return unless graph
-
-      @$('select.source').val(graph.sourceId)
-      @autoRenderPreview graph,
-        $el: @$el
-        width: ($el) -> $el.width() - 20
-        height: -> 150
-
-  delete: ({_id}) ->
-    Graphs.remove(_id)
-
-  changeSource: (e) =>
-    Graphs.set(@template.data._id, {sourceId: @$('select.source').val()})
-
-class HackInspectorSource extends Grid.Controller
-  @template 'hack_inspector_source'
-
-  actions:
-    'blur input': 'saveChanges'
-    'click .delete': 'delete'
-
-  rendered: ->
-    $(document).on 'hack.willSelect', =>
-      @$('input').blur()
-
-  saveChanges: (source) ->
-    data =
-      title: @$('input.title').val()
-      url: @$('input.url').val()
-    Sources.set(source._id, data)
-
-  delete: (source) ->
-    Sources.remove(source._id)
-    Session.set('selection', null)

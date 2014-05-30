@@ -42,13 +42,19 @@ class Grid.Controller
 
         helpers = {}
 
+        addHelper = (method, key) ->
+          helpers[key] = ->
+            args = (a for a in arguments)
+            args.unshift(@)
+            controller[method].apply(controller, args)
+
         # Collect helpers
         if _(controller.helpers).isArray()
           _(controller.helpers).each (method) ->
-            helpers[method] = -> controller[method].call(controller, @)
+            addHelper(method, method)
         else
           _(controller.helpers).each (method, key) ->
-            helpers[key] = -> controller[method].call(controller, @)
+            addHelper(method, key)
 
 
         templateConstructor.helpers(helpers)

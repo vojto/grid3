@@ -62,3 +62,42 @@
     margin-left 10px
     border 1px solid #d4dae1;
     background #fff
+
+
+ul.graph-types
+  list-style none
+  padding 0
+  clearfix()
+  color #9ca0a2
+  font-size 10pt
+
+  li
+    width 50%
+    box-sizing border-box
+    height 90px
+    float left
+    text-align center
+
+    .image
+      margin auto
+      background #fff
+      border 1px solid #e2e2e2
+      width 84px
+      height 58px
+
+    &.selected
+      font-weight 500
+      color #5b95ed
+
+      .image
+        border-radius 2px
+        border 2px solid #5b95ed
+
+    &.line .image
+      image: '/images/graphs/line.png' 84px 58px
+    &.bar .image
+      image: '/images/graphs/bar.png' 84px 58px
+    &.area .image
+      image: '/images/graphs/area.png' 84px 58px
+    &.scatterplot .image
+      image: '/images/graphs/scatterplot.png' 84px 58px
