@@ -200,8 +200,19 @@ Graphing =
       x: d3.extent(data, (d) -> d[index.x])
       y: d3.extent(data, (d) -> d[index.y])
 
-    width = width($el) if typeof width == 'function'
-    height = height($el) if typeof height == 'function'
+    margin =
+      top: 10
+      right: 0
+      bottom: 20
+      left: 40
+
+    outerWidth = width($el) if typeof width == 'function'
+    outerHeight = height($el) if typeof height == 'function'
+
+    width = outerWidth - margin.left - margin.right
+    height = outerHeight - margin.top - margin.bottom
+
+    size = {width: width, height: height}
 
     scale =
       x: d3.time.scale().domain(domain.x).range([0, width])
@@ -217,8 +228,12 @@ Graphing =
     el = d3.select($el.get(0))
     svg = el.append('svg')
       .attr('class', 'preview')
-      .attr('width', width)
-      .attr('height', height)
+      .attr('width', outerWidth)
+      .attr('height', outerHeight)
+      .append('g')
+        .attr('transform', "translate(#{margin.left}, #{margin.top})")
+
+    svg.call(@addAxes, scale, size)
 
     svg.append('path')
       .attr('class', 'line')  
@@ -226,6 +241,21 @@ Graphing =
       # .style('fill', '#f591f4')
       .style('fill', color(graph._id))
       .style('stroke-width', '0')
+
+  addAxes: (svg, scale, size) ->
+    axis =
+      x: d3.svg.axis().scale(scale.x).orient('bottom')
+      y: d3.svg.axis().scale(scale.y).orient('left')
+
+    svg.append('g')
+      .attr('class', 'axis')
+      .attr('transform', "translate(0, #{size.height+1})")
+      .call(axis.x)
+
+    svg.append('g')
+      .attr('class', 'axis')
+        .attr('transform', "translate(-1, 0)")
+      .call(axis.y)
 
 class HackIndexGraph extends Grid.Controller
   @template 'hack_index_graph'
