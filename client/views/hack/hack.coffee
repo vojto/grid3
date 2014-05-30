@@ -40,6 +40,7 @@ class HackIndex extends Grid.Controller
     options = @defaultTableOptions()
     options.title = 'New source'
     options.type = 'source'
+    options.columnIds = []
     Tables.insert(options)
 
   addGraph: ->
@@ -177,11 +178,7 @@ class HackIndexSource extends Grid.Controller
     mapped
 
   columns: (table) ->
-    data = @dataManager.dataForTable(table)
-    if data.isEmpty()
-      ['A', 'B', 'C']
-    else
-      data.columns()
+    TableColumns.findArray(table.columnIds)
 
 class HackIndexGraph extends Grid.Controller
   @template 'hack_index_graph'

@@ -64,11 +64,40 @@ class Grid.DataManager
       Meteor.call 'sources.load', table._id, (err, data) =>
         Tables.set(table._id, {isLoading: false}) # this probably updates the table in the UI
         return if Flash.handle(err)
-        delete @_datas[table._id]
-        @_datas[table._id] = new Grid.Data(data)
-        @updateManagedTableDep(table)
+        @handleTableDataReceive(table, data)
     , 0
 
+  # This method does THREE important things:
+  # 1. Updates the schema based on received data
+  # 2. Processes received data (for now automatically, later it
+  # will use the schema -- should user have modified it)
+  # 3. Store data in cache for display and further processing
+  handleTableDataReceive: (table, data) ->
+    metadata = new Grid.Metadata(data)
+
+    # 1. Wipe existing columns (if user made any modifications --
+    # too bad, changing the URL removes all columns and creates
+    # the automatically inferred from data.
+    TableColumns.remove(id) for id in table.columnIds
+    Tables.set(table._id, {columnIds: []})
+
+    # Detect header
+    columnIds = for columnName, i in metadata.columnNames()
+      TableColumns.insert({
+        title: columnName,
+        type: metadata.typeForColumn(i)
+      })
+    Tables.set(table._id, {columnIds: columnIds})
+    
+    
+
+    # Create columns from metadata
+
+    delete @_datas[table._id]
+    @_datas[table._id] = new Grid.Data(data)
+    @updateManagedTableDep(table)
+
+  
 
 class Grid.Data
   constructor: (data) ->
@@ -82,15 +111,9 @@ class Grid.Data
 
     @_metadata = new Grid.Metadata(data)
 
-    # Detect header
+    # Remove the header
     if @_metadata.hasHeader()
-      headerRow = data[0]
-      @_columns = headerRow
       data.splice(0, 1)
-    else
-      firstLetter = "A".charCodeAt(0)
-      @_columns = for cell, i in data[0]
-        String.fromCharCode(firstLetter + i)
 
     # Parse data using datatypes from metadata
     @_data = data.map (d) =>
@@ -115,8 +138,6 @@ class Grid.Data
   metadata: ->
     @_metadata
 
-  columns: ->
-    @_columns
 
   isEmpty: ->
     @_isEmpty

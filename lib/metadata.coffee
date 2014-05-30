@@ -41,6 +41,16 @@ class Grid.Metadata
   typeForColumn: (column) ->
     @types[column]
 
+  columnNames: ->
+    if @hasHeader()
+      @firstRow
+    else
+      @generateColumnNames(@firstRow.length)
+
+  generateColumnNames: (count) ->
+    firstLetter = "A".charCodeAt(0)
+    String.fromCharCode(firstLetter + i) for i in [0..count]
+
   columnsOfPreferredTypes: (preferredTypes, options={}) ->
     columns = []
     except = options.except

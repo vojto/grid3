@@ -15,6 +15,9 @@
     isLoading: { type: Boolean, optional: true }
     inputTableId: { type: String, optional: true }
 
+    # *Table
+    columnIds:    { type: [String] }
+
     # Grouped Table
     groupColumnIndex: { type: Number, optional: true }
 
@@ -41,3 +44,13 @@ Tables.GROUPED = 'grouped'
   return difference < 1200
 
 
+@TableColumns = new Meteor.Collection2 "table_columns",
+  schema:
+    collection: { type: String, autoValue: -> 'table_columns' }
+    title:      { type: String }
+    type:       { type: String }
+
+@TableColumns.allow
+  insert: (userId, doc) -> true
+  update: (userId, doc) -> true
+  remove: (userId, doc) -> true
