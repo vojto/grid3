@@ -8,6 +8,10 @@ class HackInspectorGroupedTable extends Grid.Controller
   @inputTableName: (table) ->
     Tables.findOne(table.inputTableId)?.title
 
+  @columns: (table) ->
+    input = Tables.findOne(table.inputTableId)
+    TableColumns.findArray(input.columnIds)
+
   # Actions
 
   delete: ->

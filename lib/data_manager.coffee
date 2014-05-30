@@ -46,7 +46,7 @@ class Grid.DataManager
     # dep.depend()
 
   updateManagedTableDep: (table) ->
-    console.log 'updating dep', @_managedTablesDeps
+    # console.log 'updating dep', @_managedTablesDeps
     # @_managedTablesDeps[table._id].changed()
 
   reloadTable: (table) ->

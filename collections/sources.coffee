@@ -16,10 +16,10 @@
     inputTableId: { type: String, optional: true }
 
     # *Table
-    columnIds:    { type: [String] }
+    columnIds:    { type: [String], defaultValue: [] }
 
     # Grouped Table
-    groupColumnIndex: { type: Number, optional: true }
+    groupColumnId: { type: Number, optional: true }
 
 Tables.SOURCE = 'source'
 Tables.GROUPED = 'grouped'

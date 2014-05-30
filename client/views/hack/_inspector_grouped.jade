@@ -18,7 +18,9 @@ template(name='hack_inspector_grouped_table')
             label Group column
           td
             select
-              option(value='foo') column
+              option
+              each columns
+                option(value=_id)= title
 
     .actions-bottom
       button.delete Delete
