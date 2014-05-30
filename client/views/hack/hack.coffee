@@ -29,7 +29,7 @@ class HackIndex extends Grid.Controller
   constructor: ->
     super
 
-  didRender: ->
+  rendered: ->
     $(document.body).mousedown(@deselect.bind(@))
 
     Mousetrap.bind 'backspace', (e) =>
@@ -99,7 +99,7 @@ class HackIndexItem extends Grid.Controller
   constructor: ->
     super
 
-  didRender: ->
+  rendered: ->
     $(@template.firstNode).draggable(stop: @didStopDragging, handle: '.handle')
     $(@template.firstNode).resizable(stop: @didStopDragging)
 
@@ -152,7 +152,7 @@ class HackIndexSource extends Grid.Controller
     super
     @dataManager = Grid.DataManager.instance()
 
-  didRender: ->
+  rendered: ->
 
   dataPreview: (source) ->
     data = @dataManager.dataForSource(source)
@@ -189,8 +189,6 @@ Graphing =
           @renderPreview(Graphs.findOne(graph._id), options)
 
   renderPreview: (graph, {$el, width, height}) ->
-    console.log 'rendering'
-
     # Refresh the graph
     source = Sources.findOne(graph.sourceId)
     return unless source
@@ -269,7 +267,7 @@ class HackIndexGraph extends Grid.Controller
   @template 'hack_index_graph'
   @include Graphing
 
-  didRender: ->
+  rendered: ->
     graph = @template.data
     @$('select.source').val(graph.sourceId)
 
@@ -298,14 +296,12 @@ class HackInspectorGraph extends Grid.Controller
   events:
     'change select.source': 'changeSource'
 
-  didCreate: ->
-    console.log 'inspector was created'
+  created: ->
 
-  didDestroy: ->
-    console.log 'inspector was destroyed'
+  destroyed: ->
     @comp.stop()
 
-  didRender: ->
+  rendered: ->
     @comp = Deps.autorun =>
       graph = Session.get('selection')
       return unless graph
@@ -329,7 +325,7 @@ class HackInspectorSource extends Grid.Controller
     'blur input': 'saveChanges'
     'click .delete': 'delete'
 
-  didRender: ->
+  rendered: ->
     $(document).on 'hack.willSelect', =>
       @$('input').blur()
 
