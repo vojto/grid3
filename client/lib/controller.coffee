@@ -52,12 +52,20 @@ class Grid.Controller
 
 
         templateConstructor.helpers(helpers)
+
+        controller.didCreate.call(controller, @) if controller.didCreate
       
       templateConstructor.rendered = ->
         template = @
         controller = template.controller
         controller.$el = controller.el = $(template.firstNode)
         controller.didRender.call(controller, @) if controller.didRender  
+
+      templateConstructor.destroyed = ->
+        template = @
+        controller = template.controller
+        controller.$el = null
+        controller.didDestroy.call(controller, @) if controller.didDestroy
 
     , 0
 

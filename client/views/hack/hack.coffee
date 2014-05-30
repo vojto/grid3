@@ -1,6 +1,8 @@
 ItemsHelpers =
-  isSource: (item) -> item.collection == 'sources'
-  isGraph: (item) -> item.collection == 'graphs'
+  isSource: (item) ->
+    item.collection == 'sources'
+  isGraph: (item) ->
+    item.collection == 'graphs'
   sources: ->
     Sources.find().fetch()
     # []
@@ -179,13 +181,16 @@ Graphing =
   autoRenderPreview: (graph, options) ->
     @renderPreview(graph, options)
 
-    Graphs.find(_id: graph._id).observeChanges 
+    @query.stop() if @query
+    @query = Graphs.find(_id: graph._id).observeChanges 
       changed: (id, fields) =>
         if ('sourceId' of fields) or ('width' of fields) or ('height' of fields)
           # Graph object is not automatically refreshed
           @renderPreview(Graphs.findOne(graph._id), options)
 
   renderPreview: (graph, {$el, width, height}) ->
+    console.log 'rendering'
+
     # Refresh the graph
     source = Sources.findOne(graph.sourceId)
     return unless source
@@ -209,6 +214,8 @@ Graphing =
     outerWidth = width($el) if typeof width == 'function'
     outerHeight = height($el) if typeof height == 'function'
 
+    return if outerWidth < 0
+
     width = outerWidth - margin.left - margin.right
     height = outerHeight - margin.top - margin.bottom
 
@@ -223,6 +230,7 @@ Graphing =
       .x((d) -> scale.x(d[index.x]) )
       .y1((d) -> scale.y(d[index.y]) )
       .y0(height)
+
 
     $el.find('svg').remove()
     el = d3.select($el.get(0))
@@ -290,14 +298,23 @@ class HackInspectorGraph extends Grid.Controller
   events:
     'change select.source': 'changeSource'
 
-  didRender: ->
-    graph = @template.data
-    @$('select.source').val(graph.sourceId)
+  didCreate: ->
+    console.log 'inspector was created'
 
-    @autoRenderPreview graph,
-      $el: @$el
-      width: ($el) -> $el.width() - 20
-      height: -> 150
+  didDestroy: ->
+    console.log 'inspector was destroyed'
+    @comp.stop()
+
+  didRender: ->
+    @comp = Deps.autorun =>
+      graph = Session.get('selection')
+      return unless graph
+
+      @$('select.source').val(graph.sourceId)
+      @autoRenderPreview graph,
+        $el: @$el
+        width: ($el) -> $el.width() - 20
+        height: -> 150
 
   delete: ({_id}) ->
     Graphs.remove(_id)
