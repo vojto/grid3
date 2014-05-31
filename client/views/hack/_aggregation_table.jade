@@ -3,4 +3,12 @@ template(name='hack_index_aggregation_table')
     .handle
       i.entypo.numbered-list
     .content-wrapper
-      | Aggregation table here
+      = dataPreview
+      table
+        //- tr
+        //-   each columns
+        //-     th= title
+        //- each dataPreview
+        //-   tr
+        //-     each row
+        //-       td!= cell

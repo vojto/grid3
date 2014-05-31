@@ -1,4 +1,4 @@
-DataHelpers =
+@DataHelpers =
   dataForTemplate: (data) ->
     _(data).map (row, i) ->
       row = _(row).map (cell, j) ->

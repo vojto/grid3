@@ -5,6 +5,7 @@ class @Logger
     green0: ["28bb00"]
     green1: ["fff", "1e8f00"]
     blue1: ["fff", "165ad7"]
+    red1: ["fff", "c03a3a"]
 
   constructor: ({@enabled}) ->
     _(@colors).each (values, color) =>

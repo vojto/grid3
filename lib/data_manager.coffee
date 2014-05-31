@@ -17,7 +17,7 @@ class Grid.DataManager
     # Value: Array of table IDs that depend on that table
     @_deps = {}
 
-    @log = new Logger(enabled: false)
+    @log = new Logger(enabled: true)
 
     if Meteor.isClient
       Meteor.startup =>
@@ -94,6 +94,11 @@ class Grid.DataManager
       new Grid.Data()
     else if table.type is Tables.GROUPED
       new Grid.GroupedData()
+    else if table.type is Tables.AGGREGATION
+      new Grid.Data()
+    else
+      throw new Error("Cant create empty data for table type #{table.type}")
+      
 
   # Marking evaluation
   # ------------------------------------------------------------------
@@ -156,8 +161,10 @@ class Grid.DataManager
       @evaluateSourceTable(table)
     else if table.type is Tables.GROUPED
       @evaluateGroupedTable(table)
+    else if table.type is Tables.AGGREGATION
+      @evaluateAggregationTable(table)
     else
-      throw new Error("Cannot evaluate table of unknown type #{table.type}")
+      @log.red1("Don't know how to evaluate table of type #{table.type}")
 
   evaluateSourceTable: (table) ->
     table = Tables.findOne(table._id)
@@ -240,6 +247,13 @@ class Grid.DataManager
       groupedData.addGroup(group, new Grid.Data(rows))
 
     @finishEval(table, groupedData)
+
+  evaluateAggregationTable: (table) ->
+    console.log 'evaluating aggregation table now...'
+    # TODO
+    throw new Error('TODO')
+
+    @cancelEval(table)
 
 
 class Grid.Data
