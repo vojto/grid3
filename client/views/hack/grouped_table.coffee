@@ -6,7 +6,7 @@ class HackIndexGroupedTable extends Grid.Controller
     @manager = Grid.DataManager.instance()
 
   @groups: (table) ->
-    console.log("%cRendering GROUPED TABLE", "color: blue;");
+    # console.log("%cRendering GROUPED TABLE", "color: blue;");
 
     data = @manager.dataForTable(table)
     columns = @manager.columnsForTable(table)

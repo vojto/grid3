@@ -17,13 +17,15 @@ class Grid.DataManager
     # Value: Array of table IDs that depend on that table
     @_deps = {}
 
+    @log = new Logger(enabled: false)
+
     if Meteor.isClient
       Meteor.startup =>
         Tables.find().observeChanges
           # Here also we should only observe for changes in source and reload it.
           # This logic should also be moved to something called "Loader."
           changed: (id, fields) =>
-            if fields['url'] or fields['groupColumnIndex']
+            if 'url' of fields or 'groupColumnIndex' of fields
               setTimeout =>
                 @markTableNeedingEval(Tables.findOne(id))
               , 0
@@ -57,7 +59,7 @@ class Grid.DataManager
   # evaluation. When this is called after a table has been added previously, then
   # doesn't schedule evaluation.
   dataForTable: (table) ->
-    console.log("%cRequesting data for #{table.title}", "color: red;");
+    # console.log("%cRequesting data for #{table.title}", "color: red;");
     @addTable(table)
     @depend(table)
     @_tables[table._id].data
@@ -81,7 +83,7 @@ class Grid.DataManager
     @_tables[table._id].data = data
 
     # Update the UI
-    console.log("%cUpdating UI for table #{table.title}", "color: green;");
+    @log.green0("Updating UI for table #{table.title}, data size: #{data.length()}")
     @_tables[table._id].uiDep.changed()
 
   setDataToEmpty: (table) ->
@@ -106,6 +108,7 @@ class Grid.DataManager
     @markTableNeedingEval(table) for table in dependentTables
 
   markTableNeedingEval: (table) ->
+    @log.green1("Marking needing eval #{table.title}, current status: #{@tableStatus(table)}")
     unless @tableStatus(table) == EVALUATING
       @setTableStatus(table, NEEDS_EVAL)
       @scheduleEvaluation()
@@ -120,12 +123,12 @@ class Grid.DataManager
   # ------------------------------------------------------------------
 
   cancelEval: (table) ->
-    console.log("%cFinished evaluating #{table.title}", "background-color: #d77d13; color: #fff");
+    @log.orange2("Cancelling evaluation of #{table.title}")
     @setTableStatus(table, READY)
     @setDataToEmpty(table)
 
   finishEval: (table, data) ->
-    console.log("%cFinished evaluating #{table.title}", "background-color: #d77d13; color: #fff");
+    @log.orange2("Finished evaluating #{table.title}")
     @setTableStatus(table, READY)
     @setData(table, data)
 
@@ -140,8 +143,6 @@ class Grid.DataManager
     @evaluateTimer = setTimeout @evaluateTables.bind(@), 0
 
   evaluateTables: ->
-    console.log 'tables', @_tables
-
     infos = (info for id, info of @_tables when info.status == NEEDS_EVAL)
     for info in infos
       @evaluateTable(info.table)
@@ -149,7 +150,7 @@ class Grid.DataManager
   evaluateTable: (table) ->
     @setTableStatus(table, EVALUATING)
 
-    console.log("%cEvaluating #{table.title}", "background-color: #f68f16; color: #fff");
+    @log.orange1("Evaluating #{table.title}")
 
     if table.type is Tables.SOURCE
       @evaluateSourceTable(table)
@@ -206,7 +207,6 @@ class Grid.DataManager
   evaluateGroupedTable: (table) ->
     table = Tables.findOne(table._id)
 
-    console.log '<<< EVALUATING GROUPED TABLE >>>'
     inputTable = Tables.findOne(table.inputTableId)
     inputData = @dataForTable(inputTable)
     groupIndex = table.groupColumnIndex
@@ -238,8 +238,6 @@ class Grid.DataManager
 
     for group, rows of groups
       groupedData.addGroup(group, new Grid.Data(rows))
-    
-    console.log 'grouped data', groupedData
 
     @finishEval(table, groupedData)
 
@@ -260,6 +258,7 @@ class Grid.Data
   data: -> @_data
   metadata: -> @_metadata
   isEmpty: -> @_isEmpty
+  length: -> @_data?.length or 0
 
 # This class holds structure of grouped data
 # Does it also process the data? Apply the grouping?
@@ -282,3 +281,6 @@ class Grid.GroupedData extends Grid.Data
 
   dataForGroup: (group) ->
     @_groups[group]
+
+  length: ->
+    _(@_groups).size() or 0

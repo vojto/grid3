@@ -8,7 +8,8 @@ class Grid.Controller
   constructor: (template) ->
 
   $: (selector) ->
-    @el.find(selector)
+    @el.find(selector) if @el
+    # TODO: Log an error if this failed
 
 
   @template: (name) ->

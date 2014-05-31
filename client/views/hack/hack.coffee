@@ -163,7 +163,7 @@ class HackIndexSource extends Grid.Controller
   rendered: ->
 
   @dataPreview: (table) ->
-    console.log("%cRendering TABLE", "color: blue;");
+    # console.log("%cRendering TABLE", "color: blue;");
     data = @dataManager.dataForTable(table)
     if data.isEmpty()
       preview = []
