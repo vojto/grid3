@@ -77,6 +77,7 @@ class Grid.DataManager
 
   setData: (table, data) ->
     if data.isEmpty() && @_tables[table._id].data.isEmpty()
+      console.log 'returning because both datasets are empty'
       return
 
     # Set data
@@ -249,11 +250,29 @@ class Grid.DataManager
     @finishEval(table, groupedData)
 
   evaluateAggregationTable: (table) ->
-    console.log 'evaluating aggregation table now...'
-    # TODO
-    throw new Error('TODO')
+    inputTable = Tables.findOne(table.inputTableId)
+    preInputTable = Tables.findOne(inputTable.inputTableId)
+    inputData = @dataForTable(inputTable)
 
-    @cancelEval(table)
+    columns = []
+
+    # Create the column for group name -- ideally we will use the original
+    # column name here from the group table.
+
+    # Get the original group column
+    groupColumn = TableColumns.findOne(preInputTable.columnIds[inputTable.groupColumnIndex])
+    columns.push(groupColumn)
+
+    TableColumns.replaceColumns(table, columns)
+
+
+
+
+    data = new Grid.Data()
+    for group in inputData.groups()
+      rows = inputData.dataForGroup(group)
+      data.addRow([group])
+    @finishEval(table, data)
 
 
 class Grid.Data
@@ -263,6 +282,7 @@ class Grid.Data
     # and stuff like that.
 
     if !data
+      @_data = []
       @_isEmpty = true
       return
 
@@ -273,6 +293,11 @@ class Grid.Data
   metadata: -> @_metadata
   isEmpty: -> @_isEmpty
   length: -> @_data?.length or 0
+
+  addRow: (row) ->
+    @_data.push(row)
+    @_isEmpty = false if @_isEmpty
+
 
 # This class holds structure of grouped data
 # Does it also process the data? Apply the grouping?

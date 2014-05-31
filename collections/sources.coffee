@@ -77,3 +77,7 @@ TableColumns.insertForTable = (table, columns) ->
     column.index = i
     TableColumns.insert(column)
   Tables.set(table._id, {columnIds: ids})
+
+TableColumns.replaceColumns = (table, columns) ->
+  @removeAllForTable(table)
+  @insertForTable(table, columns)

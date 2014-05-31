@@ -18,6 +18,7 @@
     table = Session.get('selection')
     return [] unless table
     input = Tables.findOne(table.inputTableId)
+    return [] unless input
     TableColumns.findArray(input.columnIds)
 
 @TableActions =

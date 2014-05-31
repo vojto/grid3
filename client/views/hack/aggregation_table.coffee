@@ -6,13 +6,8 @@ class AggregationTable extends Grid.Controller
     @manager = Grid.DataManager.instance()
 
   @dataPreview: (table) ->
-    Log.blue1 'showing data preview'
-    # console.log("%cRendering TABLE", "color: blue;");
     data = @manager.dataForTable(table)
-    if data.isEmpty()
-      preview = []
-    else
-      preview = data.preview()
+    preview = data.data()
     @constructor.dataForTemplate(preview)
 
   @columns: (table) ->

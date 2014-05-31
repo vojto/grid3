@@ -11,11 +11,11 @@ class HackInspectorAggregationTable extends Grid.Controller
     'change form.aggregation select': 'updateAggregations'
 
   @aggregations: ->
-    console.log 'calling helper for aggregations'
     # We have to make sure this will be very reactive, in other words reactive as fuck
     # But I don't understand why isn't this shit reactive by default. Perhaps it's because
     # only cursors are reactive, not results of findOne, which current @data is.
     table = Session.get('selection') # This is shitty way to do this :-(
+    return [] unless table
     cursor = Tables.find({_id: table._id})
     cursor.fetch()[0].aggregations
 
