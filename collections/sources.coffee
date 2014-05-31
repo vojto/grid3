@@ -22,7 +22,13 @@
     groupColumnIndex: { type: String, optional: true }
 
     # Aggregation table
-    userColumns: { type: [Object], optional: true }
+    aggregations: { type: [Object], defaultValue: [] }
+    'aggregations.$.name': { type: String }
+    'aggregations.$.columnIndex': { type: String }
+    'aggregations.$.function': { type: String }
+
+
+    # userColumns: { type: [Object], optional: true }
     # InferredColumn
     #   
 

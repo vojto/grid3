@@ -4,6 +4,7 @@ class @Logger
     orange2: ["fff", "d77d13"]
     green0: ["28bb00"]
     green1: ["fff", "1e8f00"]
+    blue1: ["fff", "165ad7"]
 
   constructor: ({@enabled}) ->
     _(@colors).each (values, color) =>
@@ -15,3 +16,5 @@ class @Logger
     style = "color: ##{fg}; -webkit-border-radius: 3px;"
     style += "background-color: ##{bg}; " if bg
     console.log("%c#{message}", style)
+
+@Log = new Logger(enabled: true)

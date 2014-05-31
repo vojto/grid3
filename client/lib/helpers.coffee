@@ -13,7 +13,10 @@
     Graphs.find().fetch()
   inputTableName: (table) ->
     Tables.findOne(table.inputTableId)?.title
+  # TODO: Rename to inputTableColumns
   columns: (table) ->
+    table = Session.get('selection')
+    return [] unless table
     input = Tables.findOne(table.inputTableId)
     TableColumns.findArray(input.columnIds)
 

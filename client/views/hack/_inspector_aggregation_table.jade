@@ -9,7 +9,39 @@ template(name='hack_inspector_aggregation_table')
           td
             = inputTableName
 
-    .header Aggregation
+    .header
+      | Aggregations
+      i.icon-button.entypo.circled-plus.add-aggregation
+    
+    each aggregations
+      .box
+        .buttons
+          i.icon-button.entypo.circled-cross.remove-aggregation
+        form.aggregation
+          table.form
+            tr
+              td
+                label Name
+              td
+                input.name(name='name' value=name)
+            tr
+              td
+                label Column
+              td
+                select.columnIndex(name='columnIndex')
+                  each columns
+                    option(value=index)= title
+            tr
+              td
+                label Function
+              td
+                select.function(name='function')
+                  option(value='count') Count
+                  option(value='sum') Sum
+                  option(value='avg') Average
+                  option(value='min') Minimum
+                  option(value='max') Maximum
+                  option(value='med') Median
 
     .actions-bottom
       button.delete Delete

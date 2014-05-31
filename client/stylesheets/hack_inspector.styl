@@ -12,6 +12,10 @@
   box-shadow 0 0 5px rgba(0,0,0,0.1)
   color #abb3b8
 
+  .icon-button
+    font-size 20pt
+    cursor pointer
+
   .header
     background linear-gradient(top, #fff, #f6f8f9)
     border-bottom 1px solid #d8dfe4
@@ -21,6 +25,11 @@
     color #929598
     padding 5px 10px
     margin-bottom 10px
+
+    .icon-button
+      display block
+      float right
+      padding-top 10px
 
   form
     padding 0 5px
@@ -63,6 +72,19 @@
     border 1px solid #d4dae1;
     background #fff
 
+  .box
+    background #f2eff6
+    border 1px solid #e5dbec
+    margin 0 10px
+    border-radius 3px
+    margin-bottom 10px
+
+    .buttons
+      text-align right
+      color #cebfd9
+    form
+      margin-top 0
+
 
 ul.graph-types
   list-style none
@@ -101,3 +123,4 @@ ul.graph-types
       image: '/images/graphs/area.png' 84px 58px
     &.scatterplot .image
       image: '/images/graphs/scatterplot.png' 84px 58px
+
