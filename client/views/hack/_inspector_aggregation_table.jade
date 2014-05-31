@@ -1,0 +1,15 @@
+template(name='hack_inspector_aggregation_table')
+  .inspector
+    .header Source
+    form
+      table.form
+        tr
+          td
+            label Table
+          td
+            = inputTableName
+
+    .header Aggregation
+
+    .actions-bottom
+      button.delete Delete

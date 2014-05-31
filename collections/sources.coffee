@@ -23,12 +23,12 @@
 
     # Aggregation table
     userColumns: { type: [Object], optional: true }
-    aggregationColumns: { type: [Object], optional: true }
     # InferredColumn
     #   
 
 Tables.SOURCE = 'source'
 Tables.GROUPED = 'grouped'
+Tables.AGGREGATION = 'aggregation'
 
 @Tables.allow
   insert: (userId, doc) -> true

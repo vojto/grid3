@@ -1,7 +1,6 @@
 class HackInspector extends Grid.Controller
-  @include ItemsHelpers
+  @extend ItemsHelpers
   @template 'hack_inspector'
-  helpers: ['isSource', 'isGraph', 'isGroupedTable']
 
 class HackInspectorGraph extends Grid.Controller
   @template 'hack_inspector_graph'

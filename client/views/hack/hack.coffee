@@ -1,18 +1,6 @@
-@ItemsHelpers =
-  isSource: (item) ->
-    item.collection == 'tables' && item.type == Tables.SOURCE
-  isGraph: (item) ->
-    item.collection == 'graphs'
-  isGroupedTable: (item) ->
-    item.collection == 'tables' && item.type == Tables.GROUPED
-  tables: ->
-    Tables.find().fetch()
-  graphs: ->
-    Graphs.find().fetch()
-
 class HackIndex extends Grid.Controller
   @template 'hack_index'
-  @include ItemsHelpers
+  @extend ItemsHelpers
 
   helpers: [
     'tables',
@@ -24,6 +12,7 @@ class HackIndex extends Grid.Controller
     'click .toolbar .add-source': 'addSource'
     'click .toolbar .add-graph': 'addGraph'
     'click .toolbar .group': 'addGroupTable'
+    'click .toolbar .add-aggregation': 'addAggregationTable'
 
   constructor: ->
     super
@@ -53,12 +42,24 @@ class HackIndex extends Grid.Controller
     options.title = 'New group table'
     options.type = Tables.GROUPED
     current = Session.get('selection')
-    if current.type != 'source'
+    if current.type != Tables.SOURCE
       alert('Cannot group data from this table')
       return
     
     options.inputTableId = current._id
     Tables.insert(options)
+
+  addAggregationTable: ->
+    options = @defaultTableOptions()
+    options.title = 'New aggregation table'
+    options.type = Tables.AGGREGATION
+    current = Session.get('selection')
+    if current.type != Tables.GROUPED
+      return alert('Cannot aggregate data from this table')
+
+    options.inputTableId = current._id
+    Tables.insert(options)
+
 
 
   defaultTableOptions: (width=230, height=180) ->
@@ -91,14 +92,11 @@ class HackIndex extends Grid.Controller
 
 class HackIndexItem extends Grid.Controller
   @template 'hack_index_item'
-  @include ItemsHelpers
+  @extend ItemsHelpers
 
   helpers: [
     'itemStyle',
     'itemClass',
-    'isSource',
-    'isGroupedTable',
-    'isGraph',
     'controllerId'
   ]
 

@@ -4,10 +4,16 @@ template(name='hack_index')
       li.add-source
           i.entypo.shareable
           | Add source
-      if selection
-        li.group
-          i.entypo.layout
-          | Group
+      with selection
+        if isSource
+          li.group
+            i.entypo.layout
+            | Group
+      with selection
+        if isGroupedTable
+          li.add-aggregation
+            i.entypo.numbered-list
+            | Aggregate
       li.add-graph
           i.entypo.line-graph
           | Add graph
@@ -29,6 +35,8 @@ template(name='hack_index_item')
       +hack_index_graph
     else if isGroupedTable
       +hack_index_grouped_table
+    else if isAggregationTable
+      +hack_index_aggregation_table
 
 template(name='hack_index_source')
   .item-wrapper
@@ -60,6 +68,8 @@ template(name='hack_inspector')
     +hack_inspector_graph
   else if isGroupedTable
     +hack_inspector_grouped_table
+  else if isAggregationTable
+    +hack_inspector_aggregation_table
 
 template(name='hack_inspector_table')
   .inspector
