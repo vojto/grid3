@@ -25,7 +25,7 @@ class Grid.DataManager
           # Here also we should only observe for changes in source and reload it.
           # This logic should also be moved to something called "Loader."
           changed: (id, fields) =>
-            if 'url' of fields or 'groupColumnIndex' of fields
+            if 'url' of fields or 'groupColumnIndex' of fields or 'aggregations' of fields
               setTimeout =>
                 @markTableNeedingEval(Tables.findOne(id))
               , 0
@@ -250,11 +250,14 @@ class Grid.DataManager
     @finishEval(table, groupedData)
 
   evaluateAggregationTable: (table) ->
+    table = Tables.findOne(table._id)
     inputTable = Tables.findOne(table.inputTableId)
     preInputTable = Tables.findOne(inputTable.inputTableId)
     inputData = @dataForTable(inputTable)
 
     columns = []
+
+    Log.blue1 'evaluation of aggregation table'
 
     # Create the column for group name -- ideally we will use the original
     # column name here from the group table.
@@ -263,15 +266,44 @@ class Grid.DataManager
     groupColumn = TableColumns.findOne(preInputTable.columnIds[inputTable.groupColumnIndex])
     columns.push(groupColumn)
 
+    # Add columns for aggregations
+    for aggregation, i in table.aggregations
+      columns.push
+        title: aggregation.name
+        type: 'number'
+        index: i+1 # first is the group column name
     TableColumns.replaceColumns(table, columns)
-
-
-
 
     data = new Grid.Data()
     for group in inputData.groups()
-      rows = inputData.dataForGroup(group)
-      data.addRow([group])
+      rows = inputData.dataForGroup(group).data()
+
+      # Cells for resulting aggregation
+      cells = [group]
+
+      for aggregation in table.aggregations
+        console.log 'function', aggregation.function
+        values = _(rows).map (row) -> row[aggregation.columnIndex]
+        result = if aggregation.function is 'count'
+          _(values).size()
+        else if aggregation.function is 'sum'
+          _(values).sum()
+        else if aggregation.function is 'min'
+          _(values).min()
+        else if aggregation.function is 'max'
+          _(values).max()
+        else if aggregation.function is 'avg'
+          _(values).mean()
+        else if aggregation.function is 'med'
+          _(values).median()
+        else
+          NaN
+        cells.push(result)
+        # else if 
+        
+
+      data.addRow(cells)
+
     @finishEval(table, data)
 
 
