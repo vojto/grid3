@@ -148,10 +148,10 @@ class HackIndexItem extends Grid.Controller
 
 class HackIndexSource extends Grid.Controller
   @template 'hack_index_source'
+  @extend DataHelpers
 
   helpers: [
-    'dataPreview',
-    'columns',
+    'columns'
   ]
 
   # Previews
@@ -162,19 +162,14 @@ class HackIndexSource extends Grid.Controller
 
   rendered: ->
 
-  dataPreview: (table) ->
+  @dataPreview: (table) ->
+    console.log("%cRendering TABLE", "color: blue;");
     data = @dataManager.dataForTable(table)
     if data.isEmpty()
       preview = []
     else
       preview = data.preview()
-
-    mapped = _(preview).map (row, i) ->
-      row = _(row).map (cell, j) ->
-        {index: j, cell: cell}
-      {index: i, row: row}
-
-    mapped
+    @constructor.dataForTemplate(preview)
 
   columns: (table) ->
     @dataManager.columnsForTable(table)

@@ -1,19 +1,20 @@
 class HackIndexGroupedTable extends Grid.Controller
   @template 'hack_index_grouped_table'
+  @include DataHelpers
 
   constructor: ->
     @manager = Grid.DataManager.instance()
 
   @groups: (table) ->
+    console.log("%cRendering GROUPED TABLE", "color: blue;");
+
     data = @manager.dataForTable(table)
     columns = @manager.columnsForTable(table)
 
-    console.log 'heres data', data
 
     prepared = for group in data.groups()
-      {name: group, columns: columns, data: data.dataForGroup(group).data()}
-
-    console.log 'prepared', prepared
+      dataForTemplate = @dataForTemplate(data.dataForGroup(group).data())
+      {name: group, columns: columns, data: dataForTemplate}
 
     prepared
   

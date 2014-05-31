@@ -2,6 +2,10 @@
 
 _instance = null
 
+READY = 'ready'
+NEEDS_EVAL = 'needs_eval'
+EVALUATING = 'evaluating'
+
 class Grid.DataManager
   @instance: ->
     _instance = new @() unless _instance
@@ -34,12 +38,11 @@ class Grid.DataManager
       depIds = [table.inputTableId]
     else
       depIds = []
-    
 
     @_tables[table._id] =
       table: table
       data: @emptyData(table)
-      needsEval: true
+      status: NEEDS_EVAL
       # This dependency is only used for updating the user interface
       # not tracking cross-table dependencies.
       uiDep: new Deps.Dependency()
@@ -50,7 +53,11 @@ class Grid.DataManager
     # for the UI, so we could compute in one run.
     @scheduleEvaluation()
 
+  # Tries to get data for a table. If it wasn't added previously, schedules an 
+  # evaluation. When this is called after a table has been added previously, then
+  # doesn't schedule evaluation.
   dataForTable: (table) ->
+    console.log("%cRequesting data for #{table.title}", "color: red;");
     @addTable(table)
     @depend(table)
     @_tables[table._id].data
@@ -67,13 +74,14 @@ class Grid.DataManager
   # ------------------------------------------------------------------
 
   setData: (table, data) ->
+    if data.isEmpty() && @_tables[table._id].data.isEmpty()
+      return
+
     # Set data
     @_tables[table._id].data = data
 
-    # Re-evaluate tables that depend on it
-    @markDependentTablesNeedingEval(table)
-
     # Update the UI
+    console.log("%cUpdating UI for table #{table.title}", "color: green;");
     @_tables[table._id].uiDep.changed()
 
   setDataToEmpty: (table) ->
@@ -98,11 +106,31 @@ class Grid.DataManager
     @markTableNeedingEval(table) for table in dependentTables
 
   markTableNeedingEval: (table) ->
-    @_tables[table._id].needsEval = true
-    @scheduleEvaluation()
+    unless @tableStatus(table) == EVALUATING
+      @setTableStatus(table, NEEDS_EVAL)
+      @scheduleEvaluation()
 
-  markTableNotNeedingEval: (table) ->
-    @_tables[table._id].needsEval = false
+  tableStatus: (table) ->
+    @_tables[table._id].status
+
+  setTableStatus: (table, status) ->
+    @_tables[table._id].status = status
+
+  # Updating eval SM
+  # ------------------------------------------------------------------
+
+  cancelEval: (table) ->
+    console.log("%cFinished evaluating #{table.title}", "background-color: #d77d13; color: #fff");
+    @setTableStatus(table, READY)
+    @setDataToEmpty(table)
+
+  finishEval: (table, data) ->
+    console.log("%cFinished evaluating #{table.title}", "background-color: #d77d13; color: #fff");
+    @setTableStatus(table, READY)
+    @setData(table, data)
+
+    # Re-evaluate tables that depend on it
+    @markDependentTablesNeedingEval(table)
 
   # Evaluation
   # ------------------------------------------------------------------
@@ -114,13 +142,14 @@ class Grid.DataManager
   evaluateTables: ->
     console.log 'tables', @_tables
 
-    infos = (info for id, info of @_tables when info.needsEval)
+    infos = (info for id, info of @_tables when info.status == NEEDS_EVAL)
     for info in infos
       @evaluateTable(info.table)
-      info.needsEval = false
 
   evaluateTable: (table) ->
-    @markTableNotNeedingEval(table)
+    @setTableStatus(table, EVALUATING)
+
+    console.log("%cEvaluating #{table.title}", "background-color: #f68f16; color: #fff");
 
     if table.type is Tables.SOURCE
       @evaluateSourceTable(table)
@@ -130,13 +159,11 @@ class Grid.DataManager
       throw new Error("Cannot evaluate table of unknown type #{table.type}")
 
   evaluateSourceTable: (table) ->
-    console.log 'evaluating source table', table
     table = Tables.findOne(table._id)
     if not table.url or table.url == ''
-      @setDataToEmpty(table)
-      return
+      return @cancelEval(table)
     Meteor.call 'sources.load', table._id, (err, data) =>
-      return @setDataToEmpty(table) if Flash.handle(err)
+      return @cancelEval(table) if Flash.handle(err)
       @handleTableDataReceive(table, data)
 
   # This method does THREE important things:
@@ -173,10 +200,8 @@ class Grid.DataManager
         else
           value
 
-    console.log 'finished', data
-
     # Set data
-    @setData(table, new Grid.Data(data))
+    @finishEval(table, new Grid.Data(data))
 
   evaluateGroupedTable: (table) ->
     table = Tables.findOne(table._id)
@@ -188,11 +213,10 @@ class Grid.DataManager
     groupColumn = TableColumns.findOne(inputTable.columnIds[groupIndex])
 
     if inputData.isEmpty()
-      @setDataToEmpty(table)
-      return
+      return @cancelEval(table)
 
     if not groupColumn
-      return
+      return @cancelEval(table)
 
     columns = TableColumns.findArray(inputTable.columnIds)
     columns.splice(table.groupColumnIndex, 1)
@@ -217,7 +241,7 @@ class Grid.DataManager
     
     console.log 'grouped data', groupedData
 
-    @setData(table, groupedData)
+    @finishEval(table, groupedData)
 
 
 class Grid.Data

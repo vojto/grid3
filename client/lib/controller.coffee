@@ -1,5 +1,7 @@
 window.Grid or= {}
 
+moduleKeywords = ['included', 'extended']
+
 assert = Grid.Util.assert
 
 class Grid.Controller
@@ -60,10 +62,9 @@ class Grid.Controller
             addHelperByKey(method, key)
 
         # Helpers from class methods
-        ignored = ['__super__', 'template', 'include']
+        ignored = ['__super__', 'template', 'include', 'extend']
         for method, fun of constructor
           addHelper(method, fun) unless method in ignored
-
 
         templateConstructor.helpers(helpers)
 
@@ -87,9 +88,15 @@ class Grid.Controller
     , 0
 
   @include: (obj) ->
-    moduleKeywords = ['included', 'extended']
     throw new Error('include(obj) requires obj') unless obj
     for key, value of obj when key not in moduleKeywords
       @::[key] = value
     obj.included?.apply(this)
+    this
+
+  @extend: (obj) ->
+    throw new Error('extend(obj) requires obj') unless obj
+    for key, value of obj when key not in moduleKeywords
+      @[key] = value
+    obj.extended?.apply(this)
     this
