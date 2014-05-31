@@ -21,6 +21,12 @@
     # Grouped Table
     groupColumnIndex: { type: String, optional: true }
 
+    # Aggregation table
+    userColumns: { type: [Object], optional: true }
+    aggregationColumns: { type: [Object], optional: true }
+    # InferredColumn
+    #   
+
 Tables.SOURCE = 'source'
 Tables.GROUPED = 'grouped'
 

@@ -2,6 +2,9 @@ class HackIndexGroupedTable extends Grid.Controller
   @template 'hack_index_grouped_table'
   @include DataHelpers
 
+  events:
+    'click .header': 'toggleGroup'
+
   constructor: ->
     @manager = Grid.DataManager.instance()
 
@@ -13,10 +16,22 @@ class HackIndexGroupedTable extends Grid.Controller
 
 
     prepared = for group in data.groups()
-      dataForTemplate = @dataForTemplate(data.dataForGroup(group).data())
-      {name: group, columns: columns, data: dataForTemplate}
+      groupData = data.dataForGroup(group).data()
+      previewSize = 3
+      groupPreview = _(groupData).head(previewSize)
+      if groupData.length > previewSize
+        more = groupData.length - previewSize
+      
+      # Show only a small preview of data here
+      dataForTemplate = @dataForTemplate(groupPreview)
+      {name: group, columns: columns, data: dataForTemplate, more: more}
 
     prepared
+
+  toggleGroup: (ev) ->
+    $header = $(ev.currentTarget).closest('.header')
+    $group = $header.closest('.group')
+    $group.toggleClass('expanded')
   
   # @columns: (table) ->
   #   cols = @manager.columnsForTable(table)

@@ -17,7 +17,7 @@ class Grid.DataManager
     # Value: Array of table IDs that depend on that table
     @_deps = {}
 
-    @log = new Logger(enabled: false)
+    @log = new Logger(enabled: true)
 
     if Meteor.isClient
       Meteor.startup =>

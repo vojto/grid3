@@ -4,13 +4,21 @@ template(name='hack_index_grouped_table')
       i.entypo.layout
     .content-wrapper
       each groups
-        .header
-          = name
-        table
-          tr
-            each columns
-              td= title
-          each data
+        .group.expanded
+          .header
+            i.entypo.triangle-down.collapse
+            i.entypo.triangle-right.expand
+            = name
+          table.content
             tr
-              each row
-                td!= cell
+              each columns
+                td= title
+            each data
+              tr
+                each row
+                  td!= cell
+            if more
+              tr
+                td.center(colspan=columns.length)
+                  = more
+                  | more
