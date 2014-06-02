@@ -21,8 +21,8 @@ Meteor.methods
 
     # Temporary force using cache so I wouldn't be slowed down by this shitty
     # internet in the coffeeshop.
-    if source.cachedData
-      return JSON.parse(source.cachedData)
+    # if source.cachedData
+      # return JSON.parse(source.cachedData)
     
 
     Tables.update source._id, {

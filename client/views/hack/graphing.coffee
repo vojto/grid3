@@ -2,29 +2,43 @@ color = d3.scale.category10()
 
 @Graphing =
   autoRenderPreview: (graph, options) ->
-    @renderPreview(graph, options)
+    console.log 'auto rendering preview'
+    Deps.autorun =>
+      console.log 'autorun'
+      table = Tables.findOne(graph.tableId)
+      return unless table
+      manager = Grid.DataManager.instance()
+      info = manager.dataForTable(table)
+      data = info.data()
+      @renderPreview(data, graph, options)
 
     @query.stop() if @query
     @query = Graphs.find(_id: graph._id).observeChanges 
       changed: (id, fields) =>
+        console.log 'changed'
         if ('tableId' of fields) or ('width' of fields) or ('height' of fields) or ('type' of fields)
           # Graph object is not automatically refreshed
-          @renderPreview(Graphs.findOne(graph._id), options)
+          table = Tables.findOne(graph.tableId)
+          return unless table
+          manager = Grid.DataManager.instance()
+          info = manager.dataForTable(table)
+          data = info.data()
+          @renderPreview(data, graph, options)
 
-  renderPreview: (graph, {$el, width, height}) ->
+  renderPreview: (data, graph, {$el, width, height}) ->
+    return unless data && data.length
     # Refresh the graph
-    table = Tables.findOne(graph.tableId)
-    return unless table
+    @type = 'string'
 
-    manager = Grid.DataManager.instance()
-    info = manager.dataForTable(table)
-    data = info.data()
-    meta = info.metadata()
+    
+    @meta = new Grid.Metadata(data)
 
     index = @index = {x: 0, y: 1}
     domain = @domain =
-      x: d3.extent(data, (d) -> d[index.x])
+      x: @findXDomain(data)
       y: d3.extent(data, (d) -> d[index.y])
+
+    console.log 'domain', domain
 
     margin = @margin =
       top: 10
@@ -43,8 +57,14 @@ color = d3.scale.category10()
     size = @size = {width: width, height: height}
 
     scale = @scale =
-      x: d3.time.scale().domain(domain.x).range([0, width])
       y: d3.scale.linear().domain(domain.y).range([height, 0])
+
+    if @type == 'string'
+      console.log 'creating scale for domain', domain.x
+      scale.x = d3.scale.ordinal().domain(domain.x).rangePoints([0, width])
+      console.log 'range is', scale.x.range()
+    else
+      scale.x = d3.time.scale().domain(domain.x).range([0, width])
 
     $el.find('svg').remove()
     el = d3.select($el.get(0))
@@ -62,6 +82,22 @@ color = d3.scale.category10()
       @renderAreaChart(svg, data: data, color: color)
     else if graph.type == 'bar'
       @renderBarChart(svg, data: data, color: color2)
+
+  findXDomain: (data) ->
+    # TODO: This would normally use column types information
+    index = @index.x
+    type = @meta.typeForColumn(index)
+    console.log 'type', type
+    if type == 'number'
+      d3.extent(data, (d) -> d[index])
+    else if type == 'string'
+      values = data.map (d) -> d[index]
+      console.log 'values', values
+      d3.set(values).values()
+    else
+      d3.extent(data, (d) -> d[index])
+
+    
 
   addAxes: (svg, scale, size) ->
     axis =
@@ -81,27 +117,39 @@ color = d3.scale.category10()
   renderAreaChart: (svg, {data}) ->
     {size, scale, index} = @
 
-    line = d3.svg.area()
+    console.log 'data', data
+
+    line = d3.svg.line()
       .interpolate('basis')  
       .x((d) -> scale.x(d[index.x]) )
-      .y1((d) -> scale.y(d[index.y]) )
-      .y0(size.height)
+      .y((d) -> scale.y(d[index.y]) )
+
+    console.log 'x domain', scale.x.domain()
+    console.log 'pair1', data[0][0], data[0][1]
+
+    console.log 'x', scale.x(data[0][0])
+    console.log 'y', scale.y(data[0][1])
+      # .y0(size.height)
 
     svg.append('path')
       .attr('class', 'line')  
       .attr('d', line(data))
       # .style('fill', '#f591f4')
-      .style('fill', color)
-      .style('stroke-width', '0')
+      .style('fill', 'none')
+      .style('stroke', color)
+      .style('stroke-width', '2')
 
   renderBarChart: (svg, {data, color}) ->
     {size, scale, index} = @
 
     domain = scale.x.domain()
 
-    maxDay = new Date(domain[1])
-    maxDay.setDate(maxDay.getDate() + 1)
-    buckets = d3.time.days(domain[0], maxDay)
+    if @type == 'string'
+      buckets = domain
+    else
+      maxDay = new Date(domain[1])
+      maxDay.setDate(maxDay.getDate() + 1)
+      buckets = d3.time.days(domain[0], maxDay)
 
     # console.log 'buckets', buckets
 

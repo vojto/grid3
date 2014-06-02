@@ -197,6 +197,9 @@ class Grid.DataManager
     if metadata.hasHeader()
       data.splice(0, 1)
 
+    data = data.filter (d) ->
+      d.length == metadata.columns
+
     # Parse data using datatypes from metadata
     # TODO: Not make a copy with map, but instead do it in-place
     data = data.map (d) =>
