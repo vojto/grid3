@@ -15,12 +15,22 @@ class @Modal extends Grid.Controller
     'click button': 'hide'
 
   @show: (options) ->
+    @instance = new Modal()
+    inst = @instance
+
     setTimeout =>
-      @instance = new Modal()
-      component = UI.renderWithData(Template.modal, options)
+      if options.template
+        template = Template[options.template]
+      else
+        template = Template.modal
+      
+      
+      component = UI.renderWithData(template, options)
       UI.insert(component, document.body)
-      @instance.component = component
+      inst.component = component
     , 0
+
+    inst
 
   rendered: ->
     @$('button').focus()

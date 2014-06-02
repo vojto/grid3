@@ -26,11 +26,18 @@ class HackIndex extends Grid.Controller
       false
 
   addSource: ->
-    options = @defaultTableOptions()
-    options.title = 'New source'
-    options.type = 'source'
-    options.columnIds = []
-    Tables.insert(options)
+    # Display selector for the type of data source
+    modal = Modal.show(template: 'hack_modal_source_selector')
+    setTimeout =>
+      $('.dialog li').click =>
+        console.log 'heres modal', modal
+        $('.modal').remove()
+        options = @defaultTableOptions()
+        options.title = 'New source'
+        options.type = 'source'
+        options.columnIds = []
+        Tables.insert(options)
+    , 0
 
   addGraph: ->
     options = @defaultTableOptions(280, 160)

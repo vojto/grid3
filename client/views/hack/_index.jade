@@ -27,6 +27,27 @@ template(name='hack_index')
   with selection
     +hack_inspector
 
+template(name='hack_modal_source_selector')
+  .modal
+    .overlay
+    .dialog
+      .content
+        h2.centered Add new data source
+
+        ul.source-selector
+          li
+            i.entypo.numbered-list
+            br
+            | CSV
+          li
+            i.entypo.numbered-list
+            br
+            | Excel
+          li
+            i.entypo.database
+            br
+            | SQL
+
 template(name='hack_index_item')
   div.item(style=itemStyle, data-id=_id, class=itemClass)
     if isSource
