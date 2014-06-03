@@ -2,9 +2,7 @@ color = d3.scale.category10()
 
 @Graphing =
   autoRenderPreview: (graph, options) ->
-    console.log 'auto rendering preview'
     Deps.autorun =>
-      console.log 'autorun'
       table = Tables.findOne(graph.tableId)
       return unless table
       manager = Grid.DataManager.instance()
@@ -15,7 +13,6 @@ color = d3.scale.category10()
     @query.stop() if @query
     @query = Graphs.find(_id: graph._id).observeChanges 
       changed: (id, fields) =>
-        console.log 'changed'
         if ('tableId' of fields) or ('width' of fields) or ('height' of fields) or ('type' of fields)
           # Graph object is not automatically refreshed
           table = Tables.findOne(graph.tableId)
@@ -38,8 +35,6 @@ color = d3.scale.category10()
       x: @findXDomain(data)
       y: d3.extent(data, (d) -> d[index.y])
 
-    console.log 'domain', domain
-
     margin = @margin =
       top: 10
       right: 0
@@ -60,9 +55,7 @@ color = d3.scale.category10()
       y: d3.scale.linear().domain(domain.y).range([height, 0])
 
     if @type == 'string'
-      console.log 'creating scale for domain', domain.x
       scale.x = d3.scale.ordinal().domain(domain.x).rangePoints([0, width])
-      console.log 'range is', scale.x.range()
     else
       scale.x = d3.time.scale().domain(domain.x).range([0, width])
 
@@ -87,12 +80,10 @@ color = d3.scale.category10()
     # TODO: This would normally use column types information
     index = @index.x
     type = @meta.typeForColumn(index)
-    console.log 'type', type
     if type == 'number'
       d3.extent(data, (d) -> d[index])
     else if type == 'string'
       values = data.map (d) -> d[index]
-      console.log 'values', values
       d3.set(values).values()
     else
       d3.extent(data, (d) -> d[index])
@@ -117,19 +108,10 @@ color = d3.scale.category10()
   renderAreaChart: (svg, {data}) ->
     {size, scale, index} = @
 
-    console.log 'data', data
-
     line = d3.svg.line()
-      .interpolate('basis')  
+      .interpolate('linear')
       .x((d) -> scale.x(d[index.x]) )
       .y((d) -> scale.y(d[index.y]) )
-
-    console.log 'x domain', scale.x.domain()
-    console.log 'pair1', data[0][0], data[0][1]
-
-    console.log 'x', scale.x(data[0][0])
-    console.log 'y', scale.y(data[0][1])
-      # .y0(size.height)
 
     svg.append('path')
       .attr('class', 'line')  
@@ -150,8 +132,6 @@ color = d3.scale.category10()
       maxDay = new Date(domain[1])
       maxDay.setDate(maxDay.getDate() + 1)
       buckets = d3.time.days(domain[0], maxDay)
-
-    # console.log 'buckets', buckets
 
     x = d3.scale.ordinal().domain(buckets).rangeRoundBands([0, size.width], .1)
 

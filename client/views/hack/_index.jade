@@ -115,64 +115,6 @@ template(name='hack_inspector_table')
     .actions-bottom
       button.delete Delete
 
-template(name='hack_inspector_graph')
-  .inspector
-    .header Tables
-    form
-      table.form
-        tr
-          td
-            label Table
-          td
-            select.table
-              option(value='')
-              each tables
-                option(value=_id)= title
-
-    .header Graph type
-
-    ul.graph-types
-      with 'line'
-        li.line(class='{{graphTypeClass ..}}')
-          .image
-          | Line chart
-      with 'bar'
-        li.bar(class='{{graphTypeClass ..}}')
-          .image
-          | Bar chart
-      with 'area'
-        li.area(class='{{graphTypeClass ..}}')
-          .image
-          | Area chart
-      with 'scatterplot'
-        li.scatterplot(class='{{graphTypeClass ..}}')
-          .image
-          | Scatterplot
-
-    .header Series
-    form
-      table.form
-        tr
-          td
-            label X
-          td
-            select.x
-              option(value='')
-        tr
-          td
-            label Y
-          td
-            select.y
-              option(value='')
-        tr
-          td
-            label Color
-          td
-            select.color
-              option(value='')
-
-    .actions-bottom
-      button.delete Delete
 
 template(name='modal')
   .modal

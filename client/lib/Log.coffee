@@ -6,16 +6,23 @@ class @Logger
     green1: ["fff", "1e8f00"]
     blue1: ["fff", "165ad7"]
     red1: ["fff", "c03a3a"]
+    orange0: ['fff', 'e58905']
 
   constructor: ({@enabled}) ->
     _(@colors).each (values, color) =>
-      @[color] = (message) =>
-        @log(message, values[0], values[1])
+      @[color] = () =>
+        @log(arguments, values[0], values[1])
 
-  log: (message, fg, bg) ->
+  log: (messages, fg, bg) ->
     return unless @enabled
     style = "color: ##{fg}; -webkit-border-radius: 3px;"
     style += "background-color: ##{bg}; " if bg
-    console.log("%c#{message}", style)
+
+    args = ["%c#{messages[0]}", style]
+
+    if messages.length > 1
+      args = _(args).union(_(messages).rest())
+
+    console.log.apply(console, args)
 
 @Log = new Logger(enabled: true)

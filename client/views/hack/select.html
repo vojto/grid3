@@ -1,0 +1,14 @@
+<template name="select">
+
+  <select>
+    {{#if prompt}}
+      <option>{{prompt}}</option>
+    {{/if}}
+
+    {{#each options}}
+      <option {{optionAttributes}}>{{optionLabel}}</option>
+    {{/each}}
+
+  </select>
+
+</template>

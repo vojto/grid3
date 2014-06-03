@@ -30,7 +30,6 @@ class HackIndex extends Grid.Controller
     modal = Modal.show(template: 'hack_modal_source_selector')
     setTimeout =>
       $('.dialog li').click =>
-        console.log 'heres modal', modal
         $('.modal').remove()
         options = @defaultTableOptions()
         options.title = 'New source'
@@ -168,7 +167,6 @@ class HackIndexSource extends Grid.Controller
   rendered: ->
 
   @dataPreview: (table) ->
-    # console.log("%cRendering TABLE", "color: blue;");
     data = @dataManager.dataForTable(table)
     if data.isEmpty()
       preview = []
@@ -191,4 +189,40 @@ class HackIndexGraph extends Grid.Controller
       $el: @$el.find('.content-wrapper')
       width: ($el) -> $el.width()
       height: ($el) -> $el.height()
+
+
+class Select extends Grid.Controller
+  @template 'select'
+
+  actions:
+    'change select': 'change'
+
+  @optionAttributes: (option) ->
+    {doc, value, options, field} = @template.data
+
+    if option[value] == doc[field]
+      {"selected": "", value: option[value]}
+    else
+      {value: option[value]}
+
+  @optionLabel: (option) ->
+    {label} = @template.data
+    option[label]
+
+
+  change: ->
+    val = @el.val()
+    {collection, doc, value, options, field, prompt} = @template.data
+    collection = window[collection]
+
+    val = null if val == '' or val == prompt
+
+    # if val
+    data = {}
+    data[field] = val
+    console.log 'updating', data
+    collection.set(doc._id, data)
+    # else
+
+
 

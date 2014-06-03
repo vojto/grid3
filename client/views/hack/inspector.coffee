@@ -4,10 +4,10 @@ class HackInspector extends Grid.Controller
 
 class HackInspectorGraph extends Grid.Controller
   @template 'hack_inspector_graph'
-  @include ItemsHelpers
+  @extend ItemsHelpers
   @include Graphing
 
-  helpers: ['tables', 'graphTypeClass']
+  helpers: ['graphTypeClass']
 
   actions:
     'click .delete': 'delete'

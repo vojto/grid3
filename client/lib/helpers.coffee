@@ -15,9 +15,10 @@
     Tables.findOne(table.inputTableId)?.title
   # TODO: Rename to inputTableColumns
   columns: (table) ->
-    table = Session.get('selection')
-    return [] unless table
-    input = Tables.findOne(table.inputTableId)
+    item = Session.get('selection')
+    return [] unless item
+    input = Tables.findOne(item.inputTableId)
+    input or= Tables.findOne(item.tableId) # if it's a graph
     return [] unless input
     TableColumns.findArray(input.columnIds)
 

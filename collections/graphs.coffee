@@ -11,6 +11,11 @@
     height: { type: Number, optional: true }
     type: { type: String, optional: true }
 
+    xColumnIndex: { type: Number, optional: true }
+    yColumnIndex: { type: Number, optional: true }
+    y1ColumnIndex: { type: Number, optional: true }
+    y2ColumnIndex: { type: Number, optional: true }
+
 @Graphs.allow
   insert: (userId, doc) -> true
   update: (userId, doc) -> true
