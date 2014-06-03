@@ -209,7 +209,6 @@ class Select extends Grid.Controller
     {label} = @template.data
     option[label]
 
-
   change: ->
     val = @el.val()
     {collection, doc, value, options, field, prompt} = @template.data
@@ -220,7 +219,6 @@ class Select extends Grid.Controller
     # if val
     data = {}
     data[field] = val
-    console.log 'updating', data
     collection.set(doc._id, data)
     # else
 

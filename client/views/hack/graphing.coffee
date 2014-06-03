@@ -13,8 +13,12 @@ color = d3.scale.category10()
     @query.stop() if @query
     @query = Graphs.find(_id: graph._id).observeChanges 
       changed: (id, fields) =>
-        if ('tableId' of fields) or ('width' of fields) or ('height' of fields) or ('type' of fields)
+        keys = _(fields).keys()
+        watched = ['tableId', 'width', 'height', 'type', 'xColumnIndex', 'yColumnIndex', 'y1ColumnIndex', 'y2ColumnIndex']
+
+        if _(keys).any((key) -> key in watched)
           # Graph object is not automatically refreshed
+          graph = Graphs.findOne(graph._id)
           table = Tables.findOne(graph.tableId)
           return unless table
           manager = Grid.DataManager.instance()
@@ -30,10 +34,18 @@ color = d3.scale.category10()
     
     @meta = new Grid.Metadata(data)
 
-    index = @index = {x: 0, y: 1}
+    index = @index =
+      x: graph.xColumnIndex,
+      y: graph.yColumnIndex
+
+    if graph.y1ColumnIndex && graph.y2ColumnIndex
+      index.lower = graph.y1ColumnIndex
+      index.upper = graph.y2ColumnIndex
+    
+
     domain = @domain =
       x: @findXDomain(data)
-      y: d3.extent(data, (d) -> d[index.y])
+      y: @findYDomain(data)
 
     margin = @margin =
       top: 10
@@ -72,9 +84,23 @@ color = d3.scale.category10()
 
     color2 = color(graph._id)
     if graph.type == 'area'
-      @renderAreaChart(svg, data: data, color: color)
-    else if graph.type == 'bar'
+      @renderAreaChart(svg, data: data, color: color2)
+    if graph.type == 'area' && index.lower && index.upper
+      @renderLineMargin(svg, data: data, color: color2)
+    
+    if graph.type == 'bar'
       @renderBarChart(svg, data: data, color: color2)
+
+  findYDomain: (data) ->
+    {index} = @
+    if index.lower && index.upper
+      lower = index.lower
+      upper = index.upper
+    else
+      lower = upper = index.y
+
+    extent = [d3.min(data, (d) -> d[lower]), d3.max(data, (d) -> d[upper])]
+    @extendExtent(extent)
 
   findXDomain: (data) ->
     # TODO: This would normally use column types information
@@ -87,6 +113,12 @@ color = d3.scale.category10()
       d3.set(values).values()
     else
       d3.extent(data, (d) -> d[index])
+
+  extendExtent: (extent) ->
+    extent[0] -= 0.2*extent[0]
+    extent[1] += 0.2*extent[1]
+    extent
+
 
     
 
@@ -105,7 +137,7 @@ color = d3.scale.category10()
         .attr('transform', "translate(-1, 0)")
       .call(axis.y)
 
-  renderAreaChart: (svg, {data}) ->
+  renderAreaChart: (svg, {data, color}) ->
     {size, scale, index} = @
 
     line = d3.svg.line()
@@ -119,7 +151,29 @@ color = d3.scale.category10()
       # .style('fill', '#f591f4')
       .style('fill', 'none')
       .style('stroke', color)
-      .style('stroke-width', '2')
+      .style('stroke-width', '2pt')
+
+  renderLineMargin: (svg, {data, color}) ->
+    {size, scale, index} = @
+
+    console.log 'drawing the margin', data
+
+    line = d3.svg.area()
+      .interpolate('linear')
+      .x((d) -> scale.x(d[index.x]) )
+      .y0((d) -> scale.y(d[index.lower]) )
+      .y1((d) -> scale.y(d[index.upper]) )
+
+    color = d3.rgb(color).hsl()
+    color.l = 0.9
+    color = color.rgb()
+
+    svg.append('path')
+      .attr('class', 'line')  
+      .attr('d', line(data))
+      # .style('fill', '#f591f4')
+      .style('fill', color)
+      .style('stroke', 'none')
 
   renderBarChart: (svg, {data, color}) ->
     {size, scale, index} = @

@@ -260,7 +260,7 @@ class Grid.DataManager
 
     columns = []
 
-    Log.blue1 'evaluation of aggregation table'
+    @log.blue1 'evaluation of aggregation table'
 
     # Create the column for group name -- ideally we will use the original
     # column name here from the group table.
