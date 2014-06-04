@@ -112,6 +112,29 @@ template(name='hack_inspector_table')
             label Status
           td
 
+    .header
+      | User columns
+      i.icon-button.entypo.circled-plus.add-user
+
+    .box
+      .buttons
+        i.icon-button.entypo.circled-cross.remove-aggregation
+      form.aggregation
+        table.form
+          tr
+            td
+              label Name
+            td
+              input.name(name='name' value=name)
+          tr
+            td(colspan="2")
+              div.expression
+                | if (<em>$Currency</em> == 2) {<br />
+                | &nbsp;&nbsp;&nbsp;&nbsp;<em>$Value</em> * 0.73;<br />
+                | } else {<br />
+                | &nbsp;&nbsp;&nbsp;&nbsp;<em>$Value</em>;<br />
+                | }
+
     .actions-bottom
       button.delete Delete
 

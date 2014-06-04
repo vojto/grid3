@@ -83,10 +83,10 @@ color = d3.scale.category10()
     svg.call(@addAxes, @scale, @size)
 
     color2 = color(graph._id)
-    if graph.type == 'area'
-      @renderAreaChart(svg, data: data, color: color2)
     if graph.type == 'area' && index.lower && index.upper
       @renderLineMargin(svg, data: data, color: color2)
+    if graph.type == 'area'
+      @renderAreaChart(svg, data: data, color: color2)
     
     if graph.type == 'bar'
       @renderBarChart(svg, data: data, color: color2)
