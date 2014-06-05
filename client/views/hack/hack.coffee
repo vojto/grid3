@@ -40,6 +40,7 @@ class HackIndex extends Grid.Controller
 
   addGraph: ->
     options = @defaultTableOptions(280, 160)
+    options.tableId = Session.get('selection')?._id
     options.title = 'New graph'
     Graphs.insert(options)
 

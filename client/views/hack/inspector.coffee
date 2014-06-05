@@ -53,6 +53,8 @@ class HackInspectorGraph extends Grid.Controller
     $(".graph-types li.#{type}").addClass('selected')
     type = JSON.parse(JSON.stringify(type))
     Graphs.set(@template.data._id, {type: type})
+    graph = Graphs.findOne(@template.data._id)
+    Session.set('selection', graph)
 
 class HackInspectorTable extends Grid.Controller
   @template 'hack_inspector_table'

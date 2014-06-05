@@ -9,6 +9,10 @@ template(name='hack_index')
           li.group
             i.entypo.layout
             | Group
+        if isSource
+          li.group
+            i.entypo.code
+            | Filter
       with selection
         if isGroupedTable
           li.add-aggregation
@@ -116,7 +120,7 @@ template(name='hack_inspector_table')
       | User columns
       i.icon-button.entypo.circled-plus.add-user
 
-    .box
+    //-.box
       .buttons
         i.icon-button.entypo.circled-cross.remove-aggregation
       form.aggregation
@@ -125,7 +129,7 @@ template(name='hack_inspector_table')
             td
               label Name
             td
-              input.name(name='name' value=name)
+              input.name(name='name' value='Value EUR')
           tr
             td(colspan="2")
               div.expression
@@ -134,6 +138,24 @@ template(name='hack_inspector_table')
                 | } else {<br />
                 | &nbsp;&nbsp;&nbsp;&nbsp;<em>$Value</em>;<br />
                 | }
+
+  
+    //-.box
+      .buttons
+        i.icon-button.entypo.circled-cross.remove-aggregation
+      form.aggregation
+        table.form
+          tr
+            td
+              label Name
+            td
+              input.name(name='name' value='Value EUR')
+          tr
+            td(colspan="2")
+              div.expression
+                | function reduce(student, scores) {<br />
+                | &nbsp;&nbsp;&nbsp;&nbsp;return Array.sum(scores) / scores.length;<br />
+                | }<br />
 
     .actions-bottom
       button.delete Delete

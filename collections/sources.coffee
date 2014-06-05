@@ -73,7 +73,7 @@ TableColumns.removeAllForTable = (table) ->
   Tables.set(table._id, {columnIds: []})
 
 TableColumns.insertForTable = (table, columns) ->
-  ids = for column, i in columns
+  ids = for column, i in columns when column
     column.index = i
     TableColumns.insert(column)
   Tables.set(table._id, {columnIds: ids})

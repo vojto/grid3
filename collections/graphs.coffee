@@ -9,10 +9,10 @@
     y: { type: Number, label: 'Y', optional: true }
     width: { type: Number, optional: true }
     height: { type: Number, optional: true }
-    type: { type: String, optional: true }
+    type: { type: String, optional: true, defaultValue: 'area' }
 
-    xColumnIndex: { type: Number, optional: true }
-    yColumnIndex: { type: Number, optional: true }
+    xColumnIndex: { type: Number, optional: true, defaultValue: 0 }
+    yColumnIndex: { type: Number, optional: true, defaultValue: 1 }
     y1ColumnIndex: { type: Number, optional: true }
     y2ColumnIndex: { type: Number, optional: true }
 
